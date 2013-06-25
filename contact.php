@@ -5,7 +5,7 @@
 	
 	
 		<div class="span12">
-			<p>some stuffa</p>
+			<p>some stuffaa</p>
 		</div><!--/.span12-->
 	
 	</div><!--/.row-->
