@@ -9,7 +9,9 @@
 			<p>another paragraph</p>
 			<p>Yet Another One</p>
 			
-			<p> This is a bit of code that is going to take months to work on</p>
+			
+			<p>testing</p>
+			<p> This should show up without the big update above</p>
 		</div><!--/.span12-->
 	
 	</div><!--/.row-->
