@@ -71,12 +71,9 @@
 														 <?php while (rwmb_meta($title) != '') :?>
 														   
 														   		<div class="row-fluid lecture-phase-info">
-																	<div class="span4 lecture-phase-info-title">
-																		<h6><?php echo rwmb_meta($title); ?></h6>
-																		<p><?php echo rwmb_meta($hours); ?> Hours/Week</p>
-																	</div><!--------/.lecture-phase-info-title------->
-																	
-																	<div class="span8 lecture-phase-info-desc">
+																	<div class="span12 lecture-phase-info-title">
+																		<h6><?php echo rwmb_meta($title); ?> <i class="icon-long-arrow-right" style="margin: 0px 10px;"></i><?php echo rwmb_meta($hours); ?> Hours/Week</h6>
+																		
 																		<p>
 																			<?php echo rwmb_meta($desc); ?>
 																			<?php $lecture_block = rwmb_meta('lecture_block_num'); ?>
@@ -111,7 +108,27 @@
 																							<?php } ?>
 																					<?php } ?>
 																					
-																					<?php echo rtrim($topic_string, ', ') . '.'; ?>
+																					<?php $topic_string = rtrim($topic_string, ', '); ?>
+																					
+																					<?php // DISPLAY TOPIC STRING IN TABLE ?>
+																					<?php $topics = explode( ',', $topic_string); ?>
+																					<?php $cell_count = 0 ?>
+																					<table class="lecture-phase-topics-table">
+																						<tr>
+																						<?php foreach($topics as $topic) { ?>
+																							<?php if ($cell_count < 2) { ?>
+																								<td><i class="icon-minus"></i> <?php echo $topic; ?></td>
+																								<?php $cell_count = $cell_count + 1; ?>
+																							<?php } else { ?>
+																						</tr>
+																						<tr>
+																								<td><i class="icon-minus"></i> <?php echo $topic; ?></td>
+																								<?php $cell_count = 1; ?>
+																							<?php } ?>
+
+																						<?php } ?>
+																					</table>
+																					
 																					
 																				<?php } ?>
 																		</p>
@@ -285,7 +302,13 @@
 							
 							
 							<?php // RETRIEVE RELATED POSTS ?>
-							<?php get_related_posts( 3, $program_slug, null); ?> 
+							<?php $related_args = array (
+									'posts_per_page' 	=> 5,
+									'post_type' 		=> 'post',
+									'program_taxo'		=> $program_slug,
+							) ?>
+							
+							<?php get_related_posts($related_args); ?> 
 							
 						   
 							

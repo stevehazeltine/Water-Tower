@@ -1286,18 +1286,29 @@
 			
 			
 			
+			//----------------------------------------------------------//
+			//----- FUNCTION TO RETRIEVE AND DISPLAY RELATED POSTS -----//
+			//----------------------------------------------------------//
 			
-			// FUNCTION TO RETRIEVE AND DISPLAY RELATED POSTS
-			function get_related_posts( $post_count, $program_slug, $project_slug, $target_nation) { ?>
+			function get_related_posts($related_args) {
 			
-				<!--RELATED POSTS-->
-						   <?php $args = array(
-								'posts_per_page' 	=> $post_count,
-								'post_type' 		=> 'post',
-								'program_taxo' 		=> $program_slug,
-								'project_taxo'		=> $project_slug,
-								'target_nation_taxo'=> $target_nation,
-						   ); ?>
+			
+			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
+			if (!isset($related_args["posts_type"])){$related_args["posts_type"] = 'post';}
+			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
+			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
+			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
+			
+			?>
+			
+				
+					   <?php $args = array(
+							'posts_per_page' 	=> $related_args["posts_per_page"],
+							'post_type' 		=> $related_args["post_type"],
+							'program_taxo' 		=> $related_args["program_taxo"],
+							'project_taxo'		=> $related_args["project_taxo"],
+							'target_nation_taxo'=> $related_args["target_nation_taxo"],
+					   ); ?>
 						   
 						   <?php $my_query = new WP_Query( $args ); ?>
 						   <?php if ( $my_query->have_posts() ) { ?>
@@ -1666,9 +1677,9 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 		
 		
-		//-------------------//
-		// ADD THEME SUPPORT //
-		//-------------------//
+		//-----------------------------//
+		//----- ADD THEME SUPPORT -----//
+		//-----------------------------//
 					
 					//ADD CUSTOM HEADER FUNCTIONALITY
 					add_theme_support( 'custom-header' );

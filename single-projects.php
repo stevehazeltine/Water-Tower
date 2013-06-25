@@ -170,7 +170,11 @@
 		
 		<div class="span4 sidebar">
 			<ul>
-				<?php get_related_posts(5, null, $project_slug); ?>
+				<?php $related_args = array (
+						'posts_per_page' 	=> 3,
+						'project_taxo'		=> $project_slug,
+				) ?>
+				<?php get_related_posts($related_args); ?>
 			</ul>
 		</div>
 	</div>
