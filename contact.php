@@ -6,6 +6,7 @@
 	
 		<div class="span12">
 			<p>some stuffaatesting</p>
+			<p>another paragraph</p>
 		</div><!--/.span12-->
 	
 	</div><!--/.row-->
