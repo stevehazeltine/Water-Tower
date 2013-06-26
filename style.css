@@ -1061,35 +1061,6 @@ a:hover {
 }
 
 
-/****************** TABS STYLE *****************/
-
-.nav-tabs {
-	border-bottom: none !important;
-}
-
-.nav-tabs>li>a {
-	color: #CCC;
-	margin-top: -3px;
-	margin-right: 0px;
-	border-top: 3px solid #EFEFEF;
-	border-right: none !important;
-	border-left: none !important;
-	border-bottom: none !important;
-	-webkit-border-radius: 0px !important;
-	-moz-border-radius: 0px !important;
-	border-radius: 0px !important;
-}
-
-.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
-	border-top: 3px solid #609FCE !important;
-	margin-top: -3px;
-	border-radius: 0px !important;
-}
-
-.nav>li>a:hover, .nav>li>a:focus {
-	border-top: 3px solid #CCC !important;
-	background-color: transparent !important;
-}
 
 
 /********** VIDEO STYLE **********/
@@ -1342,11 +1313,11 @@ a:hover {
 /***************** PROGRAM STYLES ***********************/
 
 .program-archive-menu {
-	margin-top: 65px;
+	margin-top: 35px;
 }
 
 .program-archive-nav .affix {
-	top: 50px;
+	top: 90px;
 	margin-top: 0px !important;
 }
 
@@ -1356,7 +1327,7 @@ a:hover {
 
 .program-archive-container h4 {
 	font-size: 20px;
-	margin-top: 60px;
+	padding-top: 60px;
 }
 
 .program-archive-school-title {
@@ -1375,6 +1346,10 @@ a:hover {
 				display: none;
 			}
 		}
+
+.program-archive-tagline {
+	color: #666;
+}
 
 .program-archive-featured-image {
 
@@ -1426,12 +1401,26 @@ a:hover {
 }
 
 .program-archive-nav ul li {
+	position: relative;
 	padding: 10px 0px 10px 30px;
 	border-bottom: 1px solid #DDD;
 	list-style-type: none;
 	background: #FCFCFC;
-	font-family: 'HelveticaNeueW01-57Cn';
+	font-family:'HelveticaNeueW01-57Cn';
 	font-size: 16px;
+}
+
+.program-archive-nav ul.nav > li a {
+	font-family:'HelveticaNeueW01-77BdCn 692722';
+}
+
+.program-archive-nav ul.nav > li > i {
+	position: absolute;
+	left: 13px;
+	top: 8px;
+	color: white;
+	font-size: 22px;
+	display: none;
 }
 
 .compare-programs-list-container {
@@ -2685,294 +2674,21 @@ body {
 
 
 
+/*************************/
+/***** SCROLLSPY NAV *****/
+/*************************/
 
-
-/* CSS for jQuery Orbit Plugin 1.4.0 Maintained for Foundation. foundation.zurb.com Free to use under the MIT license. http://www.opensource.org/licenses/mit-license.php
-*/
-
-.front-page-slider-container {
-	width: 100%;
-	position: relative;
-	left: 0px;
-	margin-top: 25px;
-}
-
-#front-page-slider {
-}
-
-.front-page-slider-container ul.orbit-bullets li.active.has-thumb .front-page-slider-lower-number {
-	background-color: #444;
-	width: 20px;
-	height: 20px;
-	color: white;
-	border-radius: 18px;
-	text-align: center;
-	padding: 8px;
-	float: left;
-	margin-right: 20px;
-}
-
-.front-page-slider-container ul.orbit-bullets li.has-thumb .front-page-slider-lower-number {
-	background-color: white;
-	width: 20px;
-	height: 20px;
-	color: #444;
-	border: 1px solid #444;
-	border-radius: 18px;
-	text-align: center;
-	padding: 8px;
-	float: left;
-	margin-right: 20px;
-	margin-bottom: 40px;
-}
-
-.front-page-slider-info {
-	float:left;
-	width:372px;
-	box-sizing: border-box;
-	padding: 50px 35px;
-	margin-left: 130px;
-}
-
-.front-page-slider-title {
-	font-size: 14px;
-	color: #999;
-	font-family: 'HelveticaNeueW01-47LtCn 692689';
-	letter-spacing: 1px;
-}
-
-.front-page-slider-video {
-	float:left;
-	width:568px;
-	box-sizing: border-box;
-	box-shadow: 0px 0px 225px #000;
-}
-
-		@media (min-width: 1200px) {
-			.front-page-slider-info {
-				width: 378px;
-				margin-left: 90px;
-			}
-			
-			.front-page-slider-video {
-				width: 793px;
-			}
-		}
-
-		
-.slider-video h5 {
-	font-size: 20px;
-	color: #999;
-	margin-top: -12px;
-}
-
-.slider-post {
-	padding: 35px 35px;
-	position: absolute;
-	text-shadow: 1px 1px 5px rgba(0, 0, 0, .75);
-}
-
-		@media (max-width: 767px) {
-			.slider-post h2{
-				font-size: 34px !important;
-			}
-			
-			.front-page-slider-container .orbit.with-bullets {
-				height: 240px !important;
-			}
-		}
-
-		/**** SLIDER TEXT LOCATIONS ****/
-		.slider-post-topleft {
-			top: 0px;
-			left: 90px;
-		}
-		
-		.slider-post-midleft {
-			top: 33%;
-			left: 90px;
-		}
-		
-		.slider-post-lowleft {
-			bottom: 0px;
-			left: 90px;
-		}
-		
-		.slider-post-topright {
-			top: 0px;
-			right: 90px;
-		}
-		
-		.slider-post-midright {
-			top: 33%;
-			right: 90px;
-		}
-		
-		.slider-post-lowright {
-			bottom: 0px;
-			right: 90px;
-		}
-
-.slider-post h2 {
-	font-size: 52px;
-	color: white;
-	font-family:'HelveticaNeueW01-77BdCn 692722';
-}
-
-.slider-post-read-more {
-	float: right;
-	font-size: 16px;
-	font-family:'HelveticaNeueW01-77BdCn 692722';
-}
-		.slider-post-topright .slider-post-read-more {float: right;}
-		.slider-post-midright .slider-post-read-more {float: right;}
-		.slider-post-lowright .slider-post-read-more {float: right;}
-		
-		.slider-post-topleft .slider-post-read-more {float: left;}
-		.slider-post-midleft .slider-post-read-more {float: left;}
-		.slider-post-lowleft .slider-post-read-more {float: left;}
-
-.slider-post-read-more i {
-	margin-right: 5px;
-	font-size: 24px;
-	vertical-align: top;
-}
-
-.slider-post a {
-	color: white;
-}
-
-.slider-post .read-more-window {
-	margin-top: 35px;
-}
-
-/*LOADING STATE   */
-	#front-page-slider { 
-          width: 100%;
-          height: 400px;
-          background: white;
-		  overflow: hidden; }
-     #front-page-slider img,  
-     #front-page-slider div { display: none; }
-
-
-/* Container ---------------------- */
-.orbit-wrapper { width: 1px; height: 1px; position: relative; }
-
-.orbit { width: 1px; height: 1px; position: relative; overflow: hidden; margin-bottom: 17px; }
-.orbit.with-bullets { margin-bottom: 40px; }
-.orbit .orbit-slide { max-width: 100%; position: absolute; top: 0; left: 0; }
-.orbit-slide div, .orbit-slide img { display: block !important;}
-.orbit a.orbit-slide { border: none; line-height: 0; display: none; }
-.orbit div.orbit-slide { width: 100%; height: 100%; background-color: #444; -webkit-background-size: cover !important; -moz-background-size: cover !important; -o-background-size: cover!important; background-size: cover !important; filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0); opacity: 0; }
-
-/* Note: If your slider only uses content or anchors, you're going to want to put the width and height declarations on the ".orbit>div" and "div.orbit>a" tags in addition to just the .orbit-wrapper */
-/* Timer ---------------------- */
-.orbit-wrapper .timer { width: 40px; height: 40px; overflow: hidden; position: absolute; top: 10px; right: 10px; opacity: .6; cursor: pointer; z-index: 31; }
-.orbit-wrapper span.rotator { display: block; width: 40px; height: 40px; position: absolute; top: 0; left: -20px; background: url('../images/foundation/orbit/rotator-black.png') no-repeat; z-index: 3; }
-.orbit-wrapper span.rotator.move { left: 0; }
-.orbit-wrapper span.mask { display: block; width: 20px; height: 40px; position: absolute; top: 0; right: 0; z-index: 2; overflow: hidden; }
-.orbit-wrapper span.mask.move { width: 40px; left: 0; background: url('../images/foundation/orbit/timer-black.png') repeat 0 0; }
-.orbit-wrapper span.pause { display: block; width: 40px; height: 40px; position: absolute; top: 0; left: 0; background: url('../images/foundation/orbit/pause-black.png') no-repeat; z-index: 4; opacity: 0; }
-.orbit-wrapper span.pause.active { background: url('../images/foundation/orbit/pause-black.png') no-repeat 0 -40px; }
-.orbit-wrapper .timer:hover span.pause, .orbit-wrapper .timer:focus span.pause, .orbit-wrapper span.pause.active { opacity: 1; }
-
-/* Captions ---------------------- */
-.orbit-caption { display: none; font-family: inherit; }
-
-.orbit-wrapper .orbit-caption { background: black; background: rgba(0, 0, 0, 0.6); z-index: 30; color: white; text-align: center; padding: 7px 0; font-size: 13px; position: absolute; right: 0; bottom: 0; width: 100%; }
-
-/* Directional Nav ---------------------- */
-.orbit-wrapper .slider-nav { display: block; }
-.orbit-wrapper .slider-nav span { width: 39px; height: 50px; text-indent: -9999px; position: absolute; z-index: 30; top: 50%; margin-top: -25px; cursor: pointer; }
-.orbit-wrapper .slider-nav span.right { background: url('../images/foundation/orbit/right-arrow.png'); background-size: 100%; right: 0; }
-.orbit-wrapper .slider-nav span.left { background: url('../images/foundation/orbit/left-arrow.png'); background-size: 100%; left: 0; }
-
-.lt-ie9 .orbit-wrapper .slider-nav span.right { background: url('../images/foundation/orbit/right-arrow-small.png'); }
-.lt-ie9 .orbit-wrapper .slider-nav span.left { background: url('../images/foundation/orbit/left-arrow-small.png'); }
-
-/* Bullet Nav ---------------------- */
-ul.orbit-bullets { position: absolute; z-index: 30; list-style: none; bottom: -40px; left: 50%; margin-left: -50px; padding: 0; }
-ul.orbit-bullets li { float: left; margin-left: 5px; cursor: pointer; color: #999999; text-indent: -9999px; background: url('../images/foundation/orbit/bullets.jpg') no-repeat 4px 0; width: 13px; height: 12px; overflow: hidden; }
-ul.orbit-bullets li.active { color: #222222; background-position: -8px 0; }
-ul.orbit-bullets li.has-thumb { background: none; width: 100px; height: 75px; }
-ul.orbit-bullets li.active.has-thumb { background-position: 0 0; }
-
-/* NORMAL BULLET NAV */
-.normal-slider ul.orbit-bullets li.active {
-	color: #222222;
-	background-position: -8px 0;
-	background-color: #444;
-	height: 10px;
-	width: 10px;
-	border-radius: 7px;
-}
-
-.normal-slider ul.orbit-bullets li {
-	background-color: white;
-	height: 10px;
-	width: 10px;
-	border-radius: 7px;
-	border: 2px solid #444;
-}
-
-.normal-slider .attachment-full-banner {
-	margin-left: 0px !important;
-}
-
-.front-page-slider-container .orbit {
-	border-bottom: 4px solid #444;
-}
-
-.orbit {
-	width: 1200px !important;
-	left: -130px !important;
-}
-
-
-	@media (min-width: 1200px) {
-		.orbit {
-			width: 1350px !important;
-			left: -90px !important;
-		}
-	}
-
-/*LOADING STATE   */
-	.bullet-slider { 
-          width: 100%;
-          height: 400px;
-          background: white url('orbit/loading.gif') no-repeat center center; overflow: hidden; }
-     .bullet-slider img,  
-     .bullet-slider div { display: none; }
+#scrollspy-nav .nav .active { background: #609FCE; }
+#scrollspy-nav .nav .active a {	color: white; }
+#scrollspy-nav .nav .active i {position: absolue; display: block;}
 
 
 
 
-/* Front Page Bullet Nav ---------------------- */
-.front-page-slider-container .orbit.with-bullets { box-sizing: border-box; }
-		@media (min-width: 1200px) { .front-page-slider-container .orbit.with-bullets { height: 450px !important;}}
-		@media (max-width: 1200px) and (min-width: 747px) { .front-page-slider-container .orbit.with-bullets{ height: 400px !important;}}
-.front-page-slider-container ul.orbit-bullets { position: relative; z-index: 30; list-style: none; top: -44px; left: 0px; margin-left: 0px !important; padding: 0px; }
-.front-page-slider-container ul.orbit-bullets li { float: left; margin-left: 0px; cursor: pointer; opacity: .4; text-indent: 0px; background: url('../images/foundation/orbit/bullets.jpg') no-repeat 4px 0; width: 13px; height: 12px; overflow: hidden; }
-.front-page-slider-container ul.orbit-bullets li.active { color: #222222; background-position: -8px 0; }
-.front-page-slider-container ul.orbit-bullets li.has-thumb { overflow: hidden; box-sizing: border-box; padding: 10px 15px; position: relative; background-image: none !important; width: 33.33334%; height: 80px; transition: .35s; -moz-transition: .35s; -webkit-transition: .35s; -o-transition: .35s; z-index: 9; }
-.front-page-slider-container ul.orbit-bullets li.has-thumb i { color: #444; position: absolute; top: -17px; left: 6px; font-size: 44px; visibility: hidden; opacity: 0; transition: .35s; -moz-transition: .35s; -webkit-transition: .35s; -o-transition: .35s;}
-.front-page-slider-container ul.orbit-bullets li.has-thumb h5 { font-family:'HelveticaNeueW01-77BdCn 692722'; }
-.front-page-slider-container ul.orbit-bullets li.active.has-thumb { overflow: hidden;  opacity: 1; }
-.front-page-slider-container ul.orbit-bullets li.active.has-thumb i {visibility: visible !important; opacity: 1 !important;}
 
-.front-page-slider-container ul.orbit-bullets li.has-thumb h4 { font-size: 20px; }
+/*******************************/
+/***** BOOTSTRAP OVERRIDES *****/
+/*******************************/
 
-/* Orbit Slide Counter */
-.orbit-slide-counter { position: absolute; bottom: 0; z-index: 99; background: rgba(0, 0, 0, 0.7); color: white; padding: 5px; }
-
-/* Fluid Layout ---------------------- */
-.orbit img.fluid-placeholder { visibility: hidden; position: static; display: block; width: 100%; }
-
-/* Correct timer in IE */
-.lt-ie9 .timer { display: none !important; }
-
-.lt-ie9 .orbit-caption { background: black; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000,endColorstr=#99000000); zoom: 1; }
-
-@media only screen and (max-width: 767px) { .orbit.orbit-stack-on-small img.fluid-placeholder { visibility: visible; }
-  .orbit.orbit-stack-on-small .orbit-slide { position: static; margin-bottom: 10px; } }
+.nav>li>a:hover, .nav>li>a:focus { background: transparent !important;}
+.page-wrap { overflow: visible !important;}

@@ -1286,7 +1286,7 @@
 			
 			
 			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
-			if (!isset($related_args["posts_type"])){$related_args["posts_type"] = 'post';}
+			if (!isset($related_args["post_type"])){$related_args["post_type"] = 'post';}
 			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
 			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
 			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
