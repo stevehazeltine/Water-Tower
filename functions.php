@@ -59,12 +59,11 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our programs and program specific data',
 				'public'        => true,
-				'menu_position' => 100,
+				'menu_position' => 6,
 				'supports'      => array( 'title', 'editor', 'thumbnail', 'comments', 'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
-				'rewrite' => array('slug' => 'programs'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/books-stack.png'  
+				'rewrite' => array('slug' => 'programs'), 
 			);
 			register_post_type( 'program', $args );	
 		}
@@ -183,12 +182,11 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Target Nations specific data',
 				'public'        => true,
-				'menu_position' => 106,
+				'menu_position' => 22,
 				'supports'      => array( 'title', 'editor', 'thumbnail' ),
 				'has_archive'   => true,
 				'hierarchical' 	=> true,
 				'taxonomies' 	=> array('post_tag'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/globe.png',
 				'rewrite' 		=> array('slug' => 'target-nations'),
 			);
 			register_post_type( 'target_nations', $args );	
@@ -279,10 +277,9 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Video specific data',
 				'public'        => true,
-				'menu_position' => 104,
+				'menu_position' => 11,
 				'supports'      => array( 'title', 'editor', 'thumbnail' ),
 				'has_archive'   => true,
-				'menu_icon' => get_bloginfo('template_directory') . '/images/films.png'  
 			);
 			register_post_type( 'videos', $args );	
 		}
@@ -311,10 +308,9 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Story specific data',
 				'public'        => true,
-				'menu_position' => 105,
+				'menu_position' => 7,
 				'supports'      => array( 'title', 'editor',  'revisions' ),
 				'has_archive'   => true,
-				'menu_icon' => get_bloginfo('template_directory') . '/images/testimonies.png'  
 			);
 			register_post_type( 'stories', $args );	
 		}
@@ -343,12 +339,11 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Focus Ministries specific data',
 				'public'        => true,
-				'menu_position' => 106,
+				'menu_position' => 21,
 				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 				'has_archive'   => true,
 				'hierarchical' 	=> true,
 				'taxonomies' 	=> array('post_tag'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/microphone.png',
 				'rewrite' 		=> array('slug' => 'focus-ministries'),
 			);
 			register_post_type( 'focus_ministries', $args );	
@@ -406,11 +401,10 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Project specific data',
 				'public'        => true,
-				'menu_position' => 106,
+				'menu_position' => 23,
 				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/microphone.png'  
 			);
 			register_post_type( 'projects', $args );	
 		}
@@ -489,13 +483,13 @@
 	    function my_custom_post_staff_opportunities() {
 			$labels = array(
 				'name'               => _x( 'Staff Opportunities', 'post type general name' ),
-				'singular_name'      => _x( 'Staff Opening', 'post type singular name' ),
+				'singular_name'      => _x( 'Staff Opportunity', 'post type singular name' ),
 				'add_new'            => _x( 'Add New', 'book' ),
 				'add_new_item'       => __( 'Add New Staff Opportunity' ),
 				'edit_item'          => __( 'Edit Staff Opportunity' ),
 				'new_item'           => __( 'New Staff Opportunity' ),
-				'all_items'          => __( 'All Staff Opportunity' ),
-				'view_item'          => __( 'View Staff Opportunity' ),
+				'all_items'          => __( 'All Staff Opportunities' ),
+				'view_item'          => __( 'View Staff Opportunities' ),
 				'search_items'       => __( 'Search Staff Opportunities' ),
 				'not_found'          => __( 'No Staff Opportunities found' ),
 				'not_found_in_trash' => __( 'No Staff Opportunities found in the Trash' ), 
@@ -506,11 +500,10 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our Staff Opportunity specific data',
 				'public'        => true,
-				'menu_position' => 106,
+				'menu_position' => 24,
 				'supports'      => array( 'title', 'editor', 'thumbnail',  'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/microphone.png', 
 				'rewrite' 		=> array('slug' => 'staff-opportunities'), 
 			);
 			register_post_type( 'staff_opportunities', $args );	
@@ -543,11 +536,10 @@
 				'description'   => 'Holds our teachings and teaching specific data',
 				'public'        => true,
 				'capability_type'  => array( 'publish_posts' ),
-				'menu_position' => 104,
+				'menu_position' => 12,
 				'supports'      => array( 'title', 'author', 'editor', 'thumbnail', 'comments',  'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
-				'menu_icon' 	=> get_bloginfo('template_directory') . '/images/microphone.png'  
 			);
 			register_post_type( 'teachings', $args );	
 		}
@@ -1585,83 +1577,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 		
 		
-			//ADD PLACEHOLDER FUNCTIONALITY TO GRAVITYFORMS
-
-			/* Add a custom field to the field editor (See editor screenshot) */
-			add_action("gform_field_standard_settings", "my_standard_settings", 10, 2);
-
-			function my_standard_settings($position, $form_id){
-
-			// Create settings on position 25 (right after Field Label)
-
-			if($position == 25){
-			?>
 					
-			<li class="admin_label_setting field_setting" style="display: list-item; ">
-			<label for="field_placeholder">Placeholder Text
-
-			<!-- Tooltip to help users understand what this field does -->
-			<a href="javascript:void(0);" class="tooltip tooltip_form_field_placeholder" tooltip="&lt;h6&gt;Placeholder&lt;/h6&gt;Enter the placeholder/default text for this field.">(?)</a>
-						
-			</label>
-					
-			<input type="text" id="field_placeholder" class="fieldwidth-3" size="35" onkeyup="SetFieldProperty('placeholder', this.value);">
-					
-			</li>
-			<?php
-			}
-			}
-
-			/* Now we execute some javascript technicalitites for the field to load correctly */
-
-			add_action("gform_editor_js", "my_gform_editor_js");
-
-			function my_gform_editor_js(){
-			?>
-			<script>
-			//binding to the load field settings event to initialize the checkbox
-			jQuery(document).bind("gform_load_field_settings", function(event, field, form){
-			jQuery("#field_placeholder").val(field["placeholder"]);
-			});
-			</script>
-
-			<?php
-			}
-
-			/* We use jQuery to read the placeholder value and inject it to its field */
-
-			add_action('gform_enqueue_scripts',"my_gform_enqueue_scripts", 10, 2);
-
-			function my_gform_enqueue_scripts($form, $is_ajax=false){
-			?>
-			<script>
-
-			jQuery(function(){
-			<?php
-
-			/* Go through each one of the form fields */
-
-			foreach($form['fields'] as $i=>$field){
-
-			/* Check if the field has an assigned placeholder */
-						
-			if(isset($field['placeholder']) && !empty($field['placeholder'])){
-							
-			/* If a placeholder text exists, inject it as a new property to the field using jQuery */
-							
-			?>
-							
-			jQuery('#input_<?php echo $form['id']?>_<?php echo $field['id']?>').attr('placeholder','<?php echo $field['placeholder']?>');
-							
-			<?php
-			}
-			}
-			?>
-			});
-			</script>
-			<?php
-			}
-		
 		
 		
 		//ADD JESUS TO EVERY POST TAG LIST
@@ -1711,9 +1627,88 @@ class ywammontana_walker_comment extends Walker_Comment {
 		}
 			
 			
+		//-------------------------------//
+		//----- CUSTOMIZE DASHBOARD -----//
+		//-------------------------------//
+		
+			// CUSTOM ADMIN LOGIN HEADER LOGO
+			function my_custom_login_logo() {
+			    echo '<style  type="text/css"> h1 a {  background-image:url(' . get_bloginfo('template_directory') . '/images/logo_login.png)  !important;
+			    									   background-size: 300px 35px !important;
+													   background-position-y: 28px !important; } </style>';
+			}
+			add_action('login_head',  'my_custom_login_logo');
 			
-			
-			
+			// ADD CUSTOM ICONS TO CUSTOM POST TYPES
+			add_action( 'admin_head', 'cpt_icons' );
+			function cpt_icons() {
+			    ?>
+			    <style type="text/css" media="screen">
+			    	<?php // PROGRAMS ?>
+			        #menu-posts-program .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/books-stack.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-program:hover .wp-menu-image, #menu-posts-program.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // TARGET NATIONS ?>
+			        #menu-posts-target_nations .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/globe-model.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-target_nations:hover .wp-menu-image, #menu-posts-target_nations.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // VIDEOS ?>
+			        #menu-posts-videos .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/films.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-videos:hover .wp-menu-image, #menu-posts-videos.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // STORIES ?>
+			        #menu-posts-stories .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/user--pencil.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-stories:hover .wp-menu-image, #menu-posts-stories.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // TEACHINGS ?>
+			        #menu-posts-teachings .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/microphone.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-teachings:hover .wp-menu-image, #menu-posts-teachings.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // FOCUS MINISTRIES ?>
+			        #menu-posts-focus_ministries .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/magnifier.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-focus_ministries:hover .wp-menu-image, #menu-posts-focus_ministries.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // PROJECTS ?>
+			        #menu-posts-projects .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/hard-hat.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-projects:hover .wp-menu-image, #menu-posts-projects.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			        
+			        <?php // STAFF OPPORTUNITIES ?>
+			        #menu-posts-staff_opportunities .wp-menu-image {
+			            background: url(<?php bloginfo('template_url') ?>/images/user-business.png) no-repeat 6px -17px !important;
+			        }
+					#menu-posts-staff_opportunities:hover .wp-menu-image, #menu-posts-staff_opportunities.wp-has-current-submenu .wp-menu-image {
+			            background-position:6px 7px!important;
+			        }
+			    </style>
+			<?php }
 			
 			
 			
