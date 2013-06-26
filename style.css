@@ -1190,10 +1190,10 @@ a:hover {
 }
 
 .gfield_label {
-	font-size: 14px;
-	color: #999;
-	font-weight: 300 !important;
-	font-style: italic;
+	font-size: 20px;
+	color: #609FCE;
+	font-family: 'HelveticaNeueW01-77BdCn 692722';
+	font-weight: normal !important;
 }
 
 .gfield_required {
@@ -2618,45 +2618,6 @@ a:hover {
 			width: 979px !important;
 			max-width: 979px;
 			margin-left: -130px;
-		}
-		
-		/* GRAVITY FORMS MOBILE LABELS AND DESCRIPTIONS */
-		.gform_wrapper .left_label .gfield_label {
-			float: none !important;
-			width: 100% !important;
-			border-bottom: none !important;
-		}
-		
-		.gform_wrapper .left_label .gfield_description {
-			width: 100% !important;
-		}
-		
-		.chzn-container {
-			width: 250px !important;
-		}
-		
-		.chzn-drop {
-			width: 248px !important;
-		}
-		
-		.chzn-search input {
-			width: 227px !important;
-		}
-		
-		.gform_wrapper .right_label .gfield_description, .gform_wrapper .left_label .gfield_description, .gform_wrapper .left_label .instruction, .gform_wrapper .right_label .instruction {
-			margin-left: 0px !important;
-		}
-		
-		.gform_wrapper .gform_footer.left_label {
-			padding: 16px 0 10px 0px !important;
-		}
-		
-		.gform_wrapper textarea.textarea {
-			width: 100% !important;
-		}
-		
-		.gform_wrapper .left_label input.medium {
-			width: 100% !important;
 		}
 
 }

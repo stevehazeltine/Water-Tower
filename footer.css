@@ -117,6 +117,17 @@
 	color: #888;
 }
 
+.global-footer .attachment-xs-thumbnail-card {
+	-webkit-filter: grayscale(100%);
+	transition: .35s;
+	-webkit-transition: .35s; /* Safari */
+}
+
+.upcoming-school:hover img.attachment-xs-thumbnail-card,
+.footer-related-post-container:hover img.attachment-xs-thumbnail-card {
+	-webkit-filter: grayscale(0%);
+}
+
 .footer-user-options {
 	position: absolute;
 	top: 0px;
