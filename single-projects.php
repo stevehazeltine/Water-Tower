@@ -163,10 +163,12 @@
 			
 			<!----- END PROJECT STATUS CHART ----->
 			
-			
-			
-			
 		</div>
+		
+		
+		<!------------------->
+		<!----- SIDEBAR ----->
+		<!------------------->
 		
 		<div class="span4 sidebar">
 			<ul>
