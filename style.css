@@ -1,5 +1,5 @@
 /*
-Theme Name: YWAM Montana, Lakeside
+Theme Name: Water Tower
 Theme URI: http://www.ywammontana.org
 Description: A theme developed specifically for use at YWAM Montana, Lakeside.
 Author: Josh Rathke
@@ -1327,7 +1327,8 @@ a:hover {
 
 .program-archive-container h4 {
 	font-size: 20px;
-	padding-top: 60px;
+	padding-top: 80px;
+	margin-top: 0px;
 }
 
 .program-archive-school-title {
@@ -2684,11 +2685,36 @@ body {
 
 
 
-
-
 /*******************************/
 /***** BOOTSTRAP OVERRIDES *****/
 /*******************************/
 
 .nav>li>a:hover, .nav>li>a:focus { background: transparent !important;}
 .page-wrap { overflow: visible !important;}
+
+
+
+/**************************/
+/***** FOLLOW US PAGE *****/
+/**************************/
+.follow-us-title span { display: inline-block; float: right;}
+@media (max-width: 979px) {
+	.follow-us-title {font-size: 34px; margin-top: 0px;}
+	.follow-us-title span {float: none;}
+	.follow-us-title-icons {margin-left: 0px !important; margin-right: 10px;}
+	}
+.follow-us-title-icons { font-size: .4em; padding: 10px; background: #DDD; color: white; border-radius: 9999px; display: inline-block; width: 1em; height: 1em; text-align: center; vertical-align: top; margin-left: 15px;}
+
+
+
+/***********************************/
+/***** INSTAGRAM WIDGET STYLES *****/
+/***********************************/
+
+.instagram-container { position: relative; padding: 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, .2); text-align: center; transition: .35s; -webkit-transition: .35s; }
+.instagram-container:hover { box-shadow: none; }
+.instarow { margin-top: 25px; }
+.instagram-meta { color: #999; font-family:'HelveticaNeueW01-67MdCn 692710';text-transform: uppercase; margin-top: 10px; font-size: 12px; color: #444; }
+.instagram-meta i { font-size: 12px; color: #999; }
+.instagram-social { text-align: right; }
+.instagram-social i {margin-left: 5px;}

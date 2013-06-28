@@ -1711,8 +1711,86 @@ class ywammontana_walker_comment extends Walker_Comment {
 			<?php }
 			
 			
+		
+		
+		//----------------------------//
+		//----- INSTAGRAM WIDGET -----//
+		//----------------------------//
+		
+		function get_instagram($insta_args) {
 			
-			
+				
+				if (!isset($insta_args["rows"])){$insta_args["rows"] = 3;}
+				if (!isset($insta_args["cols"])){$insta_args["cols"] = 4;}//OPTIONS 2,3,4,6,12
+				if (!isset($insta_args["resolution"])){$insta_args["resolution"] = 'low_resolution';}//OPTIONS: low_resolution, thumbnail, standard_resolution
+				if (!isset($insta_args["feed"])){$insta_args["feed"] = 'hashtag';} //OPTIONS: base, hashtag
+				if (!isset($insta_args["tag"])){$insta_args["tag"] = 'ywammontana';}
+				
+				if ($insta_args['feed'] == 'base') {
+					$feed_url = 'https://api.instagram.com/v1/users/231333075/media/recent?access_token=231333075.26c3a2f.8f32564f07c64424b28191ee96825254';
+				} else {
+					$feed_url = 'https://api.instagram.com/v1/tags/' . $insta_args['tag'] . '/media/recent?access_token=231333075.26c3a2f.8f32564f07c64424b28191ee96825254';
+				}
+				
+				
+				global $span, $resolution, $cols, $rows;
+				
+				$resolution = $insta_args['resolution'];
+				$cols = $insta_args['cols'];
+				$rows = $insta_args['rows'];
+				$span = 12/$cols;
+				
+				
+				
+			  function fetchData($url){
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+				$result = curl_exec($ch);
+				curl_close($ch); 
+				return $result;
+			  }
+			  $result = fetchData($feed_url);
+			  $result = json_decode($result);
+			  
+			  $col_i = 1;
+			  $row_i = 1;
+			  ?>
+			  
+			  <?php function get_instagram_post($post) { ?>
+			  <?php global $span, $resolution; ?>
+			  
+		  		<div class="span<?php echo $span; ?> instagram-container">
+					<img src="<?php echo $post->images->$resolution->url; ?>" />
+					
+						<div class="instagram-meta">	
+							<div class="instagram-social">
+								<i class="icon-heart"></i> <?php echo $post->likes->count; ?>
+								<i class="icon-comment"></i> <?php echo $post->comments->count; ?>
+							</div>
+						</div>
+				</div>
+			  <?php } ?>
+			  
+			  
+			  <div class="row-fluid instarow">
+				  <?php foreach ($result->data as $post) { ?>
+				  <?php if ($row_i <= $rows) { ?> 
+						  	<?php if ($col_i <= $cols) { ?>
+								<?php get_instagram_post($post); ?>
+								<?php $col_i = ++$col_i; ?>
+							<?php } else { ?>
+					  </div>
+					  <?php $row_i = ++$row_i; ?>
+					  <div class="row-fluid instarow">
+					  
+					  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
+								<?php $col_i = 2; ?>
+							<?php } ?>
+					<?php } ?>
+				  <?php } ?>
+		<?php } 
 			
 			
 
