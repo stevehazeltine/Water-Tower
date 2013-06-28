@@ -1352,7 +1352,9 @@
 			
 			
 			
-			// IMAGE CREDITS
+			//-------------------------//
+			//----- IMAGE CREDITS -----//
+			//-------------------------//
 			
 				//FUNCTION TO RETRIEVE IMAGE CREDITS
 					function get_image_credits() {
@@ -1502,19 +1504,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 	</ul><!-- /#comment-list -->
 
 	<?php }
-}
-			
-			
-			
-	//ADD SOCIAL LOGIN TO COMMENTS FORM
-	function add_social_login_to_comments() { 
-		do_action( 'wordpress_social_login' );
-	}
-	add_filter( 'comment_form_must_log_in_after', 'add_social_login_to_comments' );
-			
-	//ADD FIX FOR YOAST SEO O.G. TAGS FOR FACEBOOK DESCRIPTION TO WORK
-	add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
-	
+}	
 			
 
 
@@ -1579,8 +1569,10 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 					
 		
+		//--------------------------------------------//
+		//----- ADD JESUS TO EVERY POST TAG LIST -----//
+		//--------------------------------------------//
 		
-		//ADD JESUS TO EVERY POST TAG LIST
 			function set_jesus_tag_on_publish($post_id,$post) {
 			  if ($post->post_type == 'post' or 'program'
 				&& $post->post_status == 'publish') {
@@ -1594,37 +1586,38 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 		
 		//-----------------------------//
-		//----- ADD THEME SUPPORT -----//
+		//----- ADD THEME SUPPORT -----// 
 		//-----------------------------//
 					
-					//ADD CUSTOM HEADER FUNCTIONALITY
-					add_theme_support( 'custom-header' );
-					
-					//ADD POST THUMBNAIL FUNCTIONALITY
-					if ( function_exists( 'add_theme_support' ) ) {
-							add_theme_support( 'post-thumbnails' );
-							set_post_thumbnail_size( 150, 150 ); // default Post Thumbnail dimensions   
-					}
-
-		if ( function_exists( 'add_image_size' ) ) { 
-			add_image_size( 'full-banner', 1350, 450, true ); //USE FOR FULL LENGTH BANNERS
-			add_image_size( 'mobile-banner', 960, 320, true ); //USE FOR MOBILE SIZED BANNERS
-			add_image_size( 'xs-mobile-banner', 320, 107, true ); //USE FOR EXTRA SMALL MOBILE SIZED BANNERS
+			//ADD CUSTOM HEADER FUNCTIONALITY
+			add_theme_support( 'custom-header' );
 			
-			// ARCHIVE BANNERS
-			add_image_size( 'archive-banner', 1200, 300, true ); //USE FOR ARCHIVE PAGES
-			add_image_size( 'mobile-archive-banner', 600, 150, true ); //USE FOR MOBILE ARCHIVE PAGES
-			add_image_size( 'mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
+			//ADD POST THUMBNAIL FUNCTIONALITY
+			if ( function_exists( 'add_theme_support' ) ) {
+					add_theme_support( 'post-thumbnails' );
+					set_post_thumbnail_size( 150, 150 ); // default Post Thumbnail dimensions   
+			}
 			
-			// 2x1 ASPECT RATIO
-			add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
-			add_image_size( 'thumbnail-card', 400, 200, true ); //USE FOR DISPLAY OF THUMBNAIL SIZE CARDS
-			add_image_size( 'xs-thumbnail-card', 150, 75, true ); //USE FOR DISPLAY OF EXTRA SMALL THUMBNAIL SIZE CARDS
-			
-			// 16x9 ASPECT RATIO
-			add_image_size( '16:9-media', 1200, 675, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
-			add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
-		}
+			//DEFINE THUMBNAIL SIZES
+			if ( function_exists( 'add_image_size' ) ) { 
+				add_image_size( 'full-banner', 1350, 450, true ); //USE FOR FULL LENGTH BANNERS
+				add_image_size( 'mobile-banner', 960, 320, true ); //USE FOR MOBILE SIZED BANNERS
+				add_image_size( 'xs-mobile-banner', 320, 107, true ); //USE FOR EXTRA SMALL MOBILE SIZED BANNERS
+				
+				// ARCHIVE BANNERS
+				add_image_size( 'archive-banner', 1200, 300, true ); //USE FOR ARCHIVE PAGES
+				add_image_size( 'mobile-archive-banner', 600, 150, true ); //USE FOR MOBILE ARCHIVE PAGES
+				add_image_size( 'mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
+				
+				// 2x1 ASPECT RATIO
+				add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
+				add_image_size( 'thumbnail-card', 400, 200, true ); //USE FOR DISPLAY OF THUMBNAIL SIZE CARDS
+				add_image_size( 'xs-thumbnail-card', 150, 75, true ); //USE FOR DISPLAY OF EXTRA SMALL THUMBNAIL SIZE CARDS
+				
+				// 16x9 ASPECT RATIO
+				add_image_size( '16:9-media', 1200, 675, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
+				add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
+			}
 			
 			
 		//-------------------------------//
@@ -1719,9 +1712,8 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 		function get_instagram($insta_args) {
 			
-				
 				if (!isset($insta_args["rows"])){$insta_args["rows"] = 3;}
-				if (!isset($insta_args["cols"])){$insta_args["cols"] = 4;}//OPTIONS 2,3,4,6,12
+				if (!isset($insta_args["cols"])){$insta_args["cols"] = 3;}//OPTIONS 2,3,4,6,12
 				if (!isset($insta_args["resolution"])){$insta_args["resolution"] = 'low_resolution';}//OPTIONS: low_resolution, thumbnail, standard_resolution
 				if (!isset($insta_args["feed"])){$insta_args["feed"] = 'hashtag';} //OPTIONS: base, hashtag
 				if (!isset($insta_args["tag"])){$insta_args["tag"] = 'ywammontana';}
@@ -1733,22 +1725,22 @@ class ywammontana_walker_comment extends Walker_Comment {
 				}
 				
 				
-				global $span, $resolution, $cols, $rows;
-				
-				$resolution = $insta_args['resolution'];
-				$cols = $insta_args['cols'];
-				$rows = $insta_args['rows'];
-				$span = 12/$cols;
+				global $span, $resolution, $cols, $rows, $title_prefix;
+					$title_prefix = $insta_args['title_prefix'];
+					$resolution = $insta_args['resolution'];
+					$cols = $insta_args['cols'];
+					$rows = $insta_args['rows'];
+					$span = 12/$cols;
 				
 				
 				
 			  function fetchData($url){
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 20);
 				$result = curl_exec($ch);
-				curl_close($ch); 
+					curl_close($ch); 
 				return $result;
 			  }
 			  $result = fetchData($feed_url);
@@ -1758,11 +1750,14 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  $row_i = 1;
 			  ?>
 			  
+			  
 			  <?php function get_instagram_post($post) { ?>
 			  <?php global $span, $resolution; ?>
+			   
 			  
 		  		<div class="span<?php echo $span; ?> instagram-container">
-					<img src="<?php echo $post->images->$resolution->url; ?>" />
+		  			<a href="<?php echo $post->link; ?>" >
+						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
 						<div class="instagram-meta">	
 							<div class="instagram-social">
@@ -1770,26 +1765,30 @@ class ywammontana_walker_comment extends Walker_Comment {
 								<i class="icon-comment"></i> <?php echo $post->comments->count; ?>
 							</div>
 						</div>
+					</a>
 				</div>
 			  <?php } ?>
 			  
-			  
+			  <?php if (!empty($result->data)) { ?>
+			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
 			  <div class="row-fluid instarow">
 				  <?php foreach ($result->data as $post) { ?>
-				  <?php if ($row_i <= $rows) { ?> 
-						  	<?php if ($col_i <= $cols) { ?>
-								<?php get_instagram_post($post); ?>
-								<?php $col_i = ++$col_i; ?>
-							<?php } else { ?>
-					  </div>
-					  <?php $row_i = ++$row_i; ?>
-					  <div class="row-fluid instarow">
-					  
-					  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
-								<?php $col_i = 2; ?>
-							<?php } ?>
-					<?php } ?>
+					  <?php if ($row_i <= $rows) { ?> 
+							  	<?php if ($col_i <= $cols) { ?>
+									<?php get_instagram_post($post); ?>
+									<?php $col_i = ++$col_i; ?>
+								<?php } else { ?>
+								  </div>
+								  <?php $row_i = ++$row_i; ?>
+								  <div class="row-fluid instarow">
+						  
+						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
+									<?php $col_i = 2; ?>
+								<?php } ?>
+					  <?php } ?>
 				  <?php } ?>
+								  </div>
+								  <?php } ?>
 		<?php } 
 			
 			
@@ -1999,163 +1998,5 @@ class ywammontana_walker_comment extends Walker_Comment {
 		add_action('save_post', 'post_programs_completed_update');
 	
 	
-	//ADD FIX FOR SOCIAL LOGIN AVATAR OVERWRITE PROBLEM
-	// remove WordPress Social Login's get_avatar filter so that we can add our own
-remove_filter( 'get_avatar', 'wsl_user_custom_avatar' );
-function my_user_custom_avatar($avatar, $id_or_email, $size, $default, $alt) {
-        global $comment;
-
-        if( get_option ('wsl_settings_users_avatars') && !empty ($avatar)) {
-                //Check if we are in a comment
-                if (!is_null ($comment) && !empty ($comment->user_id)) {
-                        $user_id = $comment->user_id;
-                } elseif(!empty ($id_or_email)) {
-                        if ( is_numeric($id_or_email) ) {
-                                $user_id = (int) $id_or_email;
-                        } elseif ( is_string( $id_or_email ) && ( $user = get_user_by( 'email', $id_or_email ) ) ) {
-                                $user_id = $user->ID;
-                        } elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-                                $user_id = (int) $id_or_email->user_id;
-                        }
-                }
-                // Get the thumbnail provided by WordPress Social Login
-                if ($user_id) {
-                        if (($user_thumbnail = get_user_meta ($user_id, 'wsl_user_image', true)) !== false) {
-                                if (strlen (trim ($user_thumbnail)) > 0) {
-                                        $user_thumbnail = preg_replace ('#src=([\'"])([^\\1]+)\\1#Ui', "src=\\1" . $user_thumbnail . "\\1", $avatar);
-                                        return $user_thumbnail;
-                                }
-                        }
-                }
-        }
-        // No avatar found.  Return unfiltered.
-        return $avatar;
-}
 	
-	
-	
-	//ADD CUSTOM FIELDS TO USER PROFILE
-		add_action( 'show_user_profile', 'social_fields' );
-			add_action( 'edit_user_profile', 'social_fields' );
-			 
-			function social_fields( $user ) { ?>
-			 
-			<h3>Personal Information</h3>
-			 
-			<table class="form-table">			 
-			 
-			<tr>
-			<th><label for="social">Position</label></th>
-			 
-			<td>
-			<input type="text" name="position" id="position" value="<?php echo esc_attr( get_the_author_meta( 'position', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's position.</span>
-			</td>
-			</tr>
-			 
-			<tr>
-			<th><label for="social">Hometown</label></th>
-			 
-			<td>
-			<input type="text" name="hometown" id="hometown" value="<?php echo esc_attr( get_the_author_meta( 'hometown', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's hometown</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="image">Featured</label></th>
-			 
-			<td>
-			<input type="checkbox" style="width: auto; margin-right: 10px;" name="featured" id="featured" value="<?php echo esc_attr( get_the_author_meta( 'featured', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Check the box to feature this person.</span>
-			</td>
-			</tr>
-			 
-			</table>
-			
-			<h3>Education & Credentials</h3>
-			 
-			<table class="form-table">
-			 
-			 
-			<tr>
-			<th><label for="social">School</label></th>
-			 
-			<td>
-			<input type="text" name="school" id="school" value="<?php echo esc_attr( get_the_author_meta( 'school', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's school name.</span>
-			</td>
-			</tr>
-			 
-			<tr>
-			<th><label for="social">Degree</label></th>
-			 
-			<td>
-			<input type="text" name="degree" id="degree" value="<?php echo esc_attr( get_the_author_meta( 'degree', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's degree.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Registrations</label></th>
-			 
-			<td>
-			<input type="text" name="registrations" id="registrations" value="<?php echo esc_attr( get_the_author_meta( 'registrations', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Registrations.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Certifications</label></th>
-			 
-			<td>
-			<input type="text" name="certifications" id="certifications" value="<?php echo esc_attr( get_the_author_meta( 'certifications', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Certifications.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Associations</label></th>
-			 
-			<td>
-			<input type="text" name="associations" id="associations" value="<?php echo esc_attr( get_the_author_meta( 'associations', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Associations.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Credentials String</label></th>
-			 
-			<td>
-			<input type="text" name="credstring" id="credstring" value="<?php echo esc_attr( get_the_author_meta( 'credstring', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's certifications in an abbreviated string format. This will be displayed after their name.</span>
-			</td>
-			</tr>
-			 
-			</table>
-		<?php }
-		
-		
-			add_action( 'personal_options_update', 'save_social_fields' );
-			add_action( 'edit_user_profile_update', 'save_social_fields' );
-			 
-			function save_social_fields( $user_id ) {
-			 
-			if ( !current_user_can( 'edit_user', $user_id ) )
-			return false;
-			
-			update_usermeta( $user_id, 'image', $_POST['image'] );
-			update_usermeta( $user_id, 'position', $_POST['position'] );
-			update_usermeta( $user_id, 'hometown', $_POST['hometown'] );
-			update_usermeta( $user_id, 'featured', $_POST['featured'] );
-
-			update_usermeta( $user_id, 'school', $_POST['school'] );
-			update_usermeta( $user_id, 'degree', $_POST['degree'] );
-			update_usermeta( $user_id, 'registrations', $_POST['registrations'] );
-			update_usermeta( $user_id, 'certifications', $_POST['certifications'] );
-			update_usermeta( $user_id, 'associations', $_POST['associations'] );
-			update_usermeta( $user_id, 'credstring', $_POST['credstring'] );
-			}
-
-		
 ?>

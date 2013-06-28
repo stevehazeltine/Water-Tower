@@ -377,6 +377,32 @@ $meta_boxes[] = array(
 
 
 
+
+
+//PROGRAM (SCHOOLS) CUSTOM POST TYPE CUSTOM FIELDS
+$meta_boxes[] = array(
+	'title'  => 'Social Media Options',
+	'pages' => array( 'program' ),
+	'context' => 'normal',
+	'priority' => 'high',
+	'fields' => array(
+
+		array(
+			'name'  => 'Instagram Hashtag Override',
+			'id'    => "{$prefix}insta_tag",
+			'desc'  => 'If you would like to directly control what hashtag is used to generate your feed, you can type the tag in here.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
+		),	
+				
+	),
+	
+);
+
+
+
+
 $meta_boxes[] = array(
 	'title'  => 'Program Dates/Cost',
 	'pages' => array( 'program' ),

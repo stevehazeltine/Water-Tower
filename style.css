@@ -162,7 +162,7 @@ p {
 
 .rsPlayBtnIcon {
 	background-color: rgba(255, 255, 255, .65) !important;
-	box-shadow: 0px 0px 3px rgba(0, 0, 0, .65);
+	box-shadow: 0px 0px 3px rgba(0, 0, 0, .85);
 	border-radius: 3px !important;
 }
 
@@ -367,7 +367,7 @@ p {
 	visibility: hidden;
 	opacity: 0;
 	transition: .35s;
-	-webkit-transition: .35s; /* Safari */
+	-webkit-transition: .35s;
 	border-radius: 2px;
 	overflow: hidden !important;
 }
@@ -1573,7 +1573,7 @@ a:hover {
 
 .lecture-phase-info-title p {
 	color: #999;
-	font-size: 12;
+	font-size: 12px;
 }
 
 .lecture-phase-info-desc {
@@ -1842,100 +1842,29 @@ a:hover {
 	margin: 40px 0px 30px 0px;
 }
 
-.sidebar ul ul li {
-	font-size: 13px;
-	margin: 0px;
-	font-weight: 500;
-	text-transform: none;
-}
+.sidebar ul ul li {	font-size: 13px; margin: 0px; font-weight: 500;	text-transform: none; }
 
 
-.apply-button-window {
-	overflow: hidden;
-	height: 46px;
-	position: relative;
-	margin: 30px 0px;
-	box-sizing: border-box;
-	border-radius: 3px;
-	border: 1px solid #CCC;
-}
-
-.apply-button-window:hover .apply-button-container {
-	left: -80%;
-}
 
 
-.apply-button-container {
-	white-space: nowrap;
-	position: relative;
-	transition: .25s;
-	-webkit-transition: .25s; /* Safari */
-}
 
-.apply-button-container > div {
-	padding: 12px 14px;
-	box-sizing: border-box;
-	height: 46px;
-	z-index: 9;
-}
 
-.apply-button-hover {
-	width: 80%;
-	background-color: #609FCE;
-	float: left;
-}
+.apply-button-window { overflow: hidden; height: 46px; position: relative;	margin: 30px 0px; box-sizing: border-box; border-radius: 3px; }
+.apply-button-window:hover .apply-button-container { left: -80%; }
+.apply-button-container { white-space: nowrap;	position: relative;	transition: .25s; -webkit-transition: .25s; }
+.apply-button-container > div {	padding: 12px 14px; box-sizing: border-box; height: 46px; z-index: 9; }
+.apply-button-hover { width: 100%; background-color: #609FCE; float: left; }
+.apply-button-hover h4 { font-family: 'HelveticaNeueW01-77BdCn 692722';	margin: 0px; font-size: 20px; text-align: center; color: white; }
+.apply-button-hover i {	float: right; display: inline-block; width: 20%; border-left: 2px solid white; padding: 3px 0px 3px 4px; margin: -2px -10px 0px 0px; }
+.apply-button-active { width: 80%; text-align: center; background-color: #555; left: 80%; color: white;	position: absolute;	left: 100%; }
+.apply-button-active a { color: white; }
+.apply-button-active i { margin-right: 6px; }
+.apply-button-active span {	margin-left: 20px; padding: 5px 0px; }
+.apply-button-active span:first-child { padding-right: 20px; margin-left: 0px; border-right: 2px solid white; }
 
-.apply-button-hover h4 {
-	font-family: 'HelveticaNeueW01-77BdCn 692722';
-	margin: 0px;
-	font-size: 20px;
-	text-align: center;
-	color: white;
-}
 
-.apply-button-active {
-	width: 80%;
-	text-align: center;
-	background-color: #555;
-	left: 80%;
-	color: white;
-	position: absolute;
-	left: 100%;
-}
 
-.apply-button-active a {
-	color: white;
-}
-
-.apply-button-icon {
-	width: 21%;
-	background-color: #EEE;
-	font-size: 18px;
-	text-align: center;
-	color: #444;
-	position: absolute;
-	left: 80%;
-}
-
-.apply-button-active i {
-	margin-right: 6px;
-}
-
-.apply-button-active span {
-	margin-left: 20px;
-	padding: 5px 0px;
-}
-
-.apply-button-active span:first-child {
-	padding-right: 20px;
-	margin-left: 0px;
-	border-right: 2px solid white;
-}
-
-.sidebar-info-item {
-	padding: 10px 0px !important;
-	border-bottom: 1px dashed #DDD;
-}
+.sidebar-info-item { padding: 10px 0px !important; border-bottom: 1px dashed #DDD; }
 
 .sidebar-info-title {
 	width: 40%;
@@ -2253,8 +2182,6 @@ a:hover {
 
 /* TIMELINE STYLES */
 
-.
-
 
 
 .timeline-container {
@@ -2570,7 +2497,7 @@ a:hover {
 		}
 		
 		.main-menu-desktop ul > div {
-			padding: 0px 0px 0px 20px;
+			padding: 0px 0px 0px 0px;
 			margin: 0px;
 		}
 		
@@ -2681,7 +2608,7 @@ body {
 
 #scrollspy-nav .nav .active { background: #609FCE; }
 #scrollspy-nav .nav .active a {	color: white; }
-#scrollspy-nav .nav .active i {position: absolue; display: block;}
+#scrollspy-nav .nav .active i {position: absolute; display: block;}
 
 
 
@@ -2698,12 +2625,13 @@ body {
 /***** FOLLOW US PAGE *****/
 /**************************/
 .follow-us-title span { display: inline-block; float: right;}
-@media (max-width: 979px) {
-	.follow-us-title {font-size: 34px; margin-top: 0px;}
-	.follow-us-title span {float: none;}
-	.follow-us-title-icons {margin-left: 0px !important; margin-right: 10px;}
-	}
 .follow-us-title-icons { font-size: .4em; padding: 10px; background: #DDD; color: white; border-radius: 9999px; display: inline-block; width: 1em; height: 1em; text-align: center; vertical-align: top; margin-left: 15px;}
+	@media (max-width: 979px) {
+		.follow-us-title {font-size: 34px; margin-top: 0px;}
+		.follow-us-title span {float: none;}
+		.follow-us-title-icons {margin-left: 0px !important; margin-right: 10px;}
+		}
+
 
 
 

@@ -156,7 +156,19 @@
 	color: #609FCE;
 	font-family:'HelveticaNeueW01-77BdCn 692722';
 	text-transform: uppercase;
+	transition: .35s;
+	-webkit-transition: .35s;
 	
+}
+
+.main-menu-desktop ul ul li a:hover {
+	color: white;
+	text-decoration: none !important;
+}
+
+.main-menu-desktop ul ul li a i {
+	font-size: 14px;
+	padding-right: 10px;
 }
 
 .main-menu-desktop .center-highlight ul li a{
@@ -248,7 +260,7 @@
 	top: 0px;
 	bottom:0px;
 	left: 0px;
-	padding: 20px 15px 20px 90px !important;
+	padding: 20px 30px 20px 90px !important;
 	background-color: #444;
 	
 }

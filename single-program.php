@@ -194,9 +194,42 @@
 										<?php $season = 'season'.$i; ?>
 										<?php endwhile ?>
 									
-											 
-											 
-											 
+									
+									
+									
+									<?php //--------------------------//?>
+									<?php //----- INSTAGRAM FEED -----//?>
+									<?php //--------------------------//?>
+									
+									
+										<?php // SET HASHTAG ?>
+										<?php if (rwmb_meta('insta_tag') == '') {
+										
+													if (rwmb_meta('acronym') != '') {
+														$hashtag = 'ywammontana' . rwmb_meta('acronym');
+													} else {
+														$hashtag = 'ywammontana' . str_replace( '-', '', $program_slug);
+													}
+													
+											  } else { 
+												$hashtag = rwmb_meta('insta_tag');
+											  } ?>
+										
+										<?php // SET PREFIX FOR TITLE ?>
+										<?php if (rwmb_meta('acronym') != '') {
+											$insta_prefix = rwmb_meta('acronym');
+										} else {
+											$insta_prefix = $school_title;
+										} ?>
+										
+										<?php $insta_args = array(
+												'cols' 				 => 6,
+												'rows' 				 => 2,
+												'title_prefix' 		 => $insta_prefix,
+												'tag'			 	 => $hashtag,
+										); ?>
+										
+										<?php get_instagram($insta_args); ?>
 											 
 											 
 											 
@@ -244,11 +277,7 @@
 						 			
 						 			<div class="apply-button-container">
 						 				<div class="apply-button-hover">
-						 					<a href="#_"><h4>Apply Now</h4></a>
-						 				</div>
-						 				
-						 				<div class="apply-button-icon">
-						 					<i class="icon-arrow-right"></i>
+						 					<a href="#_"><h4>Apply Now <i class="icon-chevron-right"></i></h4></a>
 						 				</div>
 						 				
 						 				<div class="apply-button-active">
@@ -370,6 +399,10 @@
 							</li>
 						   <?php } ?>
 						   <?php wp_reset_postdata(); ?>
+						   
+						   
+
+							
 							
 							
 							
