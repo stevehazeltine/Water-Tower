@@ -535,7 +535,6 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our teachings and teaching specific data',
 				'public'        => true,
-				'capability_type'  => array( 'publish_posts' ),
 				'menu_position' => 12,
 				'supports'      => array( 'title', 'author', 'editor', 'thumbnail', 'comments',  'revisions' ),
 				'has_archive'   => true,
@@ -956,76 +955,105 @@
 			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 				<div class="row-fluid post-container">
-						<div class="span3">
-							<div class="entry-meta-left">
-								<div class="date-container-border">
-								<div class="date-container">
-										<div class="day"><?php the_time('j') ?></div>
-										<div class="month"><?php the_time('M') ?></div>
-								</div>
-								</div>
-								
-								<div class="tags-container">
-									<span class="tags-title"><span>Author<?php if ( 1 !== count( get_coauthors( get_the_id() ) ) ) { echo 's'; } ?></span></span>
-									<ul>
-										<?php coauthors_posts_links( ' ', '</li><li>', '<li>', '</li>', true ); ?>
-									</ul>
-								</div>
-								
-								<div class="tags-container">
-									
-										<?php if ( 'teachings' == get_post_type()) { ?>
-											<div class="tags-title"><span>Teaching Types<span></div>
-											<ul>
-												<li><?php echo the_terms( $post->ID, 'teaching_types', null, '</li><li>', null ); ?></li>
-											</ul>
-										<?php } else { ?>
-											<div class="tags-title"><span>Categories<span></div>
-											<ul>
-												<li><?php the_category('</li><li>'); ?></li>
-											</ul>
-											
-										<?php }?>
-
-								</div>
-								
-								<div class="tags-container">
-									<div class="tags-title"><span>Tags</span></div>
-									<?php the_tags('<ul><li>','</li><li>','</li></ul>'); ?>
-								</div>
-								
-								<?php if ($post_length != 'excerpt') { ?>
-									<div class="pull-quote">
-										<p><?php echo rwmb_meta( 'pull_quote' ); ?></p>
-									</div>
-								<?php } ?>
+						<div class="span3 visible-desktop post-meta-container">
 							
+							<?php
+							if ($post_length == 'excerpt') {
+								if ( has_post_thumbnail() ) {
+								  the_post_thumbnail( '16:9-media-thumbnail' );
+								} 
+							}
+							?>
+							
+							
+							
+							
+							
+							<?php if ($post_length == 'full') { ?>
+							<div class="entry-meta-left">
+							
+								<?php // CATEGORIES ?>
+								
+									<div class="date-container-border">
+										<div class="date-container">
+												<div class="day"><?php the_time('j') ?></div>
+												<div class="month"><?php the_time('M') ?></div>
+										</div>
+									</div>
+								
+									
+								
+								<h4 class="meta-title">Author<?php if ( 1 !== count( get_coauthors( get_the_id() ) ) ) { echo 's'; } ?></h4>
+								<ul class="meta-list">
+									<?php coauthors_posts_links( ' ', '</li><li><i class="icon-user"></i>', '<li><i class="icon-user"></i>', '</li>', true ); ?>
+								</ul>
+								
+									
+									
+									
+								<?php // CATEGORIES ?>
+								
+									<?php if ( 'teachings' == get_post_type()) { ?>
+										<h4 class="meta-title">Teaching Types</h4>
+										<ul class="meta-list">
+											<li><i class="icon-plus-sign"></i><?php echo the_terms( $post->ID, 'teaching_types', null, '</li><li><i class="icon-plus-sign"></i>', null ); ?></li>
+										</ul>
+									<?php } else { ?>
+										<h4 class="meta-title">Categories</h4>
+										<ul class="meta-list">
+											<li><i class="icon-plus-sign"></i><?php the_category('</li><li><i class="icon-plus-sign"></i>'); ?></li>
+										</ul>
+									
+								<?php } ?>
+								
+								
+								<?php // TAGS ?>
+									<h4 class="meta-title">Tags</h4>
+									<?php the_tags('<ul class="meta-list"><li><i class="icon-tag"></i>','</li><li><i class="icon-tag"></i>','</li></ul>'); ?>
+									
+								<?php // RELATED PROGRAMS ?>
+								
+									<?php $related_programs = get_the_terms( $post->ID, 'program_taxo' ); ?>
+									<?php if (!empty($related_programs)) { ?>
+										<h4 class="meta-title">Related Schools</h4>
+										<ul class="meta-list">
+										<?php foreach ($related_programs as $program) { ?>
+											<?php $program = get_page_by_path($program->slug, OBJECT, 'program'); ?>
+												
+												<?php if (rwmb_meta('short_name', '', $post_id=$program->ID) == '') {
+														$post_title = $program->post_title;
+													} else {
+														$post_title = rwmb_meta('short_name', '', $post_id=$program->ID);
+													} ?>
+												
+												
+												
+											<li>
+												<a href="<?php echo get_permalink($program->ID); ?>"><i class="icon-location-arrow"></i><?php echo $post_title; ?></a>
+											</li>
+											
+										<?php } ?>
+										</ul>
+									
+								<?php } ?>
 							</div>
+							<?php } ?>
+							
+							
 						</div>
 					 
 					 
-					 <div class="span9 post">
-								 
-						<?php if ($post_length == 'excerpt') { ?>
-							<?php // check if the post has a Post Thumbnail assigned to it.
-								if ( has_post_thumbnail() ) {
-									the_post_thumbnail( 'archive-banner' );
-								} else { ?>
-									<img src="http://placehold.it/1200x300" />
-							<?php } ?>
-						<?php } ?>
+					 <div class="span9 post loop-content">
 						
 						
-						<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
-						<?php if (rwmb_meta( 'sub_title') !== '') { ?>
-							<h5 class="subtitle"><?php echo rwmb_meta( 'sub_title' ); ?></h5>
-						<?php } ?>
+						<h2><a <?php if ($post_length == 'excerpt') { echo 'style="font-size: 24px;"';} ?> href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 
 							 <div class="entry">
 							   <?php if ($post_length=='excerpt') {the_excerpt();} else {the_content();} ?>
 							   
 							   
-							   <!--------- TEACHINGS MEDIA FILES ------------>
+							   <?php //----- TEACHING MEDIA FILES -----// ?>
+							   
 							   <?php if (get_post_type() == 'teachings' and $post_length !== 'excerpt') { ?>
 							   <div class="teachings-media-container">
 							   <?php $files = rwmb_meta( 'media_files', 'type=file' ); ?>
@@ -1034,72 +1062,12 @@
 									<?php } else { ?>
 																		
 											<?php foreach ( $files as $info ){ ?>
-												<div class="row-fluid teaching-media-container">													
-													
-													<div class="span12 audio-container">
-															<?php echo $info['title']; ?>
-															
-															<div class="teaching-options">
-																<a href="#_"><i class="icon-facebook-sign"></i></a>
-																<a href="#_"><i class="icon-twitter-sign"></i></a>
-																<?php echo "<a href='{$info['url']}' target='_blank' title='{$info['title']}'><i class='icon-download-alt'></i></a>"; ?>
-															</div>
-																
 															<?php echo do_shortcode('[audio src="' . $info['url'] . '"]'); ?>
-													</div>
-		
-												</div>
+
 											<?php } ?>
 									<?php } ?>
 									 </div>
 							   <?php } ?>
-							   		
-							 
-							 <!-------- ABOUT THE AUTHOR SECTION ---------->
-							   	<?php if ($post_length !== 'excerpt') { ?>
-							   		<?php $coauthors = get_coauthors(); ?>
-								 	<?php foreach( $coauthors as $coauthor ) { ?>
-									 	<div class="about-the-author" id="about-the-author">
-									 	
-											<div class="row-fluid">
-												<div class="span3 author-avatar">
-													<?php echo get_avatar( $coauthor->ID, 150 ); ?>
-												</div>
-												<div class="span9">
-													<h5><?php echo the_author_meta( 'display_name', $coauthor->ID ); ?></h5>
-													<?php echo the_author_meta( 'description', $coauthor->ID ); ?>
-
-	    			
-										    			<div class="about-the-author-school-associations">
-												    		<?php $terms = wp_get_object_terms( $coauthor->ID, 'programs_completed'); ?>
-												    		<?php if (!empty($terms)) { ?>
-												    			<h6>Programs Completed</h6>
-											    					<ul class="author-page-program-list">
-																	    <?php foreach ($terms as $term) { ?>
-																		    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-																	    <?php } ?>
-											    					</ul>
-															<?php } ?>
-										    			</div>
-										    			
-										    			<div class="about-the-author-school-associations">
-												    		<?php $terms = wp_get_object_terms( $coauthor->ID, 'programs_staffed'); ?>
-												    		<?php if (!empty($terms)) { ?>
-												    			<h6>Programs Staffed</h6>
-												    					<ul class="author-page-program-list">
-																		    <?php foreach ($terms as $term) { ?>
-																			    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-																		    <?php } ?>
-												    					</ul>
-															<?php } ?>
-										    			</div>
-													
-													
-												</div>
-											</div>
-										</div>
-									<?php } ?>
-								<?php } ?>
 								
 								
 								
@@ -1277,6 +1245,77 @@
 			
 			
 			
+			//----------------------------------------------------//
+			//----- DISPLAY PROGRAM IN ARCHIVE MODE FUNCTION -----//
+			//----------------------------------------------------//
+			
+			function get_program_in_archive($program_id, $in_main_archive ) {
+			
+			$args = array(
+				'p'				=> $program_id,
+				'post_type' 	=> 'program',
+			);
+			
+			$program_query = new WP_Query($args);
+			
+			if ( $program_query->have_posts() ) {
+	while ( $program_query->have_posts() ) {
+		$program_query->the_post(); ?>
+			
+			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
+						
+						<div class="span4 program-archive-featured-media hidden-phone">
+							
+							<div class="program-archive-featured-image">
+								<?php echo the_post_thumbnail('thumbnail-card');  ?>
+							</div>
+							
+						</div>
+						
+						<div class="span8 program-archive-content">
+						
+							<?php if ($in_main_archive == true) { ?>
+								<div class="program-archive-school-compare-link visible-desktop">
+									<span>Compare 
+										<i id="compare-programs-checkbox" data-programId="<?php echo program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
+									</span>
+								</div>
+							<?php } ?>
+						
+							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
+							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
+							
+							<div class="program-archive-school-meta">
+								<div class="program-archive-school-date">
+									<?php $start_date = rwmb_meta( 'start_date', $post_id=$program_id ); ?>
+									<?php echo date("F d, Y", strtotime($start_date));?>
+									<?php $custom_value = rwmb_meta( 'end_date', $post_id=$program_id ); if ($custom_value != '') { ?> - <?php echo $custom_value; } ?>
+								</div>
+								
+								<div class="program-archive-school-cost">
+									<?php $total_cost = rwmb_meta( 'total_cost', $post_id=$program_id );?> 
+									<?php if ($total_cost != '') { ?>
+										<?php setlocale(LC_MONETARY, 'en_US'); echo money_format( '%i', $total_cost);?>
+									<?php } ?>
+								</div>
+							</div>
+							<div style="clear: both"> </div>
+							
+							<div class="program-archive-tagline">
+								<?php echo substr(get_the_excerpt(), 0, 150); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+			<?php }
+}
+					
+				 wp_reset_postdata();
+			 } 
+			
+			
 			
 			//----------------------------------------------------------//
 			//----- FUNCTION TO RETRIEVE AND DISPLAY RELATED POSTS -----//
@@ -1284,12 +1323,13 @@
 			
 			function get_related_posts($related_args) {
 			
-			
+			if (!isset($related_args["title"])){$related_args["title"] = 'Related Posts';}
 			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
 			if (!isset($related_args["post_type"])){$related_args["post_type"] = 'post';}
 			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
 			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
 			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
+			if (!isset($related_args["archive_url"])){$related_args["archive_url"] = get_bloginfo(info) . '/blog/';}
 			
 			?>
 			
@@ -1304,7 +1344,7 @@
 						   
 						   <?php $my_query = new WP_Query( $args ); ?>
 						   <?php if ( $my_query->have_posts() ) { ?>
-								<li><h2>Related Posts</h2>
+								<li><h2><?php echo $related_args['title']; ?></h2>
 								<ul>
 							   <?php while ( $my_query->have_posts() ) { ?>
 								   <?php $my_query->the_post(); ?>
@@ -1324,10 +1364,10 @@
 							   <?php } ?>
 							   
 								<?php $args = array(
-									'post_type' => 'post',
-									'post_status' => 'publish',
-									'program_taxo' => $program_slug,
-									'project_taxo' => $project_slug,
+									'post_type' 	=> 'post',
+									'program_taxo' 	=> $related_args['program_taxo'],
+									'project_taxo' 	=> $related_args['project_taxo'],
+									'nopaging'	=> true,
 								);
 								$num = count( get_posts( $args ) ); ?>
 								
@@ -1335,7 +1375,7 @@
 									<li>
 										<div class="row-fluid sidebar-related-posts-more">
 											<div class="sidebar-related-posts-view-all">
-												<a href="#_">View All (<?php echo $num; ?>) </a>
+												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
 											</div>
 											
 											<div class="sidebar-related-posts-subscribe">
@@ -1607,7 +1647,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 				// ARCHIVE BANNERS
 				add_image_size( 'archive-banner', 1200, 300, true ); //USE FOR ARCHIVE PAGES
 				add_image_size( 'mobile-archive-banner', 600, 150, true ); //USE FOR MOBILE ARCHIVE PAGES
-				add_image_size( 'mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
+				add_image_size( 'xs-mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
 				
 				// 2x1 ASPECT RATIO
 				add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
@@ -1618,7 +1658,30 @@ class ywammontana_walker_comment extends Walker_Comment {
 				add_image_size( '16:9-media', 1200, 675, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
 				add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
 			}
-			
+		
+		//-----------------------------------------------------//
+		//----- ADD SCHOOLS FUNCTIONALITY TO USER PROFILE -----//
+		//-----------------------------------------------------//
+		
+		/**
+		 * Add a "Google Plus" field to Co-Authors Plus Guest Author
+		 */
+		add_filter( 'coauthors_guest_author_fields', 'capx_filter_guest_author_fields', 10, 2 );
+		function capx_filter_guest_author_fields( $fields_to_return, $groups ) {
+		 
+			if ( in_array( 'all', $groups ) || in_array( 'contact-info', $groups ) ) {
+				$fields_to_return[] = array(
+							'key'      => 'schools_staffed',
+							'label'    => 'Schools Staffed',
+							'group'    => 'contact-info',
+					);
+					
+			} 
+		 
+			return $fields_to_return;
+		}
+		
+		
 			
 		//-------------------------------//
 		//----- CUSTOMIZE DASHBOARD -----//
@@ -1756,7 +1819,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			   
 			  
 		  		<div class="span<?php echo $span; ?> instagram-container">
-		  			<a href="<?php echo $post->link; ?>" >
+		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
 						<div class="instagram-meta">	
@@ -1793,20 +1856,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			
 			
 
-		//REMOVE [...] FROM EXCERPT AND ADD READ MORE LINK FOR ALL POST TYPES
-	
-		function new_excerpt_more($more) {
-	       global $post;
-			   
-			if ($post->post_type == 'people')
-			return '... <a href="'. get_permalink($post->ID) . '" class="read-more-link">View Full Profile <i class="icon-double-angle-right"></i></a>';
-			else if ($post->post_type == 'projects')
-			return '... <a href="'. get_permalink($post->ID) . '" class="read-more-link">View Full Project Description <i class="icon-double-angle-right"></i></a>';
-			else
-			return '... <div class="read-more-window"><div class="read-more-container"><a href="'. get_permalink($post->ID) . '" class="read-more-link"><span class="read-more-hover">Read More </span><span class="read-more-active"><i class="icon-chevron-right"></i> Read More</span></a></div></div>';
-			}
-	
-		add_filter('excerpt_more', 'new_excerpt_more');
+		
 
 
 
@@ -1874,129 +1924,3 @@ class ywammontana_walker_comment extends Walker_Comment {
 			
 		</div>
 	<?php }
-
-
-
-
-	//INCLUDE CUSTOM USER BIO FIELDS
-	//ADD PROGRAMS STAFFED TAXONOMY TO POSTS, VIDEOS, STORIES, & TEACHINGS
-		function my_taxonomies_programs_staffed() {
-			$labels = array(
-				'name'              => _x( 'Programs Staffed', 'taxonomy general name' ),
-				'singular_name'     => _x( 'Program(s) Staffed', 'taxonomy singular name' ),
-				'search_items'      => __( 'Search Programs Staffed' ),
-				'all_items'         => __( 'All Programs Staffed' ),
-				'parent_item'       => __( 'Parent Program Staffed' ),
-				'parent_item_colon' => __( 'Parent Program Staffed:' ),
-				'edit_item'         => __( 'Edit Program Staffed' ), 
-				'update_item'       => __( 'Update Program Staffed' ),
-				'add_new_item'      => __( 'Add New Program Staffed' ),
-				'new_item_name'     => __( 'New Program Staffed' ),
-				'menu_name'         => __( 'Programs Staffed' ),
-			);
-			$args = array(
-				'labels' => $labels,
-				'hierarchical' => true,
-				'rewrite' => array('hierarchical' => true ),
-				'show_admin_column' => true,
-			);
-			register_taxonomy( 'programs_staffed', 'user', $args );
-		}
-		add_action( 'init', 'my_taxonomies_programs_staffed', 0 );
-		
-	//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-		function post_programs_staffed_update($post_id){
-		  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-			  return $post_id;
-		  }
-
-		  $post_obj = get_post($post_id);
-		  $raw_title = $post_obj->post_title;
-		  $post_type = $post_obj->post_type;
-		  $slug_title = sanitize_title($raw_title);
-
-		  if (($post_type == 'program') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-			 // get the terms associated with this custom post type
-			 $terms = get_the_terms($post_id, 'programs_staffed');
-			 $term_id = $terms[0]->term_id;
-			 // if term exists then update term
-			 if ($term_id > 0) {
-				 wp_update_term($term_id,
-								'programs_staffed',
-								array(
-								  'description' => $raw_title,
-								  'slug' => $raw_title,
-								  'name' => $raw_title)
-								);
-			 } else {
-				// creates a new term in the program_taxo taxonomy
-				wp_set_object_terms($post_id, $raw_title, 'programs_staffed', false);
-			 }
-		  }
-		}
-
-		add_action('save_post', 'post_programs_staffed_update');
-
-	
-	
-		//ADD PROGRAMS Completed TAXONOMY TO POSTS, VIDEOS, STORIES, & TEACHINGS
-		function my_taxonomies_programs_completed() {
-			$labels = array(
-				'name'              => _x( 'Programs Completed', 'taxonomy general name' ),
-				'singular_name'     => _x( 'Program(s) Completed', 'taxonomy singular name' ),
-				'search_items'      => __( 'Search Programs Completed' ),
-				'all_items'         => __( 'All Programs Completed' ),
-				'parent_item'       => __( 'Parent Program Completed' ),
-				'parent_item_colon' => __( 'Parent Program Completed:' ),
-				'edit_item'         => __( 'Edit Program Completed' ), 
-				'update_item'       => __( 'Update Program Completed' ),
-				'add_new_item'      => __( 'Add New Program Completed' ),
-				'new_item_name'     => __( 'New Program Completed' ),
-				'menu_name'         => __( 'Programs Completed' ),
-			);
-			$args = array(
-				'labels' => $labels,
-				'hierarchical' => true,
-				'rewrite' => array('hierarchical' => true ),
-				'show_admin_column' => true,
-			);
-			register_taxonomy( 'programs_completed', 'user', $args );
-		}
-		add_action( 'init', 'my_taxonomies_programs_completed', 0 );
-		
-	//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-		function post_programs_completed_update($post_id){
-		  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-			  return $post_id;
-		  }
-
-		  $post_obj = get_post($post_id);
-		  $raw_title = $post_obj->post_title;
-		  $post_type = $post_obj->post_type;
-		  $slug_title = sanitize_title($raw_title);
-
-		  if (($post_type == 'program') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-			 // get the terms associated with this custom post type
-			 $terms = get_the_terms($post_id, 'programs_completed');
-			 $term_id = $terms[0]->term_id;
-			 // if term exists then update term
-			 if ($term_id > 0) {
-				 wp_update_term($term_id,
-								'programs_completed',
-								array(
-								  'description' => $raw_title,
-								  'slug' => $raw_title,
-								  'name' => $raw_title)
-								);
-			 } else {
-				// creates a new term in the program_taxo taxonomy
-				wp_set_object_terms($post_id, $raw_title, 'programs_completed', false);
-			 }
-		  }
-		}
-
-		add_action('save_post', 'post_programs_completed_update');
-	
-	
-	
-?>

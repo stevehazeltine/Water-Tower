@@ -337,6 +337,15 @@ $meta_boxes[] = array(
 	'fields' => array(
 
 		array(
+			'name'  => 'Short Name',
+			'id'    => "{$prefix}short_name",
+			'desc'  => 'If your program has an unusually long name, it may interfere with some of the design elements of the website.  We highly recommend assigning a shorterned version of the name here to use in sections where the forementioned example takes place.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
+		),	
+	
+		array(
 			'name'  => 'Program Acronym',
 			'id'    => "{$prefix}acronym",
 			'desc'  => 'Insert the program acronym.  For example Discipleship Training School would be DTS.  However, not all schools have an acronym that is directly derived from the first letter in each of the words of the school name, so make sure you have the acronym given by the school leader.',

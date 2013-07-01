@@ -1,11 +1,11 @@
 <?php get_header() ?>
 		<div class="row">
-			<div class="span10">
+			<div class="span9">
 				<?php insert_loop(); ?>
 			</div>
 		
 		
-			<div class="span2 sidebar-container">
+			<div class="span3 sidebar">
 				<?php get_sidebar(); ?>
 			</div><!--sidebar-container-->
 		</div>

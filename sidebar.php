@@ -2,6 +2,31 @@
 	<?php if ( ! dynamic_sidebar() ) : ?>
 		
 		
+		<li class="sidebar-about-the-author">
+			<?php $coauthors = get_coauthors(); ?>
+				<?php foreach( $coauthors as $coauthor ) { ?>
+					
+								<?php echo get_the_post_thumbnail( $coauthor->ID, 'xs-mobile-banner' ); ?>
+
+								<h2><?php echo $coauthor->display_name; ?></h2>
+								<p><?php echo $coauthor->description; ?></p>
+
+								
+				<?php } ?>			
+			
+		
+		</li>
+		
+		
+		
+		<?php //----- RECENT POSTS -----// ?>
+		<li>
+			<?php $args = array(
+				'title' => 'Latest Posts',
+			) ?>
+		
+			<?php get_related_posts($args); ?>
+		</li>
 		
 		
 		<!-------------------CATEGORIES----------------->
@@ -12,7 +37,7 @@
 				<?php wp_list_categories('title_li=&taxonomy=teaching_types'); ?>
 			</ul>
 		<?php } else { ?>
-			<?php _e('Categories:'); ?>
+			<h2><?php _e('Categories'); ?></h2>
 			<ul>
 				<?php wp_list_categories('title_li='); ?>
 			</ul>
@@ -20,31 +45,6 @@
 		<?php }?>
 		</li>
 		
-		
-		<!--------------------ARCHIVES---------------------->
-		<!--<li id="archives">
-		     
-		     <?php if ( 'teachings' == get_post_type()) { ?>
-		     	<?php _e('Archives'); ?>
-			    <ul>
-			     	<?php wp_get_archives('type=yearly&post_type=teachings'); ?>
-			    </ul>
-			 <?php } else { ?>
-			 	<?php _e('Archives'); ?>
-			 	<ul>
-			   		<?php wp_get_archives('type=yearly&limit=10'); ?>
-			 	</ul>
-			 <?php } ?>
-		</li>-->
-		
-		<li>Subscribe
-			<ul>
-				<li><a href="#">Email Alerts</a></li>
-				<li><a href="#">Posts RSS Feed</a></li>
-				<li><a href="#">Comments RSS Feed</a></li>
-				<li><a href="#">Monthly Newsletter</a></li>
-			</ul>
-		</li>
 
 	<?php endif; ?>
 </ul>

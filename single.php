@@ -1,13 +1,8 @@
 <?php get_header() ?>
 
-		<div class="banner-image">
-			<?php // check if the post has a Post Thumbnail assigned to it.
-			if ( has_post_thumbnail() ) {
-				the_post_thumbnail( 'full-banner' );
-			} ?>
-		</div>
+		<?php get_banner($banner_args); ?>
 		
-		<div class="row">
+		<div class="row single-post-container">
 			<div class="span9">
 				<?php insert_loop(); ?>		
 			</div>

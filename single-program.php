@@ -8,13 +8,13 @@
 				<?php $program_slug = sanitize_title( get_the_title(), $fallback_title ); ?>
 				<?php if (rwmb_meta('display_map') == 1) {$display_map = true;} else {$display_map = false;} ?>
 				
-	<?php $args = array(
+	<?php $banner_args = array(
 			'post-id' 			=> $program_id,
 			'include-map'		=> $display_map,
 			'program-taxo'		=> $program_slug,
 	); ?>
 	
-	<?php get_banner($args); ?>
+	<?php get_banner($banner_args); ?>
 		
 	<div class="row">
 	
@@ -331,10 +331,13 @@
 							
 							
 							<?php // RETRIEVE RELATED POSTS ?>
+							<?php $archive_url = get_bloginfo('url') . '/program_taxo/' . $program_slug . '?posttype=post&programid=' . $program_id; ?>
+
 							<?php $related_args = array (
 									'posts_per_page' 	=> 5,
 									'post_type' 		=> 'post',
 									'program_taxo'		=> $program_slug,
+									'archive_url'		=> $archive_url,
 							) ?>
 							
 							<?php get_related_posts($related_args); ?> 
