@@ -662,13 +662,6 @@
 		
 			
 		// GET GALLERY AND MAP FUNCTION
-			// $args
-			// include-map 			-> true, false | Default = false
-			// post_type 			-> post | Default = post
-			// category_name 		-> outreach-updates | Default = outreach-updates
-			// program_taxo			-> Accepts variable driven by program slug.| Default = null
-			// target_nations_taxo	-> Accepts variable driven by target nation slug.| Default = null
-			// 
 		
 		
 		function get_banner($banner_args) { 
