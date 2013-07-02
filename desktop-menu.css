@@ -120,7 +120,9 @@
 	min-height: 300px;
 	margin-left: 185px;
 	float: right;
+	box-sizing: border-box;
 	padding-top: 10px !important;
+	padding-left: 20px !important;
 }
 
 .main-menu-desktop ul > div > div{
@@ -213,7 +215,7 @@
 .main-menu-desktop .related-post {
 	margin-top: 25px;
 	box-sizing: border-box;
-	padding-left: 50px;
+	padding: 15px 0px 15px 40px;
 }
 
 .main-menu-desktop .related-post-excerpt {
@@ -277,4 +279,12 @@
 .menu-related-posts {
 	float: right;
 	border-left: 1px dashed #777;
+}
+
+@media (max-width: 1200px) {
+	.center-highlight {padding-left: 0px !important; width: 155px;}
+	.center-highlight-programs-menu {width: 705px !important;}
+	.menu-related-posts { width: 540px; }
+	.menu-related-posts .related-post { width: 100%; }
+	.menu-related-posts .related-post:last-child { display: none; }
 }

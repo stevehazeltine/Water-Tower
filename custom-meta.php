@@ -420,7 +420,25 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),	
+		),
+		
+		// SCHOOL LEADERS
+		array (
+			'name'	=> 'School Leaders',
+			'id'	=> "{$prefix}leaders",
+			'type'	=> 'taxonomy',
+			'options'=> array (
+				'taxonomy' => 'guest_author_taxo',
+				'type'		=> 'select_advanced',
+				'multiple'	=> true,
+			),
+			'multiple'	=> true,
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+
+		),
 				
 		//FILE ATTACHEMENTS
 		array(
@@ -539,24 +557,10 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		// SCHOOL LEADERS
-		array (
-			'name'	=> 'School Leaders',
-			'id'	=> "{$prefix}leaders_1",
-			'type'	=> 'taxonomy',
-			'options'=> array (
-				'taxonomy' => 'guest_author_taxo',
-				'type'		=> 'select_advanced',
-				'multiple'	=> true,
-			),
-			'multiple'	=> true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-
 		),
 		
 				
@@ -612,24 +616,10 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		// SCHOOL LEADERS
-		array (
-			'name'	=> 'School Leaders',
-			'id'	=> "{$prefix}leaders_2",
-			'type'	=> 'taxonomy',
-			'options'=> array (
-				'taxonomy' => 'guest_author_taxo',
-				'type'		=> 'select_advanced',
-				'multiple'	=> true,
-			),
-			'multiple'	=> true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-
 		),
 		
 		
@@ -695,23 +685,10 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		// SCHOOL LEADERS
-		array (
-			'name'	=> 'School Leaders',
-			'id'	=> "{$prefix}leaders_3",
-			'type'	=> 'taxonomy',
-			'options'=> array (
-				'taxonomy' => 'guest_author_taxo',
-				'type'		=> 'select_advanced',
-			),
-			'multiple'	=> true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-
 		),
 		
 		
@@ -776,23 +753,10 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		// SCHOOL LEADERS
-		array (
-			'name'	=> 'School Leaders',
-			'id'	=> "{$prefix}leaders_4",
-			'type'	=> 'taxonomy',
-			'options'=> array (
-				'taxonomy' => 'guest_author_taxo',
-				'type'		=> 'select_advanced',
-			),
-			'multiple'	=> true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-
 		),
 		
 	),

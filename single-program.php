@@ -149,13 +149,12 @@
 													 <p><?php echo rwmb_meta( 'outreach_phase_desc' ) ?></p> 
 											 <?php } ?>
 											 
+					
 											 
 											 
-											 
-											 
-											 
-											 
-											<?php  
+										<!--------- SCHOOL LEADERS ----------->
+										<h4>Leaders</h4>
+										<?php  
 											
 											
 											function get_school_leaders($leader_string) {
@@ -215,36 +214,87 @@
 														}											
 													}
 													$married_couples = explode(',', rtrim($married_couples, ','));
-													$singles = rtrim($singles, ',');?>
+													$singles = explode(',', rtrim($singles, ','));?>
 													
 													
-													<?php //-----DISPLAY MARRIED COUPLES-----//
+													<?php //-----DISPLAY MARRIED COUPLES-----//?>
 													<?php foreach($married_couples as $married_couple) { ?>
 														<?php $spouses = explode('-', $married_couple) ?>
-														<div class="about-the-author-container">
+														<div class="school-leader-container">
 														
-															<?php //-----DISPLAY NAMES-----//?>
-															<h5>
-															<?php $n = 1; ?>
-															<?php foreach ($spouses as $spouse) { ?>
-																<?php $spouse_object = get_coauthors($spouse); ?>
-																<?php if ($n==1) { 
-																		echo $spouse_object[0]->first_name . ' & ';
-																		$coutner = ++$n;
-																	} else {
-																		echo $spouse_object[0]->display_name;
-																	} ?>
-															<?php } ?>
-															</h5>
+														
+															<div class="row-fluid">
+																<div class="span3">
+																	
+																		<?php foreach ($spouses as $spouse) { ?>
+																		<div class="row-fluid married-avatar-container">
+																			<?php $spouse_object = get_coauthors($spouse); ?>
+																			<div class="span12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
+																		</div>
+																		<?php } ?>
+																	
+																</div>
+																														
+															
+																<div class="span9">
+																	<?php //-----DISPLAY NAMES-----//?>
+																	<h5>
+																	<?php $n = 1; ?>
+																	<?php foreach ($spouses as $spouse) { ?>
+																		<?php $spouse_object = get_coauthors($spouse); ?>
+																		<?php if ($n==1) { 
+																				echo $spouse_object[0]->first_name . ' & ';
+																				$coutner = ++$n;
+																			} else {
+																				echo $spouse_object[0]->display_name;
+																			} ?>
+																	<?php } ?>
+																	</h5>
+																	
+																	<p>
+																		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
+																	</p>
+																</div>
+															
+															</div>
 															
 														</div>
 													<?php } ?>
+													
+													
+													<?php //-----DISPLAY MARRIED COUPLES-----//?>
+													<?php foreach($singles as $single) { ?>
+														<div class="school-leader-container">
+														
+														
+															<div class="row-fluid">
+																<div class="span3 avatar-container">
+
+																	<?php $single_object = get_coauthors($single); ?>
+																	<?php echo get_the_post_thumbnail($single_object[0]->ID, 'thumbnail'); ?>
+
+																</div>
+																														
+															
+																<div class="span9">
+																	<?php //-----DISPLAY NAMES-----//?>
+																	<h5><?php echo $single_object[0]->display_name; ?></h5>
+																	<p><?php echo $single_object[0]->description; ?></p>
+																</div>
+															
+															</div>
+															
+														</div>
+													<?php } ?>
+													
+													
+													
 												<?php }
 
 											
 											
 											
-											$terms = rwmb_meta( 'leaders_1', 'type=taxonomy&taxonomy=guest_author_taxo' );
+											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo' );
 												foreach ( $terms as $term ) {
 												   $leader_string .= $term->slug . ',';
 												}
@@ -256,54 +306,7 @@
 												
 												
 											
-											?>
-											 
-											 
-											 
-											 
-											 
-											 
-											 
-										<!--------- SCHOOL LEADERS ----------->
-										<h4>Leaders</h4>
-										
-										<?php $i = 1; ?>
-										<?php $start_date = 'start_date'.$i; ?>
-										<?php $season = 'season'.$i; ?>
-										
-										<?php while (rwmb_meta($start_date) != '') : ?>
-										
-											 
-											<div class="program-leaders">
-												<div class="leaders-season-title">
-													<?php echo rwmb_meta($season); ?>
-												</div>
-												
-												<?php $leader_id = 'leader_id'.$i; ?>
-												<?php $leaders = rwmb_meta($leader_id); ?>
-													<?php foreach ($leaders as $leader) {?>
-														
-											 	
-														<div class="row-fluid">
-															<div class="span3 leader-avatar">
-																<?php echo get_avatar( $leader, 120 ); ?>
-															</div>
-															<div class="span9">
-																<h5><?php echo the_author_meta( 'display_name', $leader ); ?></h5>
-																<?php echo the_author_meta( 'description', $leader ); ?>
-			
-															</div>
-														</div>
-														
-												<?php } ?>
-												
-											</div>
-										
-										<?php $i = $i+1; ?>
-										<?php $start_date = 'start_date'.$i; ?>
-										<?php $season = 'season'.$i; ?>
-										<?php endwhile ?>
-									
+											?>								
 									
 									
 									

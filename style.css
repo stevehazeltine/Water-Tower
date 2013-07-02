@@ -246,7 +246,7 @@ font-size: 14px;
 
 
 /************** INFO BOX STYLES ****************/
-.infoBox { width: 400px; box-sizing: border-box; background-color: #F9F9F9; padding: 15px; box-shadow: 1px 1px 5px rgba(0, 0, 0, .5); overflow: hidden; }
+.infoBox { width: 400px; box-sizing: border-box; background-color: white; padding: 15px; border-radius: 3px; box-shadow: 1px 1px 5px rgba(0, 0, 0, .5); overflow: hidden; }
 .infoBox img:first-child { position: absolute !important; top: 10px; right: 10px; background: #EFEFEF; padding: 3px; border-radius: 14px; width: 10px; cursor: pointer; margin: 0px; box-shadow: 0px 0px 5px; }
 .infoBox img.attachment-mobile-banner { width: 400px; margin-left: -15px; margin-top: -15px; }
 .infoBox h2, .infoBox h2>a { font-size: 24px; margin: 18px 0px 0px 0px; line-height: 22px !important; }
@@ -921,6 +921,39 @@ font-size: 11px !important;
 /************************************/
 /***** ABOUT THE AUTHOR SECTION *****/
 /************************************/
+
+
+
+.school-leader-container {
+	border-bottom: 1px dashed #EFEFEF;
+	padding-bottom: 20px;
+}
+
+.school-leader-container:first-child {
+	border-top: 1px dashed #EFEFEF;
+}
+
+.school-leader-container .avatar-container {
+	text-align: center;
+}
+
+@media (max-width: 767px) {
+	.school-leader-container .married-avatar-container {
+		width: 50%;
+		float: left;
+		margin-bottom: 30px;
+	}
+}
+
+.school-leader-container .attachment-thumbnail {
+	width: 120px;
+	border-radius: 999px;
+	margin-top: 15px;
+}
+
+
+
+
 .sidebar-about-the-author { margin-top: 60px !important;}
 .sidebar-about-the-author p { font-size: 12px; text-transform: none; color: #444; }
 .sidebar-about-the-author .attachment-xs-mobile-banner {}

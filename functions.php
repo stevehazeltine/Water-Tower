@@ -1227,7 +1227,75 @@
 			
 			
 			
+			//----------------------------------------------------//
+			//----- DISPLAY PROGRAM IN ARCHIVE MODE FUNCTION -----//
+			//----------------------------------------------------//
+
+			function get_program_in_archive($program_id, $in_main_archive ) {
+
+			$args = array(
+				'p'				=> $program_id,
+				'post_type' 	=> 'program',
+			);
+
+			$program_query = new WP_Query($args);
+
+			if ( $program_query->have_posts() ) {
+	while ( $program_query->have_posts() ) {
+		$program_query->the_post(); ?>
 			
+			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
+						
+						<div class="span4 program-archive-featured-media hidden-phone">
+							
+							<div class="program-archive-featured-image">
+								<?php echo the_post_thumbnail('thumbnail-card');  ?>
+							</div>
+							
+						</div>
+						
+						<div class="span8 program-archive-content">
+						
+							<?php if ($in_main_archive == true) { ?>
+								<div class="program-archive-school-compare-link visible-desktop">
+									<span>Compare 
+										<i id="compare-programs-checkbox" data-programId="<?php echo program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
+									</span>
+								</div>
+							<?php } ?>
+						
+							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
+							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
+							
+							<div class="program-archive-school-meta">
+								<div class="program-archive-school-date">
+									<?php $start_date = rwmb_meta( 'start_date', $post_id=$program_id ); ?>
+									<?php echo date("F d, Y", strtotime($start_date));?>
+									<?php $custom_value = rwmb_meta( 'end_date', $post_id=$program_id ); if ($custom_value != '') { ?> - <?php echo $custom_value; } ?>
+								</div>
+								
+								<div class="program-archive-school-cost">
+									<?php $total_cost = rwmb_meta( 'total_cost', $post_id=$program_id );?> 
+									<?php if ($total_cost != '') { ?>
+										<?php setlocale(LC_MONETARY, 'en_US'); echo money_format( '%i', $total_cost);?>
+									<?php } ?>
+								</div>
+							</div>
+							<div style="clear: both"> </div>
+							
+							<div class="program-archive-tagline">
+								<?php echo substr(get_the_excerpt(), 0, 150); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+			<?php }
+}
+
+				 wp_reset_postdata();
+			 } 
 			
 						
 			

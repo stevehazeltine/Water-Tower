@@ -201,7 +201,7 @@
 		 		</div>
 
 		 		
-		 		<div class="span7 center-highlight">
+		 		<div class="span7 center-highlight center-highlight-programs-menu">
 		 			<div>
 		 				<div class="sub-main-menu sub-main-menu-two-up">
 						
@@ -441,6 +441,7 @@
 								'posts_per_page' 	=> 2,
 								'post_type' 		=> 'post',
 								'orderby'			=> 'date',
+								'category_name'		=> 'outreach-updates',
 						   ); ?>
 						   
 						   <?php $my_query = new WP_Query( $args ); ?>
@@ -564,6 +565,7 @@
 								'posts_per_page' 	=> 2,
 								'post_type' 		=> 'post',
 								'orderby'			=> 'date',
+								'category_name'		=> 'staff-articles',
 						   ); ?>
 						   
 						   <?php $my_query = new WP_Query( $args ); ?>
