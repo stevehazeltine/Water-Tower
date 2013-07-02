@@ -1,3 +1,20 @@
+			
+			//DESKTOP MENU BLOGROLL ENGINE
+			$(document).ready(function() {
+				$('[id^=related-post-menu-item]').hover(function() {
+					var postID = $(this).attr('data-id');
+					var postClass 
+					$('.active-related-post-menu-item').removeClass('active-related-post-menu-item');
+					$('.active-related-post').removeClass('active-related-post');
+					
+					$('#related-post-' + postID).addClass('active-related-post');
+					$(this).addClass('active-related-post-menu-item');
+				})
+			});
+			
+			
+			
+			
 			//ENABLE COMPARE SCHOOLS DESCRIPTION POPOVER
 			$(function () {  
 				$('[id^=compare-program-desc-btn]').popover({
@@ -7,7 +24,7 @@
 			
 			
 			
-			
+			//COMPARE SCHOOLS ENGINE 
 			$(document).ready(function() {
 			
 			var programCompareCounter = 0;
@@ -18,7 +35,7 @@
 					var programID = $(this).attr("data-programId");
 					var programTitle = $(this).attr("data-programTitle");
 					
-					if (programCompareCounter < 3) {  //ONLY ALLOW 5 BOXES TO BE CHECKED AT ONCE
+					if (programCompareCounter < 3) {  //ONLY ALLOW 3 BOXES TO BE CHECKED AT ONCE
 					
 						//INITIATE BOX BEING CHECKED
 						$(this).toggleClass('icon-check-empty icon-check').promise().done(function() {
@@ -57,7 +74,7 @@
 							}
 						});
 						
-					} else { //RUN CHECK ON BOXES AFTER 5 HAVE BEEN SELECTED - SHOULD BE IDENTICAL TO CODE ABOVE
+					} else { //RUN CHECK ON BOXES AFTER 3 HAVE BEEN SELECTED - SHOULD BE IDENTICAL TO CODE ABOVE
 						if($(this).hasClass('icon-check')) {
 							//CODE TO HANDLE UNCHECKED BOXES
 							$(this).toggleClass('icon-check-empty icon-check').promise().done(function() {
