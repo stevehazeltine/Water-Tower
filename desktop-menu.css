@@ -109,6 +109,7 @@
 	width: 960px;
 	padding: 0px 170px;
 	border-bottom: 5px solid #609FCE;
+	min-height: 310px;
 }
 
 .main-menu-desktop ul > div {
@@ -155,7 +156,7 @@
 
 .main-menu-desktop ul ul li a{
 	font-size: 16px;
-	color: #609FCE;
+	color: white;
 	font-family:'HelveticaNeueW01-77BdCn 692722';
 	text-transform: uppercase;
 	transition: .35s;
@@ -213,9 +214,20 @@
 }
 
 .main-menu-desktop .related-post {
-	margin-top: 25px;
+	margin-top: 30px;
 	box-sizing: border-box;
-	padding: 15px 0px 15px 40px;
+	padding: 0px 0px 15px 40px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	visibility: hidden;
+	opacity: 0;
+}
+
+.main-menu-desktop .related-post:first-child {
+	visibility: visible;
+	opacity: 1;
 }
 
 .main-menu-desktop .related-post-excerpt {
@@ -229,6 +241,8 @@
 }
 
 .main-menu-desktop .related-post img {
+	max-width: none;
+	width: 100%;
 	filter: grayscale(100%);
 	-webkit-filter: grayscale(100%);
 	   -moz-filter: grayscale(100%);
@@ -264,10 +278,59 @@
 		bottom:0px;
 		left: 0px;
 		padding: 20px 30px 20px 180px !important;
-		background-color: #444;
+		background-color: #609FCE;
 		width: 180px !important;
 		
 	}
+
+/***** RELATED POSTS *****/
+
+.menu-related-posts {
+	float: right;
+	position: relative;
+}
+
+.main-menu-desktop .related-post-title {
+	margin-top: 15px;
+}
+	
+.related-posts-menu-container {
+	position: absolute;
+	left: 608px;
+	bottom: 0px;
+}
+
+.related-posts-menu > li {
+	float: left;
+	box-sizing: border-box;
+	width: 40px;
+	color: white;
+	padding: 7px 10px;
+	text-align: center;
+	font-family:'HelveticaNeueW01-77BdCn 692722';
+}
+
+.related-posts-menu-title {
+	width: auto !important;
+	padding: 7px 20px !important;
+	text-transform: uppercase;
+	background: #609FCE;
+}
+
+.related-posts-menu-title i {
+	margin-left: 10px;
+}
+
+.related-posts-menu-archive-link {
+	width: 120px !important;
+	text-transform: uppercase;
+}
+	
+	
+	
+	
+	
+	
 
 @media (min-width: 1200px) {
 	.primary-menu {
@@ -276,9 +339,12 @@
 	}
 }
 
-.menu-related-posts {
-	float: right;
-	border-left: 1px dashed #777;
+
+@media (min-width: 1200px) {
+	
+	.related-posts-menu-container {
+		left: 530px;
+	}
 }
 
 @media (max-width: 1200px) {
@@ -286,5 +352,4 @@
 	.center-highlight-programs-menu {width: 705px !important;}
 	.menu-related-posts { width: 540px; }
 	.menu-related-posts .related-post { width: 100%; }
-	.menu-related-posts .related-post:last-child { display: none; }
 }

@@ -2,7 +2,7 @@
 	<ul class="main-menu-desktop">
 		
 		<!--ABOUT LINK-->
-		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up" style="color: #444;"></i></span>
+		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up" style="color: #609FCE;"></i></span>
 		 	<!--ABOUT DROPDOWN-->
 		 	<ul class="dropdown-container">
 		 		<div class="span2 primary-menu">
@@ -47,26 +47,51 @@
 						   <?php if ( $my_query->have_posts() ) { ?>
 							   <?php while ( $my_query->have_posts() ) { ?>
 								   <?php $my_query->the_post(); ?>
-								   				<div class="sub-main-menu-two-up related-post">
+								   				<div class="related-post">
 													<?php // check if the post has a Post Thumbnail assigned to it.
 														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'xs-mobile-banner' );
+															the_post_thumbnail( 'menu-banner' );
 														} else { ?>
-															<img src="http://placehold.it/1200x400" />
+															<img src="http://placehold.it/1200x200" />
 													<?php } ?>	
 													
 													
 													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo substr( get_the_content(), 0, 200 ); ?></p>
-													<h6 class="related-post-author">Written By <?php coauthors_posts_links() ?></h6>
+													<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
+													
 												</div>
 												
 							   <?php } ?>
 						   <?php } ?>
 						   <?php wp_reset_postdata(); ?>
-			 			
-			 			
+						   
+						   
+						   
+						   
+						   
 		 		</div>
+		 		
+		 		
+			<div class="related-posts-menu-container">
+	   			<ul class="related-posts-menu">
+	   				<li class="related-posts-menu-title">Blogroll <i class="icon-rotate-right"></i></li>
+	   				<li>1</li>
+	   				<li>2</li>
+	   				<li>3</li>
+	   				<li>4</li>
+	   				<li>5</li>
+	   				<li>6</li>
+	   				<li class="related-posts-menu-archive-link">View All Posts</li>
+	   			</ul>
+   			</div>
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
 		 		
 		 		<div class="span2 center-highlight">
 		 			<div class="sub-main-menu">
