@@ -1048,6 +1048,21 @@
 								
 								
 								
+								<?php //----- CHECK IF THE POST IS A SERIES -----// ?>
+								<?php //Variables -current_part_num -previous_part_ID -next_part_ID 
+								
+								
+								
+									<?php //check if post is in a series ?>
+									
+									<?php //if in a series check for previous post ?>
+										<?php //if not, it's the first post, do something cool Part1 ?>
+									
+									<?php //if in a series check for next post ?>
+										<?php //if not, it's the last post, do something cool Partx
+								
+								
+								
 								<!------------COMMENT SECTION----------->
 								 <?php comments_template(); ?>
 									
