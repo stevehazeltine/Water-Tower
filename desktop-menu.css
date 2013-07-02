@@ -223,11 +223,8 @@
 	bottom: 0px;
 	visibility: hidden;
 	opacity: 0;
-}
-
-.main-menu-desktop .related-post:first-child {
-	visibility: visible;
-	opacity: 1;
+	transition: .35s;
+	-webkit-transition: .35s;
 }
 
 .main-menu-desktop .related-post-excerpt {
@@ -308,6 +305,9 @@
 	padding: 7px 10px;
 	text-align: center;
 	font-family:'HelveticaNeueW01-77BdCn 692722';
+	cursor: pointer;
+	transition: .35s;
+	-webkit-transition: .35s;
 }
 
 .related-posts-menu-title {
@@ -315,6 +315,7 @@
 	padding: 7px 20px !important;
 	text-transform: uppercase;
 	background: #609FCE;
+	cursor: default !important;
 }
 
 .related-posts-menu-title i {
@@ -325,8 +326,16 @@
 	width: 120px !important;
 	text-transform: uppercase;
 }
+
+.active-related-post-menu-item {
+	background: #609FCE;
+	color: white;
+}
 	
-	
+.active-related-post {
+	visibility: visible !important;
+	opacity: 1 !important;
+}
 	
 	
 	
