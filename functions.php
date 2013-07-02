@@ -1643,9 +1643,8 @@ class ywammontana_walker_comment extends Walker_Comment {
 				add_image_size( 'xs-mobile-banner', 320, 107, true ); //USE FOR EXTRA SMALL MOBILE SIZED BANNERS
 				
 				// ARCHIVE BANNERS
-				add_image_size( 'archive-banner', 1200, 300, true ); //USE FOR ARCHIVE PAGES
-				add_image_size( 'mobile-archive-banner', 600, 150, true ); //USE FOR MOBILE ARCHIVE PAGES
-				add_image_size( 'xs-mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
+				add_image_size( 'menu-banner', 1200, 200, true ); //USE FOR ARCHIVE PAGES
+				add_image_size( 'mobile-menu-banner', 600, 100, true ); //USE FOR MOBILE ARCHIVE PAGES
 				
 				// 2x1 ASPECT RATIO
 				add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
