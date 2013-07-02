@@ -118,7 +118,7 @@
 							'rewrite' => array('hierarchical' => true ),
 							'show_admin_column' => true,
 						);
-						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'stories', 'teachings', 'user' ), $args );
+						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'teachings', 'user' ), $args );
 					}
 					add_action( 'init', 'my_taxonomies_program_taxo', 0 );
 					
@@ -222,7 +222,7 @@
 					
 					
 					//AUTOMATICALLY SAVE AND UPDATE TARGET NATION INFORMATION TO LINK TO IN BLOG
-					function post_program_update_target_nations($post_id){
+					function post_target_nations($post_id){
 					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
 						  return $post_id;
 					  }
@@ -252,7 +252,7 @@
 					  }
 					}
 			
-					add_action('save_post', 'post_program_update_target_nations');
+					add_action('save_post', 'post_target_nations');
 
 
 		
@@ -284,38 +284,7 @@
 			register_post_type( 'videos', $args );	
 		}
 		add_action( 'init', 'my_custom_post_video' );
-		
-		
-		
-		//STORIES
-	    function my_custom_post_stories() {
-			$labels = array(
-				'name'               => _x( 'Stories', 'post type general name' ),
-				'singular_name'      => _x( 'Story', 'post type singular name' ),
-				'add_new'            => _x( 'Add New', 'Story' ),
-				'add_new_item'       => __( 'Add New Story' ),
-				'edit_item'          => __( 'Edit Story' ),
-				'new_item'           => __( 'New Story' ),
-				'all_items'          => __( 'All Stories' ),
-				'view_item'          => __( 'View Stories' ),
-				'search_items'       => __( 'Search Stories' ),
-				'not_found'          => __( 'No stories found' ),
-				'not_found_in_trash' => __( 'No stories found in the Trash' ), 
-				'parent_item_colon'  => '',
-				'menu_name'          => 'Stories'
-			);
-			$args = array(
-				'labels'        => $labels,
-				'description'   => 'Holds our Story specific data',
-				'public'        => true,
-				'menu_position' => 7,
-				'supports'      => array( 'title', 'editor',  'revisions' ),
-				'has_archive'   => true,
-			);
-			register_post_type( 'stories', $args );	
-		}
-		add_action( 'init', 'my_custom_post_stories' );
-		
+				
 		
 		
 		//FOCUS MINISTRIES
@@ -624,58 +593,65 @@
 		add_action( 'init', 'my_taxonomies_outreach_locations', 0 );
 
 		
-		//ADD URL REWRITE RULES FOR CUSTOM POST TYPE ARCHIVES. BOOM!
-		add_action('generate_rewrite_rules', 'my_datearchives_rewrite_rules');
-
-			function my_datearchives_rewrite_rules($wp_rewrite) {
-			  $rules = my_generate_date_archives('teachings', $wp_rewrite);
-			  $wp_rewrite->rules = $rules + $wp_rewrite->rules;
-			  return $wp_rewrite;
-			}
+		//ADD GUEST AUTHOR TAXONOMY
+					function my_taxonomies_guest_author_taxo() {
+						$labels = array(
+							'name'              => _x( 'Guest Authors', 'taxonomy general name' ),
+							'singular_name'     => _x( 'Guest Author', 'taxonomy singular name' ),
+							'search_items'      => __( 'Search Guest Authors' ),
+							'all_items'         => __( 'All Guest Authors' ),
+							'parent_item'       => __( 'Parent Guest Author' ),
+							'parent_item_colon' => __( 'Parent Guest Author:' ),
+							'edit_item'         => __( 'Edit Guest Author' ), 
+							'update_item'       => __( 'Update Guest Author' ),
+							'add_new_item'      => __( 'Add New Guest Author' ),
+							'new_item_name'     => __( 'New Guest Author' ),
+							'menu_name'         => __( 'Guest Authors' ),
+						);
+						$args = array(
+							'labels' => $labels,
+							'hierarchical' => true,
+							'rewrite' => array('hierarchical' => true ),
+							'show_admin_column' => true,
+						);
+						register_taxonomy( 'guest_author_taxo', '', $args );
+					}
+					add_action( 'init', 'my_taxonomies_guest_author_taxo', 0 );
+					
+					
+					
+					//AUTOMATICALLY SAVE AND UPDATE TARGET NATION INFORMATION TO LINK TO IN BLOG
+					function post_guest_author_taxo($post_id){
+					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+						  return $post_id;
+					  }
 			
-			function my_generate_date_archives($cpt, $wp_rewrite) {
-			  $rules = array();
+					  $post_obj = get_post($post_id);
+					  $raw_title = $post_obj->post_title;
+					  $post_type = $post_obj->post_type;
+					  $slug_title = sanitize_title($raw_title);
 			
-			  $post_type = get_post_type_object($cpt);
-			  $slug_archive = $post_type->has_archive;
-			  if ($slug_archive === false) return $rules;
-			  if ($slug_archive === true) {
-			    $slug_archive = $post_type->name;
-			  }
-			
-			  $dates = array(
-			            array(
-			              'rule' => "([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})",
-			              'vars' => array('year', 'monthnum', 'day')),
-			            array(
-			              'rule' => "([0-9]{4})/([0-9]{1,2})",
-			              'vars' => array('year', 'monthnum')),
-			            array(
-			              'rule' => "([0-9]{4})",
-			              'vars' => array('year'))
-			        );
-			
-			  foreach ($dates as $data) {
-			    $query = 'index.php?post_type='.$cpt;
-			    $rule = $slug_archive.'/'.$data['rule'];
-			
-			    $i = 1;
-			    foreach ($data['vars'] as $var) {
-			      $query.= '&'.$var.'='.$wp_rewrite->preg_index($i);
-			      $i++;
-			    }
-			
-			    $rules[$rule."/?$"] = $query;
-			    $rules[$rule."/feed/(feed|rdf|rss|rss2|atom)/?$"] = $query."&feed=".$wp_rewrite->preg_index($i);
-			    $rules[$rule."/(feed|rdf|rss|rss2|atom)/?$"] = $query."&feed=".$wp_rewrite->preg_index($i);
-			    $rules[$rule."/page/([0-9]{1,})/?$"] = $query."&paged=".$wp_rewrite->preg_index($i);
-			  }
-			
-			  return $rules;
-			}
-
-
-
+					  if (($post_type == 'guest-author') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
+						 // get the terms associated with this custom post type
+						 $terms = get_the_terms($post_id, 'guest_author_taxo');
+						 $term_id = $terms[0]->term_id;
+						 // if term exists then update term
+						 if ($term_id > 0) {
+							 wp_update_term($term_id,
+											'guest_author_taxo',
+											array(
+											  'description' => $raw_title,
+											  'slug' => $raw_title,
+											  'name' => $raw_title)
+											);
+						 } else {
+							// creates a new term in the program_taxo taxonomy
+							wp_set_object_terms($post_id, $raw_title, 'guest_author_taxo', false);
+						 }
+					  }
+					}
+						
+					add_action('save_post', 'post_guest_author_taxo');	
 		
 		
 		
@@ -1245,76 +1221,15 @@
 			
 			
 			
-			//----------------------------------------------------//
-			//----- DISPLAY PROGRAM IN ARCHIVE MODE FUNCTION -----//
-			//----------------------------------------------------//
+			//----------------------------------------------//
+			//----- FUNCTION TO DISPLAY SCHOOL LEADERS -----//
+			//----------------------------------------------//
 			
-			function get_program_in_archive($program_id, $in_main_archive ) {
 			
-			$args = array(
-				'p'				=> $program_id,
-				'post_type' 	=> 'program',
-			);
 			
-			$program_query = new WP_Query($args);
 			
-			if ( $program_query->have_posts() ) {
-	while ( $program_query->have_posts() ) {
-		$program_query->the_post(); ?>
 			
-			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
 						
-						<div class="span4 program-archive-featured-media hidden-phone">
-							
-							<div class="program-archive-featured-image">
-								<?php echo the_post_thumbnail('thumbnail-card');  ?>
-							</div>
-							
-						</div>
-						
-						<div class="span8 program-archive-content">
-						
-							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-desktop">
-									<span>Compare 
-										<i id="compare-programs-checkbox" data-programId="<?php echo program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
-										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
-									</span>
-								</div>
-							<?php } ?>
-						
-							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
-							
-							<div class="program-archive-school-meta">
-								<div class="program-archive-school-date">
-									<?php $start_date = rwmb_meta( 'start_date', $post_id=$program_id ); ?>
-									<?php echo date("F d, Y", strtotime($start_date));?>
-									<?php $custom_value = rwmb_meta( 'end_date', $post_id=$program_id ); if ($custom_value != '') { ?> - <?php echo $custom_value; } ?>
-								</div>
-								
-								<div class="program-archive-school-cost">
-									<?php $total_cost = rwmb_meta( 'total_cost', $post_id=$program_id );?> 
-									<?php if ($total_cost != '') { ?>
-										<?php setlocale(LC_MONETARY, 'en_US'); echo money_format( '%i', $total_cost);?>
-									<?php } ?>
-								</div>
-							</div>
-							<div style="clear: both"> </div>
-							
-							<div class="program-archive-tagline">
-								<?php echo substr(get_the_excerpt(), 0, 150); ?>
-							</div>
-							
-						</div>
-					</div>
-					
-			<?php }
-}
-					
-				 wp_reset_postdata();
-			 } 
-			
 			
 			
 			//----------------------------------------------------------//
@@ -1659,30 +1574,9 @@ class ywammontana_walker_comment extends Walker_Comment {
 				add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
 			}
 		
-		//-----------------------------------------------------//
-		//----- ADD SCHOOLS FUNCTIONALITY TO USER PROFILE -----//
-		//-----------------------------------------------------//
 		
-		/**
-		 * Add a "Google Plus" field to Co-Authors Plus Guest Author
-		 */
-		add_filter( 'coauthors_guest_author_fields', 'capx_filter_guest_author_fields', 10, 2 );
-		function capx_filter_guest_author_fields( $fields_to_return, $groups ) {
-		 
-			if ( in_array( 'all', $groups ) || in_array( 'contact-info', $groups ) ) {
-				$fields_to_return[] = array(
-							'key'      => 'schools_staffed',
-							'label'    => 'Schools Staffed',
-							'group'    => 'contact-info',
-					);
+		
 					
-			} 
-		 
-			return $fields_to_return;
-		}
-		
-		
-			
 		//-------------------------------//
 		//----- CUSTOMIZE DASHBOARD -----//
 		//-------------------------------//

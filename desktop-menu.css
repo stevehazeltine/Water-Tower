@@ -255,14 +255,23 @@
 	font-size: 12px;
 }
 
+
 .primary-menu {
-	position: absolute;
-	top: 0px;
-	bottom:0px;
-	left: 0px;
-	padding: 20px 30px 20px 90px !important;
-	background-color: #444;
-	
+		position: absolute;
+		top: 0px;
+		bottom:0px;
+		left: 0px;
+		padding: 20px 30px 20px 180px !important;
+		background-color: #444;
+		width: 180px !important;
+		
+	}
+
+@media (min-width: 1200px) {
+	.primary-menu {
+		padding: 20px 30px 20px 90px !important;
+		
+	}
 }
 
 .menu-related-posts {

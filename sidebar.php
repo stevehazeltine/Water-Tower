@@ -6,7 +6,7 @@
 			<?php $coauthors = get_coauthors(); ?>
 				<?php foreach( $coauthors as $coauthor ) { ?>
 					
-								<?php echo get_the_post_thumbnail( $coauthor->ID, 'xs-mobile-banner' ); ?>
+								<?php echo get_the_post_thumbnail( $coauthor->ID, 'thumbnail-card' ); ?>
 
 								<h2><?php echo $coauthor->display_name; ?></h2>
 								<p><?php echo $coauthor->description; ?></p>

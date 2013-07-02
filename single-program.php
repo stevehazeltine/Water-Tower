@@ -154,6 +154,116 @@
 											 
 											 
 											 
+											 
+											<?php  
+											
+											
+											function get_school_leaders($leader_string) {
+												$leaders = explode(',', $leader_string);
+												$skip_leaders = array();
+												
+													
+													//----- SEPARATE MARRIED COUPLES FROM SINGLES -----//
+													foreach($leaders as $leader) {
+														
+														
+														//-----CHECK CURRENT LEADER AGAINST KNOWN SPOUSES-----//
+														if (!in_array($leader, $skip_leaders)) {
+														
+															//-----DEFINE LEADER ID-----//
+															$leader_object = get_page_by_path('cap-' . $leader, OBJECT, 'guest-author');
+															$leader_id = $leader_object->ID;
+															
+															//-----CHECK IF SPOUSE EXISTS-----//
+															if (rwmb_meta('has_spouse', '', $post_id=$leader_id) == 1) {
+																$terms =  rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$leader_id );
+																
+																//-----GET SPOUSE ID-----//
+																foreach ($terms as $term) {
+																	$spouse_raw_slug = $term->slug;
+																	$spouse_slug = 'cap-' . $term->slug;
+																	$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
+																	$spouse_id = $spouse->ID;
+																	}
+																	
+																//-----CHECK IF SPOUSE IS PRESENT-----//
+																foreach ($leaders as $i_spouse) {
+																	$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
+																	$i_spouse_id = $leader_object->ID;
+																	
+																	if ($i_spouse_id == $spouse_id) {
+																		$spouse_present = true;
+																	}  else {
+																		$spouse_present = false;
+																	}
+																}
+																
+																//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
+																if ($spouse_present = true) {
+																	$married_couples .= $leader_id . '-' . $spouse_id . ',';
+																	$skip_leaders[] = $spouse_raw_slug;
+																
+																//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
+																} else {
+																	$singles .= $leader_id . ',';
+																}
+															
+															//-----PROCEED THROUGH FOR SINGLE-----//
+															} else {
+																$singles .= $leader_id . ',';
+															}
+														}											
+													}
+													$married_couples = explode(',', rtrim($married_couples, ','));
+													$singles = rtrim($singles, ',');?>
+													
+													
+													<?php //-----DISPLAY MARRIED COUPLES-----//
+													<?php foreach($married_couples as $married_couple) { ?>
+														<?php $spouses = explode('-', $married_couple) ?>
+														<div class="about-the-author-container">
+														
+															<?php //-----DISPLAY NAMES-----//?>
+															<h5>
+															<?php $n = 1; ?>
+															<?php foreach ($spouses as $spouse) { ?>
+																<?php $spouse_object = get_coauthors($spouse); ?>
+																<?php if ($n==1) { 
+																		echo $spouse_object[0]->first_name . ' & ';
+																		$coutner = ++$n;
+																	} else {
+																		echo $spouse_object[0]->display_name;
+																	} ?>
+															<?php } ?>
+															</h5>
+															
+														</div>
+													<?php } ?>
+												<?php }
+
+											
+											
+											
+											$terms = rwmb_meta( 'leaders_1', 'type=taxonomy&taxonomy=guest_author_taxo' );
+												foreach ( $terms as $term ) {
+												   $leader_string .= $term->slug . ',';
+												}
+												
+												$leader_string = rtrim($leader_string, ',');
+												get_school_leaders($leader_string);
+												
+												
+												
+												
+											
+											?>
+											 
+											 
+											 
+											 
+											 
+											 
+											 
 										<!--------- SCHOOL LEADERS ----------->
 										<h4>Leaders</h4>
 										
@@ -348,62 +458,7 @@
 							
 							
 							
-							<!--STORIES-->
-							<?php $args = array(
-								'post_type' 	 	=>	'stories',
-								'program_taxo' 		=>  $program_slug,
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							<li><h2>Stories</h2>
-								<ul>
-						   
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-
-								   
-								   <li>
-									   <div class="row-fluid sidebar-stories-container">
-									   		<div class="span3 sidebar-stories-image">
-									   			<?php echo get_avatar( get_the_author_meta('ID'), 55 ); ?>
-									   		</div>
-									   		
-									   		<div class="span9 sidebar-stories-content">
-									   			<h5><a href="<?php the_permalink() ?>?programid=<?php echo $program_id; ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title() ?></a></h5>
-									   			<p><?php the_time( 'F j, Y' ); ?></p>
-									   		</div>
-									   </div>
-								   </li>
-								   
-							   <?php } ?>
-							   
-									<?php $args = array(
-										'post_type' => 'stories',
-										'program_taxo' => $program_slug,
-									);
-									$num = count( get_posts( $args ) ); ?>
-									
-									
-									<!--STORY MORE BUTTONS-->
-									<li>
-										<div class="row-fluid sidebar-related-posts-more">
-											<div class="sidebar-related-posts-view-all">
-												<a href="#_">View All (<?php echo $num; ?>) </a>
-											</div>
-											
-											<div class="sidebar-related-posts-subscribe sidebar-share-your-story">
-												<a href="<?php bloginfo('rss2_url'); ?>">Share Your Testimony</a>
-											</div>
-											<div class="clearfix"></div>
-										</div>
-									</li>
-								</ul>
-							</li>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-						   
-						   
+													   
 
 							
 							

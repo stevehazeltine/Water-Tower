@@ -1,11 +1,20 @@
 <?php get_header(); ?>
 
+<?php //SET THE CURAUTH VARIABLE ?>
+<?php $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author)); ?>
+
+
+<?php $coauthors = get_coauthors(); ?>
+<?php foreach( $coauthors as $coauthor ) { ?>
+			<div class="banner-image">
+				<?php echo get_the_post_thumbnail( $coauthor->ID, 'full-banner' ); ?>
+			</div>
+<?php } ?>	
+
+
 <div class="row">
 
 	<div class="span9">
-	
-		<?php //SET THE CURAUTH VARIABLE ?>
-	    <?php $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author)); ?>
 	
 	    <div class="row">
 	    	<div class="span2 author-page-avatar">
