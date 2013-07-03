@@ -75,7 +75,7 @@
 		 		
 			<div class="related-posts-menu-container">
 	   			<ul class="related-posts-menu">
-	   				<li class="related-posts-menu-title">Blogroll <i class="icon-rotate-right"></i></li>
+	   				<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
 	   					<!--LATEST POSTS MENU--->
 						   
 						   <?php $my_query = new WP_Query( $about_blogroll ); ?>

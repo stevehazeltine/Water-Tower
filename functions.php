@@ -866,9 +866,29 @@
 		<div id="map_canvas" class="visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
-			<div class="reveal-map-button visible-desktop">
-				<a href="#_"><span class="reveal-map-text">Show Outreach Map<i class="icon-caret-left"></i></span><span class="hide-map-text">Hide Outreach Map<i class="icon-caret-left"></i></span><i class="icon-globe"><span class="map-button-label">Map</span></i> </a>
+			
+			
+			
+			<div class="map-reveal-button-container visible-desktop">
+			<div class="map-reveal-button">
+				
+				<div class="map-reveal-button-hover">
+					<a href="#_"><i class="icon-globe"><span class="reveal-button-label">Map</span></i></a>
+				</div>
+				
+				<div class="map-reveal-button-extension">
+					<div class="map-reveal-button-extension-text">
+						<a href="#_"><span class="show-map-text">Show Outreach Map</span></a>
+						<a href="#_"><span class="hide-map-text">Hide Outreach Map</span></a>
+					</div>
+				</div>
+				
 			</div>
+			</div>
+			
+			
+			
+			
 		<?php } ?>
 		
 		<div class="map-key-container visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>

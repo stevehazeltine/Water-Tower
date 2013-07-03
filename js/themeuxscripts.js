@@ -279,7 +279,7 @@
 		
 		//REVEAL MAP BUTTON FOR PROGRAMS
 		$(document).ready(function() {
-		    $(".reveal-map-button").click(function () {
+		    $(".map-reveal-button").click(function () {
 		      $("#map_canvas").toggleClass("show-map");
 		      $(".map-key-container").toggleClass("map-key-map-active");
 			  

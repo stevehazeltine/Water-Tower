@@ -157,7 +157,7 @@
 .main-menu-desktop ul ul li a{
 	font-size: 16px;
 	color: white;
-	font-family:'HelveticaNeueW01-77BdCn 692722';
+	font-family: 'HelveticaNeueW01-67MdCn 692710';
 	text-transform: uppercase;
 	transition: .35s;
 	-webkit-transition: .35s;
@@ -285,6 +285,8 @@
 .menu-related-posts {
 	float: right;
 	position: relative;
+	min-height: 310px;
+	border-left: 1px dashed #666;
 }
 
 .main-menu-desktop .related-post-title {
