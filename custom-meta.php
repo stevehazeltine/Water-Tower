@@ -10,6 +10,74 @@ $meta_boxes = array();
 
 
 
+$meta_boxes[] = array(
+	'title'  => 'Additional Information',
+	'pages' => array( 'guest-author'),
+	'context' => 'normal',
+	'priority' => 'low',
+	'fields' => array(
+	
+		//IS MARRIED
+		array(
+			'name' => 'Married',
+			'id'   => "{$prefix}has_spouse",
+			'type' => 'checkbox',
+			// Value can be 0 or 1
+			'std'  => 0,
+		),
+		
+		//GUEST AUTHOR SPOUSE
+		array (
+			'name'	=> 'Spouse',
+			'id'	=> "{$prefix}spouse",
+			'type'	=> 'taxonomy',
+			'options'=> array (
+				'taxonomy' => 'guest_author_taxo',
+				'type'		=> 'select_advanced',
+			),
+		),
+		
+		//GUEST AUTHOR SCHOOLS STAFFED
+		array (
+			'name'	=> 'Schools Staffed',
+			'id'	=> "{$prefix}schools_staffed",
+			'type'	=> 'taxonomy',
+			'options'=> array (
+				'taxonomy' => 'program_taxo',
+				'type'		=> 'select_advanced',
+				),
+			'multiple'=> true,
+		),
+
+	),
+
+);
+
+$meta_boxes[] = array(
+	'title'  => 'Author Controls',
+	'pages' => array( 'guest-author'),
+	'context' => 'side',
+	'priority' => 'high',
+	'fields' => array(
+		
+		//GUEST AUTHOR SPOUSE
+		array (
+			'name'	=> 'Status',
+			'id'	=> "{$prefix}status",
+			'type'	=> 'select',
+			'options'=> array (
+				'student' => 'Student',
+				'staff'	  => 'Staff',
+			),
+		),
+
+	),
+
+);
+
+
+
+
 
 //GALLERY FUNCTION TO DISPLAY ADDITIONAL IMAGE INPUT BOX
 
@@ -337,13 +405,40 @@ $meta_boxes[] = array(
 	'fields' => array(
 
 		array(
+			'name'  => 'Short Name',
+			'id'    => "{$prefix}short_name",
+			'desc'  => 'If your program has an unusually long name, it may interfere with some of the design elements of the website.  We highly recommend assigning a shorterned version of the name here to use in sections where the forementioned example takes place.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
+		),	
+	
+		array(
 			'name'  => 'Program Acronym',
 			'id'    => "{$prefix}acronym",
 			'desc'  => 'Insert the program acronym.  For example Discipleship Training School would be DTS.  However, not all schools have an acronym that is directly derived from the first letter in each of the words of the school name, so make sure you have the acronym given by the school leader.',
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),	
+		),
+		
+		// SCHOOL LEADERS
+		array (
+			'name'	=> 'School Leaders',
+			'id'	=> "{$prefix}leaders",
+			'type'	=> 'taxonomy',
+			'options'=> array (
+				'taxonomy' => 'guest_author_taxo',
+				'type'		=> 'select_advanced',
+				'multiple'	=> true,
+			),
+			'multiple'	=> true,
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+
+		),
 				
 		//FILE ATTACHEMENTS
 		array(
@@ -377,6 +472,32 @@ $meta_boxes[] = array(
 
 
 
+
+
+//PROGRAM (SCHOOLS) CUSTOM POST TYPE CUSTOM FIELDS
+$meta_boxes[] = array(
+	'title'  => 'Social Media Options',
+	'pages' => array( 'program' ),
+	'context' => 'normal',
+	'priority' => 'high',
+	'fields' => array(
+
+		array(
+			'name'  => 'Instagram Hashtag Override',
+			'id'    => "{$prefix}insta_tag",
+			'desc'  => 'If you would like to directly control what hashtag is used to generate your feed, you can type the tag in here.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
+		),	
+				
+	),
+	
+);
+
+
+
+
 $meta_boxes[] = array(
 	'title'  => 'Program Dates/Cost',
 	'pages' => array( 'program' ),
@@ -391,7 +512,7 @@ $meta_boxes[] = array(
 			'id'    => "{$prefix}season1",
 			'desc'  => 'Insert the season of the school, such as Summer 2014.',
 			'type'  => 'text',
-			'std'   => '',
+			'std'   => 'Spring Quarter',
 			'clone' => false,
 		),
 	
@@ -436,22 +557,13 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		array(
-			'name' => 'Leader ID(s)',
-			'id'   => "{$prefix}leader_id1",
-			'desc' => 'Enter the ID of each of the school leader, make sure to clone the text field each time you enter a new ID.',
-			'type' => 'text',
-			'std'  => '',
-			'clone' => true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
 		),
 		
-		
+				
 		
 		// PROGRAM INSTANCE TWO
 		array(
@@ -459,7 +571,7 @@ $meta_boxes[] = array(
 			'id'    => "{$prefix}season2",
 			'desc'  => 'Insert the season of the school, such as Summer 2014.',
 			'type'  => 'text',
-			'std'   => '',
+			'std'   => 'Summer Quarter',
 			'clone' => false,
 		),
 		
@@ -504,15 +616,6 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-		),
-		
-		array(
-			'name' => 'Leader ID(s)',
-			'id'   => "{$prefix}leader_id2",
-			'desc' => 'Enter the ID of each of the school leader, make sure to clone the text field each time you enter a new ID.',
-			'type' => 'text',
-			'std'  => '',
-			'clone' => true,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
@@ -528,7 +631,7 @@ $meta_boxes[] = array(
 			'id'    => "{$prefix}season3",
 			'desc'  => 'Insert the season of the school, such as Summer 2014.',
 			'type'  => 'text',
-			'std'   => '',
+			'std'   => 'Fall Quarter',
 			'clone' => false,
 		),
 		
@@ -582,15 +685,74 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+		),
+		
+		
+		// PROGRAM INSTANCE 4
+		
+		array(
+			'name'  => 'Season of School',
+			'id'    => "{$prefix}season4",
+			'desc'  => 'Insert the season of the school, such as Summer 2014.',
+			'type'  => 'text',
+			'std'   => 'Winter Quarter',
+			'clone' => false,
 		),
 		
 		array(
-			'name' => 'Leader ID(s)',
-			'id'   => "{$prefix}leader_id3",
-			'desc' => 'Enter the ID of each of the school leader, make sure to clone the text field each time you enter a new ID.',
-			'type' => 'text',
-			'std'  => '',
-			'clone' => true,
+				'name' => 'Program Start Date',
+				'id'   => $prefix . 'start_date4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		
+			
+		array(
+				'name' => 'Program End Date',
+				'id'   => $prefix . 'end_date4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),	
+			
+		array(
+			'name'  => 'Total Cost',
+			'id'    => "{$prefix}total_cost4",
+			'desc'  => 'Insert the program cost.  It will automatically be formatted when brought into the front end of the site, so there is no need to add commas or dollar signs.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
+		),
+		
+		array(
+			'name'  => 'Total Cost',
+			'id'    => "{$prefix}total_cost4",
+			'desc'  => 'Insert the program cost.  It will automatically be formatted when brought into the front end of the site, so there is no need to add commas or dollar signs.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => false,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
@@ -610,6 +772,7 @@ $meta_boxes[] = array(
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
+	
 	
 		array(
 			'name' => 'Lecture Phase Title',

@@ -72,7 +72,7 @@
 												if ( has_post_thumbnail() ) {
 													the_post_thumbnail( 'xs-thumbnail-card' );
 												} else { ?>
-													<img src="http://placehold.it/1200x500" />
+													<img src="http://placehold.it/400x200" />
 												<?php } ?>
 											</div>
 											

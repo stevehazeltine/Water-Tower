@@ -178,6 +178,9 @@
 				) ?>
 				<?php get_related_posts($related_args); ?>
 			</ul>
+			
+			
+			
 		</div>
 	</div>
 

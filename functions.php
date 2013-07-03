@@ -118,7 +118,7 @@
 							'rewrite' => array('hierarchical' => true ),
 							'show_admin_column' => true,
 						);
-						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'stories', 'teachings', 'user' ), $args );
+						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'teachings', 'user' ), $args );
 					}
 					add_action( 'init', 'my_taxonomies_program_taxo', 0 );
 					
@@ -222,7 +222,7 @@
 					
 					
 					//AUTOMATICALLY SAVE AND UPDATE TARGET NATION INFORMATION TO LINK TO IN BLOG
-					function post_program_update_target_nations($post_id){
+					function post_target_nations($post_id){
 					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
 						  return $post_id;
 					  }
@@ -252,7 +252,7 @@
 					  }
 					}
 			
-					add_action('save_post', 'post_program_update_target_nations');
+					add_action('save_post', 'post_target_nations');
 
 
 		
@@ -284,38 +284,7 @@
 			register_post_type( 'videos', $args );	
 		}
 		add_action( 'init', 'my_custom_post_video' );
-		
-		
-		
-		//STORIES
-	    function my_custom_post_stories() {
-			$labels = array(
-				'name'               => _x( 'Stories', 'post type general name' ),
-				'singular_name'      => _x( 'Story', 'post type singular name' ),
-				'add_new'            => _x( 'Add New', 'Story' ),
-				'add_new_item'       => __( 'Add New Story' ),
-				'edit_item'          => __( 'Edit Story' ),
-				'new_item'           => __( 'New Story' ),
-				'all_items'          => __( 'All Stories' ),
-				'view_item'          => __( 'View Stories' ),
-				'search_items'       => __( 'Search Stories' ),
-				'not_found'          => __( 'No stories found' ),
-				'not_found_in_trash' => __( 'No stories found in the Trash' ), 
-				'parent_item_colon'  => '',
-				'menu_name'          => 'Stories'
-			);
-			$args = array(
-				'labels'        => $labels,
-				'description'   => 'Holds our Story specific data',
-				'public'        => true,
-				'menu_position' => 7,
-				'supports'      => array( 'title', 'editor',  'revisions' ),
-				'has_archive'   => true,
-			);
-			register_post_type( 'stories', $args );	
-		}
-		add_action( 'init', 'my_custom_post_stories' );
-		
+				
 		
 		
 		//FOCUS MINISTRIES
@@ -535,7 +504,6 @@
 				'labels'        => $labels,
 				'description'   => 'Holds our teachings and teaching specific data',
 				'public'        => true,
-				'capability_type'  => array( 'publish_posts' ),
 				'menu_position' => 12,
 				'supports'      => array( 'title', 'author', 'editor', 'thumbnail', 'comments',  'revisions' ),
 				'has_archive'   => true,
@@ -625,58 +593,65 @@
 		add_action( 'init', 'my_taxonomies_outreach_locations', 0 );
 
 		
-		//ADD URL REWRITE RULES FOR CUSTOM POST TYPE ARCHIVES. BOOM!
-		add_action('generate_rewrite_rules', 'my_datearchives_rewrite_rules');
-
-			function my_datearchives_rewrite_rules($wp_rewrite) {
-			  $rules = my_generate_date_archives('teachings', $wp_rewrite);
-			  $wp_rewrite->rules = $rules + $wp_rewrite->rules;
-			  return $wp_rewrite;
-			}
+		//ADD GUEST AUTHOR TAXONOMY
+					function my_taxonomies_guest_author_taxo() {
+						$labels = array(
+							'name'              => _x( 'Guest Authors', 'taxonomy general name' ),
+							'singular_name'     => _x( 'Guest Author', 'taxonomy singular name' ),
+							'search_items'      => __( 'Search Guest Authors' ),
+							'all_items'         => __( 'All Guest Authors' ),
+							'parent_item'       => __( 'Parent Guest Author' ),
+							'parent_item_colon' => __( 'Parent Guest Author:' ),
+							'edit_item'         => __( 'Edit Guest Author' ), 
+							'update_item'       => __( 'Update Guest Author' ),
+							'add_new_item'      => __( 'Add New Guest Author' ),
+							'new_item_name'     => __( 'New Guest Author' ),
+							'menu_name'         => __( 'Guest Authors' ),
+						);
+						$args = array(
+							'labels' => $labels,
+							'hierarchical' => true,
+							'rewrite' => array('hierarchical' => true ),
+							'show_admin_column' => true,
+						);
+						register_taxonomy( 'guest_author_taxo', '', $args );
+					}
+					add_action( 'init', 'my_taxonomies_guest_author_taxo', 0 );
+					
+					
+					
+					//AUTOMATICALLY SAVE AND UPDATE TARGET NATION INFORMATION TO LINK TO IN BLOG
+					function post_guest_author_taxo($post_id){
+					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+						  return $post_id;
+					  }
 			
-			function my_generate_date_archives($cpt, $wp_rewrite) {
-			  $rules = array();
+					  $post_obj = get_post($post_id);
+					  $raw_title = $post_obj->post_title;
+					  $post_type = $post_obj->post_type;
+					  $slug_title = sanitize_title($raw_title);
 			
-			  $post_type = get_post_type_object($cpt);
-			  $slug_archive = $post_type->has_archive;
-			  if ($slug_archive === false) return $rules;
-			  if ($slug_archive === true) {
-			    $slug_archive = $post_type->name;
-			  }
-			
-			  $dates = array(
-			            array(
-			              'rule' => "([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})",
-			              'vars' => array('year', 'monthnum', 'day')),
-			            array(
-			              'rule' => "([0-9]{4})/([0-9]{1,2})",
-			              'vars' => array('year', 'monthnum')),
-			            array(
-			              'rule' => "([0-9]{4})",
-			              'vars' => array('year'))
-			        );
-			
-			  foreach ($dates as $data) {
-			    $query = 'index.php?post_type='.$cpt;
-			    $rule = $slug_archive.'/'.$data['rule'];
-			
-			    $i = 1;
-			    foreach ($data['vars'] as $var) {
-			      $query.= '&'.$var.'='.$wp_rewrite->preg_index($i);
-			      $i++;
-			    }
-			
-			    $rules[$rule."/?$"] = $query;
-			    $rules[$rule."/feed/(feed|rdf|rss|rss2|atom)/?$"] = $query."&feed=".$wp_rewrite->preg_index($i);
-			    $rules[$rule."/(feed|rdf|rss|rss2|atom)/?$"] = $query."&feed=".$wp_rewrite->preg_index($i);
-			    $rules[$rule."/page/([0-9]{1,})/?$"] = $query."&paged=".$wp_rewrite->preg_index($i);
-			  }
-			
-			  return $rules;
-			}
-
-
-
+					  if (($post_type == 'guest-author') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
+						 // get the terms associated with this custom post type
+						 $terms = get_the_terms($post_id, 'guest_author_taxo');
+						 $term_id = $terms[0]->term_id;
+						 // if term exists then update term
+						 if ($term_id > 0) {
+							 wp_update_term($term_id,
+											'guest_author_taxo',
+											array(
+											  'description' => $raw_title,
+											  'slug' => $raw_title,
+											  'name' => $raw_title)
+											);
+						 } else {
+							// creates a new term in the program_taxo taxonomy
+							wp_set_object_terms($post_id, $raw_title, 'guest_author_taxo', false);
+						 }
+					  }
+					}
+						
+					add_action('save_post', 'post_guest_author_taxo');	
 		
 		
 		
@@ -687,13 +662,6 @@
 		
 			
 		// GET GALLERY AND MAP FUNCTION
-			// $args
-			// include-map 			-> true, false | Default = false
-			// post_type 			-> post | Default = post
-			// category_name 		-> outreach-updates | Default = outreach-updates
-			// program_taxo			-> Accepts variable driven by program slug.| Default = null
-			// target_nations_taxo	-> Accepts variable driven by target nation slug.| Default = null
-			// 
 		
 		
 		function get_banner($banner_args) { 
@@ -898,9 +866,29 @@
 		<div id="map_canvas" class="visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
-			<div class="reveal-map-button visible-desktop">
-				<a href="#_"><span class="reveal-map-text">Show Outreach Map<i class="icon-caret-left"></i></span><span class="hide-map-text">Hide Outreach Map<i class="icon-caret-left"></i></span><i class="icon-globe"><span class="map-button-label">Map</span></i> </a>
+			
+			
+			
+			<div class="map-reveal-button-container visible-desktop">
+			<div class="map-reveal-button">
+				
+				<div class="map-reveal-button-hover">
+					<a href="#_"><i class="icon-globe"><span class="reveal-button-label">Map</span></i></a>
+				</div>
+				
+				<div class="map-reveal-button-extension">
+					<div class="map-reveal-button-extension-text">
+						<a href="#_"><span class="show-map-text">Show Outreach Map</span></a>
+						<a href="#_"><span class="hide-map-text">Hide Outreach Map</span></a>
+					</div>
+				</div>
+				
 			</div>
+			</div>
+			
+			
+			
+			
 		<?php } ?>
 		
 		<div class="map-key-container visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
@@ -956,76 +944,105 @@
 			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 				<div class="row-fluid post-container">
-						<div class="span3">
-							<div class="entry-meta-left">
-								<div class="date-container-border">
-								<div class="date-container">
-										<div class="day"><?php the_time('j') ?></div>
-										<div class="month"><?php the_time('M') ?></div>
-								</div>
-								</div>
-								
-								<div class="tags-container">
-									<span class="tags-title"><span>Author<?php if ( 1 !== count( get_coauthors( get_the_id() ) ) ) { echo 's'; } ?></span></span>
-									<ul>
-										<?php coauthors_posts_links( ' ', '</li><li>', '<li>', '</li>', true ); ?>
-									</ul>
-								</div>
-								
-								<div class="tags-container">
-									
-										<?php if ( 'teachings' == get_post_type()) { ?>
-											<div class="tags-title"><span>Teaching Types<span></div>
-											<ul>
-												<li><?php echo the_terms( $post->ID, 'teaching_types', null, '</li><li>', null ); ?></li>
-											</ul>
-										<?php } else { ?>
-											<div class="tags-title"><span>Categories<span></div>
-											<ul>
-												<li><?php the_category('</li><li>'); ?></li>
-											</ul>
-											
-										<?php }?>
-
-								</div>
-								
-								<div class="tags-container">
-									<div class="tags-title"><span>Tags</span></div>
-									<?php the_tags('<ul><li>','</li><li>','</li></ul>'); ?>
-								</div>
-								
-								<?php if ($post_length != 'excerpt') { ?>
-									<div class="pull-quote">
-										<p><?php echo rwmb_meta( 'pull_quote' ); ?></p>
-									</div>
-								<?php } ?>
+						<div class="span3 visible-desktop post-meta-container">
 							
+							<?php
+							if ($post_length == 'excerpt') {
+								if ( has_post_thumbnail() ) {
+								  the_post_thumbnail( '16:9-media-thumbnail' );
+								} 
+							}
+							?>
+							
+							
+							
+							
+							
+							<?php if ($post_length == 'full') { ?>
+							<div class="entry-meta-left">
+							
+								<?php // CATEGORIES ?>
+								
+									<div class="date-container-border">
+										<div class="date-container">
+												<div class="day"><?php the_time('j') ?></div>
+												<div class="month"><?php the_time('M') ?></div>
+										</div>
+									</div>
+								
+									
+								
+								<h4 class="meta-title">Author<?php if ( 1 !== count( get_coauthors( get_the_id() ) ) ) { echo 's'; } ?></h4>
+								<ul class="meta-list">
+									<?php coauthors_posts_links( ' ', '</li><li><i class="icon-user"></i>', '<li><i class="icon-user"></i>', '</li>', true ); ?>
+								</ul>
+								
+									
+									
+									
+								<?php // CATEGORIES ?>
+								
+									<?php if ( 'teachings' == get_post_type()) { ?>
+										<h4 class="meta-title">Teaching Types</h4>
+										<ul class="meta-list">
+											<li><i class="icon-plus-sign"></i><?php echo the_terms( $post->ID, 'teaching_types', null, '</li><li><i class="icon-plus-sign"></i>', null ); ?></li>
+										</ul>
+									<?php } else { ?>
+										<h4 class="meta-title">Categories</h4>
+										<ul class="meta-list">
+											<li><i class="icon-plus-sign"></i><?php the_category('</li><li><i class="icon-plus-sign"></i>'); ?></li>
+										</ul>
+									
+								<?php } ?>
+								
+								
+								<?php // TAGS ?>
+									<h4 class="meta-title">Tags</h4>
+									<?php the_tags('<ul class="meta-list"><li><i class="icon-tag"></i>','</li><li><i class="icon-tag"></i>','</li></ul>'); ?>
+									
+								<?php // RELATED PROGRAMS ?>
+								
+									<?php $related_programs = get_the_terms( $post->ID, 'program_taxo' ); ?>
+									<?php if (!empty($related_programs)) { ?>
+										<h4 class="meta-title">Related Schools</h4>
+										<ul class="meta-list">
+										<?php foreach ($related_programs as $program) { ?>
+											<?php $program = get_page_by_path($program->slug, OBJECT, 'program'); ?>
+												
+												<?php if (rwmb_meta('short_name', '', $post_id=$program->ID) == '') {
+														$post_title = $program->post_title;
+													} else {
+														$post_title = rwmb_meta('short_name', '', $post_id=$program->ID);
+													} ?>
+												
+												
+												
+											<li>
+												<a href="<?php echo get_permalink($program->ID); ?>"><i class="icon-location-arrow"></i><?php echo $post_title; ?></a>
+											</li>
+											
+										<?php } ?>
+										</ul>
+									
+								<?php } ?>
 							</div>
+							<?php } ?>
+							
+							
 						</div>
 					 
 					 
-					 <div class="span9 post">
-								 
-						<?php if ($post_length == 'excerpt') { ?>
-							<?php // check if the post has a Post Thumbnail assigned to it.
-								if ( has_post_thumbnail() ) {
-									the_post_thumbnail( 'archive-banner' );
-								} else { ?>
-									<img src="http://placehold.it/1200x300" />
-							<?php } ?>
-						<?php } ?>
+					 <div class="span9 post loop-content">
 						
 						
-						<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
-						<?php if (rwmb_meta( 'sub_title') !== '') { ?>
-							<h5 class="subtitle"><?php echo rwmb_meta( 'sub_title' ); ?></h5>
-						<?php } ?>
+						<h2><a <?php if ($post_length == 'excerpt') { echo 'style="font-size: 24px;"';} ?> href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 
 							 <div class="entry">
 							   <?php if ($post_length=='excerpt') {the_excerpt();} else {the_content();} ?>
 							   
 							   
-							   <!--------- TEACHINGS MEDIA FILES ------------>
+							   <?php //----- TEACHING MEDIA FILES -----// ?>
+							   
 							   <?php if (get_post_type() == 'teachings' and $post_length !== 'excerpt') { ?>
 							   <div class="teachings-media-container">
 							   <?php $files = rwmb_meta( 'media_files', 'type=file' ); ?>
@@ -1034,73 +1051,28 @@
 									<?php } else { ?>
 																		
 											<?php foreach ( $files as $info ){ ?>
-												<div class="row-fluid teaching-media-container">													
-													
-													<div class="span12 audio-container">
-															<?php echo $info['title']; ?>
-															
-															<div class="teaching-options">
-																<a href="#_"><i class="icon-facebook-sign"></i></a>
-																<a href="#_"><i class="icon-twitter-sign"></i></a>
-																<?php echo "<a href='{$info['url']}' target='_blank' title='{$info['title']}'><i class='icon-download-alt'></i></a>"; ?>
-															</div>
-																
 															<?php echo do_shortcode('[audio src="' . $info['url'] . '"]'); ?>
-													</div>
-		
-												</div>
+
 											<?php } ?>
 									<?php } ?>
 									 </div>
 							   <?php } ?>
-							   		
-							 
-							 <!-------- ABOUT THE AUTHOR SECTION ---------->
-							   	<?php if ($post_length !== 'excerpt') { ?>
-							   		<?php $coauthors = get_coauthors(); ?>
-								 	<?php foreach( $coauthors as $coauthor ) { ?>
-									 	<div class="about-the-author" id="about-the-author">
-									 	
-											<div class="row-fluid">
-												<div class="span3 author-avatar">
-													<?php echo get_avatar( $coauthor->ID, 150 ); ?>
-												</div>
-												<div class="span9">
-													<h5><?php echo the_author_meta( 'display_name', $coauthor->ID ); ?></h5>
-													<?php echo the_author_meta( 'description', $coauthor->ID ); ?>
-
-	    			
-										    			<div class="about-the-author-school-associations">
-												    		<?php $terms = wp_get_object_terms( $coauthor->ID, 'programs_completed'); ?>
-												    		<?php if (!empty($terms)) { ?>
-												    			<h6>Programs Completed</h6>
-											    					<ul class="author-page-program-list">
-																	    <?php foreach ($terms as $term) { ?>
-																		    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-																	    <?php } ?>
-											    					</ul>
-															<?php } ?>
-										    			</div>
-										    			
-										    			<div class="about-the-author-school-associations">
-												    		<?php $terms = wp_get_object_terms( $coauthor->ID, 'programs_staffed'); ?>
-												    		<?php if (!empty($terms)) { ?>
-												    			<h6>Programs Staffed</h6>
-												    					<ul class="author-page-program-list">
-																		    <?php foreach ($terms as $term) { ?>
-																			    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-																		    <?php } ?>
-												    					</ul>
-															<?php } ?>
-										    			</div>
-													
-													
-												</div>
-											</div>
-										</div>
-									<?php } ?>
-								<?php } ?>
 								
+								
+								
+								
+								<?php //----- CHECK IF THE POST IS A SERIES -----// ?>
+								<?php //Variables -current_part_num -previous_part_ID -next_part_ID ?>
+								
+								
+								
+									<?php //check if post is in a series ?>
+									
+									<?php //if in a series check for previous post ?>
+										<?php //if not, it's the first post, do something cool Part1 ?>
+									
+									<?php //if in a series check for next post ?>
+										<?php //if not, it's the last post, do something cool Partx ?>
 								
 								
 								
@@ -1277,6 +1249,84 @@
 			
 			
 			
+			//----------------------------------------------//
+			//----- FUNCTION TO DISPLAY SCHOOL LEADERS -----//
+			//----------------------------------------------//
+			
+			
+			
+			//----------------------------------------------------//
+			//----- DISPLAY PROGRAM IN ARCHIVE MODE FUNCTION -----//
+			//----------------------------------------------------//
+
+			function get_program_in_archive($program_id, $in_main_archive ) {
+
+			$args = array(
+				'p'				=> $program_id,
+				'post_type' 	=> 'program',
+			);
+
+			$program_query = new WP_Query($args);
+
+			if ( $program_query->have_posts() ) {
+	while ( $program_query->have_posts() ) {
+		$program_query->the_post(); ?>
+			
+			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
+						
+						<div class="span4 program-archive-featured-media hidden-phone">
+							
+							<div class="program-archive-featured-image">
+								<?php echo the_post_thumbnail('thumbnail-card');  ?>
+							</div>
+							
+						</div>
+						
+						<div class="span8 program-archive-content">
+						
+							<?php if ($in_main_archive == true) { ?>
+								<div class="program-archive-school-compare-link visible-desktop">
+									<span>Compare 
+										<i id="compare-programs-checkbox" data-programId="<?php echo program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
+									</span>
+								</div>
+							<?php } ?>
+						
+							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
+							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
+							
+							<div class="program-archive-school-meta">
+								<div class="program-archive-school-date">
+									<?php $start_date = rwmb_meta( 'start_date', $post_id=$program_id ); ?>
+									<?php echo date("F d, Y", strtotime($start_date));?>
+									<?php $custom_value = rwmb_meta( 'end_date', $post_id=$program_id ); if ($custom_value != '') { ?> - <?php echo $custom_value; } ?>
+								</div>
+								
+								<div class="program-archive-school-cost">
+									<?php $total_cost = rwmb_meta( 'total_cost', $post_id=$program_id );?> 
+									<?php if ($total_cost != '') { ?>
+										<?php setlocale(LC_MONETARY, 'en_US'); echo money_format( '%i', $total_cost);?>
+									<?php } ?>
+								</div>
+							</div>
+							<div style="clear: both"> </div>
+							
+							<div class="program-archive-tagline">
+								<?php echo substr(get_the_excerpt(), 0, 150); ?>
+							</div>
+							
+						</div>
+					</div>
+					
+			<?php }
+}
+
+				 wp_reset_postdata();
+			 } 
+			
+						
+			
 			
 			//----------------------------------------------------------//
 			//----- FUNCTION TO RETRIEVE AND DISPLAY RELATED POSTS -----//
@@ -1284,12 +1334,13 @@
 			
 			function get_related_posts($related_args) {
 			
-			
+			if (!isset($related_args["title"])){$related_args["title"] = 'Related Posts';}
 			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
 			if (!isset($related_args["post_type"])){$related_args["post_type"] = 'post';}
 			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
 			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
 			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
+			if (!isset($related_args["archive_url"])){$related_args["archive_url"] = get_bloginfo(info) . '/blog/';}
 			
 			?>
 			
@@ -1304,7 +1355,7 @@
 						   
 						   <?php $my_query = new WP_Query( $args ); ?>
 						   <?php if ( $my_query->have_posts() ) { ?>
-								<li><h2>Related Posts</h2>
+								<li><h2><?php echo $related_args['title']; ?></h2>
 								<ul>
 							   <?php while ( $my_query->have_posts() ) { ?>
 								   <?php $my_query->the_post(); ?>
@@ -1324,10 +1375,10 @@
 							   <?php } ?>
 							   
 								<?php $args = array(
-									'post_type' => 'post',
-									'post_status' => 'publish',
-									'program_taxo' => $program_slug,
-									'project_taxo' => $project_slug,
+									'post_type' 	=> 'post',
+									'program_taxo' 	=> $related_args['program_taxo'],
+									'project_taxo' 	=> $related_args['project_taxo'],
+									'nopaging'	=> true,
 								);
 								$num = count( get_posts( $args ) ); ?>
 								
@@ -1335,7 +1386,7 @@
 									<li>
 										<div class="row-fluid sidebar-related-posts-more">
 											<div class="sidebar-related-posts-view-all">
-												<a href="#_">View All (<?php echo $num; ?>) </a>
+												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
 											</div>
 											
 											<div class="sidebar-related-posts-subscribe">
@@ -1352,7 +1403,9 @@
 			
 			
 			
-			// IMAGE CREDITS
+			//-------------------------//
+			//----- IMAGE CREDITS -----//
+			//-------------------------//
 			
 				//FUNCTION TO RETRIEVE IMAGE CREDITS
 					function get_image_credits() {
@@ -1502,19 +1555,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 	</ul><!-- /#comment-list -->
 
 	<?php }
-}
-			
-			
-			
-	//ADD SOCIAL LOGIN TO COMMENTS FORM
-	function add_social_login_to_comments() { 
-		do_action( 'wordpress_social_login' );
-	}
-	add_filter( 'comment_form_must_log_in_after', 'add_social_login_to_comments' );
-			
-	//ADD FIX FOR YOAST SEO O.G. TAGS FOR FACEBOOK DESCRIPTION TO WORK
-	add_filter( 'jetpack_enable_opengraph', '__return_false', 99 );
-	
+}	
 			
 
 
@@ -1579,8 +1620,10 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 					
 		
+		//--------------------------------------------//
+		//----- ADD JESUS TO EVERY POST TAG LIST -----//
+		//--------------------------------------------//
 		
-		//ADD JESUS TO EVERY POST TAG LIST
 			function set_jesus_tag_on_publish($post_id,$post) {
 			  if ($post->post_type == 'post' or 'program'
 				&& $post->post_status == 'publish') {
@@ -1594,39 +1637,41 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 		
 		//-----------------------------//
-		//----- ADD THEME SUPPORT -----//
+		//----- ADD THEME SUPPORT -----// 
 		//-----------------------------//
 					
-					//ADD CUSTOM HEADER FUNCTIONALITY
-					add_theme_support( 'custom-header' );
+			//ADD CUSTOM HEADER FUNCTIONALITY
+			add_theme_support( 'custom-header' );
+			
+			//ADD POST THUMBNAIL FUNCTIONALITY
+			if ( function_exists( 'add_theme_support' ) ) {
+					add_theme_support( 'post-thumbnails' );
+					set_post_thumbnail_size( 150, 150 ); // default Post Thumbnail dimensions   
+			}
+			
+			//DEFINE THUMBNAIL SIZES
+			if ( function_exists( 'add_image_size' ) ) { 
+				add_image_size( 'full-banner', 1350, 450, true ); //USE FOR FULL LENGTH BANNERS
+				add_image_size( 'mobile-banner', 960, 320, true ); //USE FOR MOBILE SIZED BANNERS
+				add_image_size( 'xs-mobile-banner', 320, 107, true ); //USE FOR EXTRA SMALL MOBILE SIZED BANNERS
+				
+				// ARCHIVE BANNERS
+				add_image_size( 'menu-banner', 1200, 200, true ); //USE FOR ARCHIVE PAGES
+				add_image_size( 'mobile-menu-banner', 600, 100, true ); //USE FOR MOBILE ARCHIVE PAGES
+				
+				// 2x1 ASPECT RATIO
+				add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
+				add_image_size( 'thumbnail-card', 400, 200, true ); //USE FOR DISPLAY OF THUMBNAIL SIZE CARDS
+				add_image_size( 'xs-thumbnail-card', 150, 75, true ); //USE FOR DISPLAY OF EXTRA SMALL THUMBNAIL SIZE CARDS
+				
+				// 16x9 ASPECT RATIO
+				add_image_size( '16:9-media', 1200, 675, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
+				add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
+			}
+		
+		
+		
 					
-					//ADD POST THUMBNAIL FUNCTIONALITY
-					if ( function_exists( 'add_theme_support' ) ) {
-							add_theme_support( 'post-thumbnails' );
-							set_post_thumbnail_size( 150, 150 ); // default Post Thumbnail dimensions   
-					}
-
-		if ( function_exists( 'add_image_size' ) ) { 
-			add_image_size( 'full-banner', 1350, 450, true ); //USE FOR FULL LENGTH BANNERS
-			add_image_size( 'mobile-banner', 960, 320, true ); //USE FOR MOBILE SIZED BANNERS
-			add_image_size( 'xs-mobile-banner', 320, 107, true ); //USE FOR EXTRA SMALL MOBILE SIZED BANNERS
-			
-			// ARCHIVE BANNERS
-			add_image_size( 'archive-banner', 1200, 300, true ); //USE FOR ARCHIVE PAGES
-			add_image_size( 'mobile-archive-banner', 600, 150, true ); //USE FOR MOBILE ARCHIVE PAGES
-			add_image_size( 'mobile-archive-banner', 320, 80, true ); //USE FOR EXTRA SMALL MOBILE ARCHIVE PAGES
-			
-			// 2x1 ASPECT RATIO
-			add_image_size( 'display-card', 1200, 600, true ); //USE FOR DISPLAY WITHIN A LIST OF POSTS
-			add_image_size( 'thumbnail-card', 400, 200, true ); //USE FOR DISPLAY OF THUMBNAIL SIZE CARDS
-			add_image_size( 'xs-thumbnail-card', 150, 75, true ); //USE FOR DISPLAY OF EXTRA SMALL THUMBNAIL SIZE CARDS
-			
-			// 16x9 ASPECT RATIO
-			add_image_size( '16:9-media', 1200, 675, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
-			add_image_size( '16:9-media-thumbnail', 400, 225, true ); //USE FOR DISPLAY OF FEATURED IMAGE ALONGSIDE FEATURED VIDEO
-		}
-			
-			
 		//-------------------------------//
 		//----- CUSTOMIZE DASHBOARD -----//
 		//-------------------------------//
@@ -1711,25 +1756,96 @@ class ywammontana_walker_comment extends Walker_Comment {
 			<?php }
 			
 			
+		
+		
+		//----------------------------//
+		//----- INSTAGRAM WIDGET -----//
+		//----------------------------//
+		
+		function get_instagram($insta_args) {
 			
-			
+				if (!isset($insta_args["rows"])){$insta_args["rows"] = 3;}
+				if (!isset($insta_args["cols"])){$insta_args["cols"] = 3;}//OPTIONS 2,3,4,6,12
+				if (!isset($insta_args["resolution"])){$insta_args["resolution"] = 'low_resolution';}//OPTIONS: low_resolution, thumbnail, standard_resolution
+				if (!isset($insta_args["feed"])){$insta_args["feed"] = 'hashtag';} //OPTIONS: base, hashtag
+				if (!isset($insta_args["tag"])){$insta_args["tag"] = 'ywammontana';}
+				
+				if ($insta_args['feed'] == 'base') {
+					$feed_url = 'https://api.instagram.com/v1/users/231333075/media/recent?access_token=231333075.26c3a2f.8f32564f07c64424b28191ee96825254';
+				} else {
+					$feed_url = 'https://api.instagram.com/v1/tags/' . $insta_args['tag'] . '/media/recent?access_token=231333075.26c3a2f.8f32564f07c64424b28191ee96825254';
+				}
+				
+				
+				global $span, $resolution, $cols, $rows, $title_prefix;
+					$title_prefix = $insta_args['title_prefix'];
+					$resolution = $insta_args['resolution'];
+					$cols = $insta_args['cols'];
+					$rows = $insta_args['rows'];
+					$span = 12/$cols;
+				
+				
+				
+			  function fetchData($url){
+				$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+				$result = curl_exec($ch);
+					curl_close($ch); 
+				return $result;
+			  }
+			  $result = fetchData($feed_url);
+			  $result = json_decode($result);
+			  
+			  $col_i = 1;
+			  $row_i = 1;
+			  ?>
+			  
+			  
+			  <?php function get_instagram_post($post) { ?>
+			  <?php global $span, $resolution; ?>
+			   
+			  
+		  		<div class="span<?php echo $span; ?> instagram-container">
+		  			<a href="<?php echo $post->link; ?>" target="_blank">
+						<img src="<?php echo $post->images->$resolution->url; ?>" />
+					
+						<div class="instagram-meta">	
+							<div class="instagram-social">
+								<i class="icon-heart"></i> <?php echo $post->likes->count; ?>
+								<i class="icon-comment"></i> <?php echo $post->comments->count; ?>
+							</div>
+						</div>
+					</a>
+				</div>
+			  <?php } ?>
+			  
+			  <?php if (!empty($result->data)) { ?>
+			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
+			  <div class="row-fluid instarow">
+				  <?php foreach ($result->data as $post) { ?>
+					  <?php if ($row_i <= $rows) { ?> 
+							  	<?php if ($col_i <= $cols) { ?>
+									<?php get_instagram_post($post); ?>
+									<?php $col_i = ++$col_i; ?>
+								<?php } else { ?>
+								  </div>
+								  <?php $row_i = ++$row_i; ?>
+								  <div class="row-fluid instarow">
+						  
+						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
+									<?php $col_i = 2; ?>
+								<?php } ?>
+					  <?php } ?>
+				  <?php } ?>
+								  </div>
+								  <?php } ?>
+		<?php } 
 			
 			
 
-		//REMOVE [...] FROM EXCERPT AND ADD READ MORE LINK FOR ALL POST TYPES
-	
-		function new_excerpt_more($more) {
-	       global $post;
-			   
-			if ($post->post_type == 'people')
-			return '... <a href="'. get_permalink($post->ID) . '" class="read-more-link">View Full Profile <i class="icon-double-angle-right"></i></a>';
-			else if ($post->post_type == 'projects')
-			return '... <a href="'. get_permalink($post->ID) . '" class="read-more-link">View Full Project Description <i class="icon-double-angle-right"></i></a>';
-			else
-			return '... <div class="read-more-window"><div class="read-more-container"><a href="'. get_permalink($post->ID) . '" class="read-more-link"><span class="read-more-hover">Read More </span><span class="read-more-active"><i class="icon-chevron-right"></i> Read More</span></a></div></div>';
-			}
-	
-		add_filter('excerpt_more', 'new_excerpt_more');
+		
 
 
 
@@ -1797,287 +1913,3 @@ class ywammontana_walker_comment extends Walker_Comment {
 			
 		</div>
 	<?php }
-
-
-
-
-	//INCLUDE CUSTOM USER BIO FIELDS
-	//ADD PROGRAMS STAFFED TAXONOMY TO POSTS, VIDEOS, STORIES, & TEACHINGS
-		function my_taxonomies_programs_staffed() {
-			$labels = array(
-				'name'              => _x( 'Programs Staffed', 'taxonomy general name' ),
-				'singular_name'     => _x( 'Program(s) Staffed', 'taxonomy singular name' ),
-				'search_items'      => __( 'Search Programs Staffed' ),
-				'all_items'         => __( 'All Programs Staffed' ),
-				'parent_item'       => __( 'Parent Program Staffed' ),
-				'parent_item_colon' => __( 'Parent Program Staffed:' ),
-				'edit_item'         => __( 'Edit Program Staffed' ), 
-				'update_item'       => __( 'Update Program Staffed' ),
-				'add_new_item'      => __( 'Add New Program Staffed' ),
-				'new_item_name'     => __( 'New Program Staffed' ),
-				'menu_name'         => __( 'Programs Staffed' ),
-			);
-			$args = array(
-				'labels' => $labels,
-				'hierarchical' => true,
-				'rewrite' => array('hierarchical' => true ),
-				'show_admin_column' => true,
-			);
-			register_taxonomy( 'programs_staffed', 'user', $args );
-		}
-		add_action( 'init', 'my_taxonomies_programs_staffed', 0 );
-		
-	//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-		function post_programs_staffed_update($post_id){
-		  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-			  return $post_id;
-		  }
-
-		  $post_obj = get_post($post_id);
-		  $raw_title = $post_obj->post_title;
-		  $post_type = $post_obj->post_type;
-		  $slug_title = sanitize_title($raw_title);
-
-		  if (($post_type == 'program') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-			 // get the terms associated with this custom post type
-			 $terms = get_the_terms($post_id, 'programs_staffed');
-			 $term_id = $terms[0]->term_id;
-			 // if term exists then update term
-			 if ($term_id > 0) {
-				 wp_update_term($term_id,
-								'programs_staffed',
-								array(
-								  'description' => $raw_title,
-								  'slug' => $raw_title,
-								  'name' => $raw_title)
-								);
-			 } else {
-				// creates a new term in the program_taxo taxonomy
-				wp_set_object_terms($post_id, $raw_title, 'programs_staffed', false);
-			 }
-		  }
-		}
-
-		add_action('save_post', 'post_programs_staffed_update');
-
-	
-	
-		//ADD PROGRAMS Completed TAXONOMY TO POSTS, VIDEOS, STORIES, & TEACHINGS
-		function my_taxonomies_programs_completed() {
-			$labels = array(
-				'name'              => _x( 'Programs Completed', 'taxonomy general name' ),
-				'singular_name'     => _x( 'Program(s) Completed', 'taxonomy singular name' ),
-				'search_items'      => __( 'Search Programs Completed' ),
-				'all_items'         => __( 'All Programs Completed' ),
-				'parent_item'       => __( 'Parent Program Completed' ),
-				'parent_item_colon' => __( 'Parent Program Completed:' ),
-				'edit_item'         => __( 'Edit Program Completed' ), 
-				'update_item'       => __( 'Update Program Completed' ),
-				'add_new_item'      => __( 'Add New Program Completed' ),
-				'new_item_name'     => __( 'New Program Completed' ),
-				'menu_name'         => __( 'Programs Completed' ),
-			);
-			$args = array(
-				'labels' => $labels,
-				'hierarchical' => true,
-				'rewrite' => array('hierarchical' => true ),
-				'show_admin_column' => true,
-			);
-			register_taxonomy( 'programs_completed', 'user', $args );
-		}
-		add_action( 'init', 'my_taxonomies_programs_completed', 0 );
-		
-	//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-		function post_programs_completed_update($post_id){
-		  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-			  return $post_id;
-		  }
-
-		  $post_obj = get_post($post_id);
-		  $raw_title = $post_obj->post_title;
-		  $post_type = $post_obj->post_type;
-		  $slug_title = sanitize_title($raw_title);
-
-		  if (($post_type == 'program') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-			 // get the terms associated with this custom post type
-			 $terms = get_the_terms($post_id, 'programs_completed');
-			 $term_id = $terms[0]->term_id;
-			 // if term exists then update term
-			 if ($term_id > 0) {
-				 wp_update_term($term_id,
-								'programs_completed',
-								array(
-								  'description' => $raw_title,
-								  'slug' => $raw_title,
-								  'name' => $raw_title)
-								);
-			 } else {
-				// creates a new term in the program_taxo taxonomy
-				wp_set_object_terms($post_id, $raw_title, 'programs_completed', false);
-			 }
-		  }
-		}
-
-		add_action('save_post', 'post_programs_completed_update');
-	
-	
-	//ADD FIX FOR SOCIAL LOGIN AVATAR OVERWRITE PROBLEM
-	// remove WordPress Social Login's get_avatar filter so that we can add our own
-remove_filter( 'get_avatar', 'wsl_user_custom_avatar' );
-function my_user_custom_avatar($avatar, $id_or_email, $size, $default, $alt) {
-        global $comment;
-
-        if( get_option ('wsl_settings_users_avatars') && !empty ($avatar)) {
-                //Check if we are in a comment
-                if (!is_null ($comment) && !empty ($comment->user_id)) {
-                        $user_id = $comment->user_id;
-                } elseif(!empty ($id_or_email)) {
-                        if ( is_numeric($id_or_email) ) {
-                                $user_id = (int) $id_or_email;
-                        } elseif ( is_string( $id_or_email ) && ( $user = get_user_by( 'email', $id_or_email ) ) ) {
-                                $user_id = $user->ID;
-                        } elseif ( is_object( $id_or_email ) && ! empty( $id_or_email->user_id ) ) {
-                                $user_id = (int) $id_or_email->user_id;
-                        }
-                }
-                // Get the thumbnail provided by WordPress Social Login
-                if ($user_id) {
-                        if (($user_thumbnail = get_user_meta ($user_id, 'wsl_user_image', true)) !== false) {
-                                if (strlen (trim ($user_thumbnail)) > 0) {
-                                        $user_thumbnail = preg_replace ('#src=([\'"])([^\\1]+)\\1#Ui', "src=\\1" . $user_thumbnail . "\\1", $avatar);
-                                        return $user_thumbnail;
-                                }
-                        }
-                }
-        }
-        // No avatar found.  Return unfiltered.
-        return $avatar;
-}
-	
-	
-	
-	//ADD CUSTOM FIELDS TO USER PROFILE
-		add_action( 'show_user_profile', 'social_fields' );
-			add_action( 'edit_user_profile', 'social_fields' );
-			 
-			function social_fields( $user ) { ?>
-			 
-			<h3>Personal Information</h3>
-			 
-			<table class="form-table">			 
-			 
-			<tr>
-			<th><label for="social">Position</label></th>
-			 
-			<td>
-			<input type="text" name="position" id="position" value="<?php echo esc_attr( get_the_author_meta( 'position', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's position.</span>
-			</td>
-			</tr>
-			 
-			<tr>
-			<th><label for="social">Hometown</label></th>
-			 
-			<td>
-			<input type="text" name="hometown" id="hometown" value="<?php echo esc_attr( get_the_author_meta( 'hometown', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's hometown</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="image">Featured</label></th>
-			 
-			<td>
-			<input type="checkbox" style="width: auto; margin-right: 10px;" name="featured" id="featured" value="<?php echo esc_attr( get_the_author_meta( 'featured', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Check the box to feature this person.</span>
-			</td>
-			</tr>
-			 
-			</table>
-			
-			<h3>Education & Credentials</h3>
-			 
-			<table class="form-table">
-			 
-			 
-			<tr>
-			<th><label for="social">School</label></th>
-			 
-			<td>
-			<input type="text" name="school" id="school" value="<?php echo esc_attr( get_the_author_meta( 'school', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's school name.</span>
-			</td>
-			</tr>
-			 
-			<tr>
-			<th><label for="social">Degree</label></th>
-			 
-			<td>
-			<input type="text" name="degree" id="degree" value="<?php echo esc_attr( get_the_author_meta( 'degree', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's degree.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Registrations</label></th>
-			 
-			<td>
-			<input type="text" name="registrations" id="registrations" value="<?php echo esc_attr( get_the_author_meta( 'registrations', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Registrations.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Certifications</label></th>
-			 
-			<td>
-			<input type="text" name="certifications" id="certifications" value="<?php echo esc_attr( get_the_author_meta( 'certifications', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Certifications.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Associations</label></th>
-			 
-			<td>
-			<input type="text" name="associations" id="associations" value="<?php echo esc_attr( get_the_author_meta( 'associations', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's Associations.  Separate each with a comma.</span>
-			</td>
-			</tr>
-			
-			<tr>
-			<th><label for="social">Credentials String</label></th>
-			 
-			<td>
-			<input type="text" name="credstring" id="credstring" value="<?php echo esc_attr( get_the_author_meta( 'credstring', $user->ID ) ); ?>" class="regular-text" />
-			<span class="description">Enter the person's certifications in an abbreviated string format. This will be displayed after their name.</span>
-			</td>
-			</tr>
-			 
-			</table>
-		<?php }
-		
-		
-			add_action( 'personal_options_update', 'save_social_fields' );
-			add_action( 'edit_user_profile_update', 'save_social_fields' );
-			 
-			function save_social_fields( $user_id ) {
-			 
-			if ( !current_user_can( 'edit_user', $user_id ) )
-			return false;
-			
-			update_usermeta( $user_id, 'image', $_POST['image'] );
-			update_usermeta( $user_id, 'position', $_POST['position'] );
-			update_usermeta( $user_id, 'hometown', $_POST['hometown'] );
-			update_usermeta( $user_id, 'featured', $_POST['featured'] );
-
-			update_usermeta( $user_id, 'school', $_POST['school'] );
-			update_usermeta( $user_id, 'degree', $_POST['degree'] );
-			update_usermeta( $user_id, 'registrations', $_POST['registrations'] );
-			update_usermeta( $user_id, 'certifications', $_POST['certifications'] );
-			update_usermeta( $user_id, 'associations', $_POST['associations'] );
-			update_usermeta( $user_id, 'credstring', $_POST['credstring'] );
-			}
-
-		
-?>

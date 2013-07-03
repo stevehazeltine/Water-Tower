@@ -1,35 +1,25 @@
 <!--RETRIEVE PROGRAM SLUG, USED FOR CUSTOM PROGRAM TAXONOMY-->
 <?php $program_id = $_GET['programid'];?>
-<?php $post_type = $_GET['posttype'];?>
 <?php $program_name = ucwords(str_replace( '-', ' ', $program_slug)); ?>
+<?php $post_type = $_GET['posttype']; ?>
 <?php $program_slug = sanitize_title( get_the_title($program_id), $fallback_title ); ?>
 
 <?php get_header() ?>
 
 	<?php //END CHECK FOR POST POST TYPE, BEGIN CHECK FOR TESTIMONY POST TYPE ?>
+	
+	<?php if ($post_type = 'post') { ?>
+		<div class="row">
+			<div class="span9 school-main-content-container">
+			<?php query_posts( 'post_type=post&program_taxo=endurance-discipleship-training-school' ); ?>
+			<?php insert_loop( 'excerpt'); ?>
+			</div>
+		</div>
+	<?php } ?>
+	
+	
 	<?php if ($post_type = 'testimonies') { ?>
 	
-				<div class="row">
-					<!--BREADCRUMB BAR FOR ADDED USABILITY WHEN DEEP IN PAGE NAVIGATION THROUGH CUSTOM POST TYPES-->
-					<div class="span12 breadcrumb-bar">
-						<div class="span2" style="margin-left: 0px"><a href="<?php echo get_permalink( $program_id ); ?>"><i class="icon-reply" style="margin-right: 15px;"></i> Back to <?php echo rwmb_meta( 'acronym', $program_slug, $program_id ); ?></a></div>
-						<div class="span10">
-						
-						<?php //GET LINK TO PREVIOUS POST OF SAME POST TYPE AND TAXONOMY ?>
-						<?php $prev_post = be_get_previous_post( true, '', 'program_taxo'); ?>
-						<?php if (!empty( $prev_post )) { ?>
-							<a href="<?php echo get_permalink( $prev_post->ID ); ?>?programid=<?php echo $program_id; ?>"><i class="icon-arrow-left" style="margin-right: 10px;"></i><?php echo $prev_post->post_title; ?></a>
-						<?php } ?>
-						
-						<?php //GET LINK TO NEXT POST OF SAME POST TYPE AND TAXONOMY ?>
-						<?php $next_post = be_get_next_post( true, '', 'program_taxo'); ?>
-						<?php if (!empty( $next_post )) { ?>
-							<a href="<?php echo get_permalink( $next_post->ID ); ?>?programid=<?php echo $program_id; ?>"><?php echo $next_post->post_title; ?><i class="icon-arrow-right" style="margin-left: 10px;"></i></a>
-						<?php } ?>
-						
-						</div>
-					</div>
-				</div>
 					
 				<div class="row">
 				

@@ -20,7 +20,7 @@
 		<script type="text/javascript"src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh1Xcix_zUvT18IoC5ldxWJpYpCXzE9lo&sensor=false"></script>
 
         <script src="<?php echo get_bloginfo ('template_directory'); ?>/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-		
+        
 		<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
         <?php if ( is_singular() && get_option( 'thread_comments' ) ) wp_enqueue_script( 'comment-reply' ); ?>
 		
