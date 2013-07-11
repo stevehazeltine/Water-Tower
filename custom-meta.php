@@ -422,6 +422,35 @@ $meta_boxes[] = array(
 			'clone' => false,
 		),
 		
+		array(
+			'name'  => 'Program Duration',
+			'id'    => "{$prefix}program_duration",
+			'desc'  => 'Enter the program duration in months',
+			'type'  => 'number',
+			'std'   => '',
+		),
+		
+		
+		//MINIMUM RECOMMENDED AGE
+		array(
+			'name'  => 'Minimum Recommended Age',
+			'id'    => "{$prefix}minimum_age_rec",
+			'desc'  => 'Insert the minimum age recommended for the school.',
+			'type'  => 'number',
+			'std'   => '',
+			'clone' => false,
+		),
+		
+		//MAXIMUM RECOMMENDED AGE
+		array(
+			'name'  => 'Maximum Recommended Age',
+			'id'    => "{$prefix}maximum_age_rec",
+			'desc'  => 'Insert the maximum age recommended for the school.',
+			'type'  => 'number',
+			'std'   => '',
+			'clone' => false,
+		),
+		
 		// SCHOOL LEADERS
 		array (
 			'name'	=> 'School Leaders',
@@ -430,7 +459,6 @@ $meta_boxes[] = array(
 			'options'=> array (
 				'taxonomy' => 'guest_author_taxo',
 				'type'		=> 'select_advanced',
-				'multiple'	=> true,
 			),
 			'multiple'	=> true,
 			'after'=> '				<hr style="margin: 30px -12px;
@@ -442,20 +470,43 @@ $meta_boxes[] = array(
 				
 		//FILE ATTACHEMENTS
 		array(
-			'name' => 'File Upload',
+			'name' => 'Resource Documents',
 			'id'   => "{$prefix}file",
 			'type' => 'file_advanced',
+			'desc' => 'Use this section to upload documents that may provide extra information about your program that may not be necessary to put on the main page of the program',
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
 		),
 		
 		//PREREQUISITES
 		array(
-			'name'  => __('Prerequisites', 'rwmb'),
-			'id'    => "{$prefix}prerequisites",
-			'desc'  => 'Please enter the prerequisites needed to apply for this school here.',
-			'type'  => 'textarea',
-			'std'   => '',
-			'clone' => false,
+			'name'  => __('Minimum Age Without GED', 'water-tower'),
+			'id'    => "{$prefix}min_age_woged_prereqs",
+			'desc'  => __('Insert the minimum age requirement of an application applying who has not earned a GED.', 'water-tower'),
+			'type'  => 'number',
+			'std'   => 0,
 		),
+		
+		array(
+			'name'  => __('Minimum Age With GED', 'water-tower'),
+			'id'    => "{$prefix}min_age_wged_prereqs",
+			'desc'  => __('Insert the minimum age requirement of an application applying who has earned a GED.', 'water-tower'),
+			'type'  => 'number',
+			'std'   => 0,
+		),
+		
+		array(
+			'name'  => __('Custom Prerequisites', 'rwmb'),
+			'id'    => "{$prefix}custom_prereqs",
+			'desc'  => 'Please enter any custom prerequisites needed to apply for this school here.',
+			'type'  => 'text',
+			'std'   => '',
+			'clone' => true,
+		),
+		
+		
 		
 		//ACCREDITATION
 		array(
@@ -506,7 +557,7 @@ $meta_boxes[] = array(
 	'fields' => array(
 	
 	
-	
+		//SPRING QUARTER
 		array(
 			'name'  => 'Season of School',
 			'id'    => "{$prefix}season1",
@@ -565,7 +616,7 @@ $meta_boxes[] = array(
 		
 				
 		
-		// PROGRAM INSTANCE TWO
+		// SUMMER QUARTER
 		array(
 			'name'  => 'Season of School',
 			'id'    => "{$prefix}season2",
@@ -624,7 +675,7 @@ $meta_boxes[] = array(
 		
 		
 		
-		// PROGRAM INSTANCE 3
+		// FALL QUARTER
 		
 		array(
 			'name'  => 'Season of School',
@@ -692,7 +743,7 @@ $meta_boxes[] = array(
 		),
 		
 		
-		// PROGRAM INSTANCE 4
+		// WINTER QUARTER
 		
 		array(
 			'name'  => 'Season of School',
@@ -791,7 +842,7 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-			'name' => 'Lecture Phase Block Number',
+			'name' => 'Auto-Populate Lecture With Topics',
 			'id'   => "{$prefix}lecture_block_num",
 			'desc' => 'If you would like WordPress to auto populate the "lecture" activity block with the lecture topics listed below, then insert the "Block Number" that has been used for the "lecture" activity',
 			'type' => 'number',
@@ -805,6 +856,16 @@ $meta_boxes[] = array(
 			'type' => 'text',
 			'std'  => '',
 			'clone' => true,
+		),
+		
+		
+		
+		array(
+			'name' => 'Has Tracks',
+			'id'   => "{$prefix}lecture_has_tracks",
+			'desc' => 'If this school has tracks, check the box above.',
+			'type' => 'checkbox',
+			'std'  => 0,
 			'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
@@ -1108,13 +1169,43 @@ $meta_boxes[] = array(
 	),
 );
 
-// LECTURE PHASE CUSTOM FIELDS
+// OUTREACH PHASE CUSTOM FIELDS
 $meta_boxes[] = array(
 	'title'  => 'Outreach Phase',
 	'pages' => array( 'program' ),
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
+	
+		array(
+			'name' => 'Has Outreach',
+			'id'   => "{$prefix}has_outreach_phase",
+			'desc' => 'Check this box if this school has an outreach phase.',
+			'type' => 'checkbox',
+			'std'  => 0,
+		),
+		
+		array(
+			'name' => 'Outreach Duration (Weeks)',
+			'id'   => "{$prefix}outreach_phase_duration",
+			'desc' => 'Enter the duration of the outreach phase in weeks',
+			'type' => 'number',
+			'std'  => '',
+		),
+		
+		array(
+			'name' => 'Outreach Locale',
+			'id'   => "{$prefix}outreach_phase_locale",
+			'desc' => 'Choose all locales that apply to the outreach of the school',
+			'type' => 'checkbox_list',
+			'options'  => array (
+					'international' 	=> 'International',
+					'domestic'			=> 'Domestic',
+					'local community'	=> 'Local Community',
+			)
+			,
+		),
+	
 		array(
 			'name' => 'Description',
 			'id'   => "{$prefix}outreach_phase_desc",

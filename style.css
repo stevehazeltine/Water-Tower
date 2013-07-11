@@ -876,7 +876,8 @@ font-size: 11px !important;
 
 
 .sidebar-about-the-author { margin-top: 60px !important;}
-.sidebar-about-the-author p { font-size: 12px; text-transform: none; color: #444; }
+.sidebar-about-the-author p { font-size: 12px; text-transform: none; color: #444; line-height: 18px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px dashed #DDD;}
+.sidebar-about-the-author .author-meta { font-size: 12px; text-transform: none; }
 .sidebar-about-the-author .attachment-xs-mobile-banner {}
 
 .about-the-author {
@@ -1154,6 +1155,9 @@ cursor: pointer;
 #compare-programs-checkbox {
 color: #609FCE;
 cursor: pointer;
+width: 22px;
+display: inline-block;
+box-sizing: border-box;
 }
 
 #compare-programs-link {
@@ -1167,6 +1171,10 @@ color: white;
 font-size: 14px;
 font-family:'HelveticaNeueW01-77BdCn 692722';
 text-transform: uppercase;
+}
+
+#compare-programs-link:hover {
+	background: #444 !important;
 }
 
 .compare-programs-table td{
@@ -1218,9 +1226,9 @@ text-transform: uppercase;
 
 .compare-programs-table .tier-two-arrow {
 position: absolute;
-font-size: 24px;
-bottom: -14px;
-right: -21px;
+font-size: 20px;
+bottom: -9px;
+right: -8px;
 color: #609FCE;
 }
 
@@ -1942,6 +1950,7 @@ font-family:'HelveticaNeueW01-57Cn';
 
 .sidebar-related-posts-more {
 border-top: 1px dashed #DDD;
+margin-top: 15px;
 }
 
 .sidebar-related-posts-more a {

@@ -10,6 +10,7 @@
 
 								<h2><?php echo $coauthor->display_name; ?></h2>
 								<p><?php echo $coauthor->description; ?></p>
+								<div class="author-meta">View Stacey's Posts</div>
 
 								
 				<?php } ?>			

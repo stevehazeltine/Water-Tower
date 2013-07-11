@@ -156,6 +156,70 @@
 					}
 			
 					add_action('save_post', 'post_program_update');
+					
+					
+					
+					
+					//ADD PROGRAMS PRE REQUISITE TAXONOMY
+					function my_taxonomies_prereqs() {
+						$labels = array(
+							'name'              => _x( 'Pre Requisite', 'taxonomy general name' ),
+							'singular_name'     => _x( 'Pre Requisite', 'taxonomy singular name' ),
+							'search_items'      => __( 'Search Pre Requisites' ),
+							'all_items'         => __( 'All Pre Requisites' ),
+							'parent_item'       => __( 'Parent Pre Requisite' ),
+							'parent_item_colon' => __( 'Parent Pre Requisite:' ),
+							'edit_item'         => __( 'Edit Pre Requisite' ), 
+							'update_item'       => __( 'Update Pre Requisite' ),
+							'add_new_item'      => __( 'Add New Pre Requisite' ),
+							'new_item_name'     => __( 'New Pre Requisite' ),
+							'menu_name'         => __( 'Pre Requisites' ),
+						);
+						$args = array(
+							'labels' => $labels,
+							'hierarchical' => true,
+							'rewrite' => array('hierarchical' => true ),
+						);
+						register_taxonomy( 'prereqs_taxo', array( 'program' ), $args );
+					}
+					add_action( 'init', 'my_taxonomies_prereqs', 0 );
+					
+					
+					
+					//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
+					function post_prereqs_update($post_id){
+					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+						  return $post_id;
+					  }
+			
+					  $post_obj = get_post($post_id);
+					  $raw_title = $post_obj->post_title;
+					  $post_type = $post_obj->post_type;
+					  $slug_title = sanitize_title($raw_title);
+			
+					  if (($post_type == 'program') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
+						 // get the terms associated with this custom post type
+						 $terms = get_the_terms($post_id, 'prereqs_taxo');
+						 $term_id = $terms[0]->term_id;
+						 // if term exists then update term
+						 if ($term_id > 0) {
+							 wp_update_term($term_id,
+											'prereqs_taxo',
+											array(
+											  'description' => $raw_title,
+											  'slug' => $raw_title,
+											  'name' => $raw_title)
+											);
+						 } else {
+							// creates a new term in the program_taxo taxonomy
+							wp_set_object_terms($post_id, $raw_title, 'prereqs_taxo', false);
+						 }
+					  }
+					}
+			
+					add_action('save_post', 'post_prereqs_update');
+					
+				
 		
 		
 		
@@ -346,6 +410,65 @@
 					add_action( 'init', 'my_taxonomies_focus_ministry_circle', 0 );
 		
 		
+		
+		
+		//VWAP TEAMS
+	    function my_custom_post_vwap_teams() {
+			$labels = array(
+				'name'               => _x( 'VWAP Teams', 'post type general name' ),
+				'singular_name'      => _x( 'VWAP Team', 'post type singular name' ),
+				'add_new'            => _x( 'Add New', 'book' ),
+				'add_new_item'       => __( 'Add New VWAP Team' ),
+				'edit_item'          => __( 'Edit VWAP Team' ),
+				'new_item'           => __( 'New VWAP Team' ),
+				'all_items'          => __( 'All VWAP Teams' ),
+				'view_item'          => __( 'View VWAP Team' ),
+				'search_items'       => __( 'Search VWAP Teams' ),
+				'not_found'          => __( 'No VWAP Teams found' ),
+				'not_found_in_trash' => __( 'No VWAP Teams found in the Trash' ), 
+				'parent_item_colon'  => '',
+				'menu_name'          => 'VWAP Teams',
+			);
+			$args = array(
+				'labels'        => $labels,
+				'description'   => 'Holds our VWAP Teams specific data',
+				'public'        => true,
+				'menu_position' => 22,
+				'supports'      => array( 'title', 'editor', 'thumbnail' ),
+				'has_archive'   => true,
+				'hierarchical' 	=> true,
+				'rewrite' 		=> array('slug' => 'vwap-teams'),
+			);
+			register_post_type( 'vwap_teams', $args );	
+		}
+		add_action( 'init', 'my_custom_post_vwap_teams' );
+
+
+					//ADD LOCATIONS TAXONOMY
+					function my_taxonomies_vwap_groups_taxo() {
+						$labels = array(
+							'name'              => _x( 'VWAP Groups', 'taxonomy general name' ),
+							'singular_name'     => _x( 'VWAP Group', 'taxonomy singular name' ),
+							'search_items'      => __( 'Search VWAP Groups' ),
+							'all_items'         => __( 'All VWAP Groups' ),
+							'parent_item'       => __( 'Parent VWAP Group' ),
+							'parent_item_colon' => __( 'Parent VWAP Group:' ),
+							'edit_item'         => __( 'Edit VWAP Group' ), 
+							'update_item'       => __( 'Update VWAP Group' ),
+							'add_new_item'      => __( 'Add New VWAP Group' ),
+							'new_item_name'     => __( 'New VWAP Group' ),
+							'menu_name'         => __( 'VWAP Groups' ),
+						);
+						$args = array(
+							'labels' => $labels,
+							'hierarchical' => true,
+							'rewrite' => array('hierarchical' => true ),
+							'show_admin_column' => true,
+						);
+						register_taxonomy( 'vwap_groups_taxo', array('vwap_teams'), $args );
+					}
+					add_action( 'init', 'my_taxonomies_vwap_groups_taxo', 0 );
+
 		
 		
 		
@@ -1039,6 +1162,7 @@
 
 							 <div class="entry">
 							   <?php if ($post_length=='excerpt') {the_excerpt();} else {the_content();} ?>
+							   <?php if ($post_length!='excerpt') {wp_link_pages();} ?>
 							   
 							   
 							   <?php //----- TEACHING MEDIA FILES -----// ?>
@@ -1287,7 +1411,7 @@
 							<?php if ($in_main_archive == true) { ?>
 								<div class="program-archive-school-compare-link visible-desktop">
 									<span>Compare 
-										<i id="compare-programs-checkbox" data-programId="<?php echo program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
 										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
 									</span>
 								</div>
@@ -1390,7 +1514,7 @@
 											</div>
 											
 											<div class="sidebar-related-posts-subscribe">
-												<a href="<?php bloginfo('rss2_url'); ?>">Subscribe to RSS</a>
+												<a href="<?php bloginfo('rss2_url'); ?>">Subscribe</a>
 											</div>
 											<div class="clearfix"></div>
 										</div>

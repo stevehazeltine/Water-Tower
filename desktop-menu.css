@@ -106,8 +106,8 @@
 }
 
 .main-menu-desktop .dropdown-container {
-	width: 960px;
-	padding: 0px 170px;
+	width: 940px;
+	padding: 0px 180px;
 	border-bottom: 5px solid #609FCE;
 	min-height: 310px;
 }
@@ -361,6 +361,6 @@
 @media (max-width: 1200px) {
 	.center-highlight {padding-left: 0px !important; width: 155px;}
 	.center-highlight-programs-menu {width: 705px !important;}
-	.menu-related-posts { width: 540px; }
+	.menu-related-posts { width: 525px; }
 	.menu-related-posts .related-post { width: 100%; }
 }

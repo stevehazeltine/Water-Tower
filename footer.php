@@ -157,27 +157,27 @@
 			</div>
 
         </div> 
-        
+			</div>
         
         
 				<!------- LINK FOOTER ------>
-				
+					<div class="row">
 						<div class="span12 link-footer-container"> 
 							<div class="link-footer">
 								 
-								<a href="#_">© YWAM Montana-Lakeside 2013</a> |
-								<a href="#_">Contact</a> | 
-								<a href="#_">Staff Opportunities</a> |
-								<a href="#_">Privacy Policy</a> | 
-								<a href="#_">Terms of Use</a> |
-								<a href="#_">Support Us</a> |
-								<a href="#_">Site Feedback</a> |
+								<a href="#_">© YWAM Montana-Lakeside 2013</a>
+								<a href="#_">Contact</a>
+								<a href="#_">Staff Opportunities</a>
+								<a href="#_">Privacy Policy</a>
+								<a href="#_">Terms of Use</a>
+								<a href="#_">Support Us</a>
+								<a href="#_">Site Feedback</a>
 								<a href="#_">YWAM.org</a>
 								
 
 							</div>
 						</div>
-						
+					</div>
 						
         
         
