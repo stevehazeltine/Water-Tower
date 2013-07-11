@@ -39,31 +39,54 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"><h6>Basic Info <i class="icon-long-arrow-right"></i></h6></td>
-						<td class="compare-tier-two-bracket">Classification<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Classification<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
-							<td>5 Months</td>
+							<td>
+								<?php $classifications = wp_get_post_terms($program, 'program_classification');
+									foreach($classifications as $classification) {
+										echo $classification->name;
+									}
+								?>
+								
+							</td>
 						<?php } ?>
 					</tr>
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Recommended Age Range<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Recommended Age Range<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
-							<td>5 Months</td>
+							<td>
+								<?php if (rwmb_meta($program, 'minimum_age_rec', '', $post_id=$program) == '') {
+									echo '17+ Years';
+								} else {
+									echo rwmb_meta('minimum_age_rec', '', $post_id=$program);
+									if (rwmb_meta('maximum_age_rec', '', $post_id=$program) != '') {
+										echo ' - ' . rwmb_meta('maximum_age_rec', '', $post_id=$program) . ' Years';	
+									} else {
+										echo '+ Years';
+									}
+								} ?>
+								
+							</td>
 						<?php } ?>
 					</tr>
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Duration<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Duration<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
-							<td>5 Months</td>
+							<td>
+								<?php if (rwmb_meta('program_duration', '', $post_id=$program) != '') { ?>
+									<?php echo rwmb_meta('program_duration', '', $post_id=$program) . ' Months'; ?>
+								<?php } ?>
+							</td>
 						<?php } ?>
 					</tr>
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Dates & Cost<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Dates & Cost<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>
 								<?php $i = 1; ?>
@@ -101,7 +124,7 @@ Template Name: Compare Programs
 					<tr class="compare-row-placeholder"><td class="compare-tier-one-bracket-placeholder"></td></tr>
 					<tr>
 						<td class="compare-tier-one-bracket"><h6>Schedule <i class="icon-long-arrow-right"></i></h6></td>
-						<td class="compare-tier-two-bracket">Hourly Breakdown<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Hourly Breakdown<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -109,7 +132,7 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Cirriculum<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Cirriculum<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -117,7 +140,7 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Tracks<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Tracks<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -132,7 +155,7 @@ Template Name: Compare Programs
 					<tr class="compare-row-placeholder"><td class="compare-tier-one-bracket-placeholder"></td></tr>
 					<tr>
 						<td class="compare-tier-one-bracket"><h6>Outreach <i class="icon-long-arrow-right"></i></h6></td>
-						<td class="compare-tier-two-bracket">Outreach Phase<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Outreach Phase<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -140,7 +163,7 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Time On Outreach<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Time On Outreach<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -148,7 +171,7 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Location<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Location<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>
@@ -156,7 +179,7 @@ Template Name: Compare Programs
 					
 					<tr>
 						<td class="compare-tier-one-bracket"></td>
-						<td class="compare-tier-two-bracket">Required<i class="tier-two-arrow icon-long-arrow-right"></i></td>
+						<td class="compare-tier-two-bracket">Required<i class="tier-two-arrow icon-caret-up"></i></td>
 						<?php foreach ($programs as $program) { ?>
 							<td>5 Months</td>
 						<?php } ?>

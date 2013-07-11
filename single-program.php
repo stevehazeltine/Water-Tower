@@ -142,13 +142,19 @@
 														 <?php endwhile ?>
 													 </div><!--------/.lecture-phase-info-container------->
 										   
-										   
 											<?php if (rwmb_meta( 'outreach_phase_desc' ) != '') { ?>
 												 <?php// OUTREACH SECTION ?>										 
 													 <h4>Outreach</h4>
 													 <p><?php echo rwmb_meta( 'outreach_phase_desc' ) ?></p> 
 											 <?php } ?>
 											 
+					
+					
+					
+					<?php $prereqs = wp_get_post_terms($post->ID, 'prereqs_taxo'); ?>
+					<?php foreach($prereqs as $prereq) {
+						print_r($prereq);
+					} ?>
 					
 											 
 											 
