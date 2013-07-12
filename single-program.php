@@ -34,7 +34,7 @@
 				 		
 				 		 <!--MAIN CONTENT FOR PROGRAM PAGE-->
 				 		 		<div class="row">
-								 <div class="span post school-main-content">
+								 <div class="span8 post school-main-content">
 														
 										 <!--OVERVIEW OF THE SCHOOL-->
 										 <div class="entry">
@@ -46,6 +46,199 @@
 											
 											     
 
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											<?php // LECTURE SECTION V2 ?>
+												<h4><?php echo rwmb_meta('lecture_phase_title'); ?></h4>
+												<p><?php echo rwmb_meta('lecture_phase_desc'); ?></p>
+												<?php // LECTURE PHASE OVERVIEW ?>
+												
+												<div class="lecture-phase-overview-container row-fluid">
+												
+												
+												
+													<div class="span4">
+														<div class="chart-container">
+															<canvas id="lecture-overview" class="chart" width="800" height="800"></canvas>
+														
+															<script>
+																jQuery(document).ready(function($) {
+																
+																var lectureOverview = [
+																
+																
+																//LOOP THROUGH TOTAL CHART DATA
+																<?php $i = 1; ?>
+																
+																<?php $activity_title = 'activity_title' . $i; ?>
+																<?php $activity_hours = 'hours_per_week' . $i; ?>
+																<?php $colors_10 = array( 
+																	'1' => 'FDB813',
+																	'2' => 'F37021', 
+																	'3' => 'ED1C24', 
+																	'4' => '00AABC', 
+																	'5' => '00A99D', 
+																	'6' => '35BBAD',
+																	'7' => '8DC73F', 
+																	'8' => '5C2E90', 
+																	'9' => 'F1729D', 
+																	'10'=> 'ED0080',
+																); ?>
+																
+																
+																<?php $total_hours = rwmb_meta($activity_hours); ?>
+																<?php while (rwmb_meta($activity_title) !== '') { ?>
+																		{value : <?php echo rwmb_meta($activity_hours); ?>, color : "#<?php echo $colors_10[$i]; ?>" },	
+																		
+																	<?php $i = $i + 1; ?>
+																	<?php $activity_title = 'activity_title' . $i; ?>
+																	<?php $activity_hours = 'hours_per_week' . $i; ?>
+																	<?php $total_hours = $total_hours + rwmb_meta($activity_hours); ?>
+																<?php } ?>
+																
+																	]
+																var options = {
+																	segmentStrokeWidth : 10,
+																	percentageInnerCutout : 65,
+																}
+																var ctx = document.getElementById("lecture-overview").getContext("2d");
+																var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
+																	
+																		
+																});			
+															</script>
+														</div>
+													</div>
+												
+												
+													<div class="span8">
+														<ul class="lecture-phase-overview-key">
+														<?php $i = 1 ?>
+														
+														<?php $activity_title = 'activity_title' . $i; ?>
+														<?php $activity_hours = 'hours_per_week' . $i; ?>
+														<?php while (rwmb_meta($activity_title) !== '') { ?>
+																<li>
+																	<div class="lecture-phase-overview-color-block" style="background: #<?php echo $colors_10[$i]; ?>;"></div>
+																	<?php echo rwmb_meta($activity_title); ?> | <?php echo rwmb_meta($activity_hours) . ' Hours/Week'; ?>
+																</li>	
+																
+															<?php $i = $i + 1; ?>
+															<?php $activity_title = 'activity_title' . $i; ?>
+															<?php $activity_hours = 'hours_per_week' . $i; ?>
+														<?php } ?>
+														</ul>
+													</div>
+												</div>
+												
+												
+												
+												
+												
+												
+												<?php // LECTURE PHASE DETAILS ?>
+												<div class="lecture-phase-detail-container row">
+													<div class="span4">
+													</div>
+													
+													<div class="span8 lectture-phase-details">
+														<?php $n = 1; ?>
+														<?php $activity_title = 'activity_title' . $n; ?>
+														<?php $activity_hours = 'hours_per_week' . $n; ?>
+														<?php $activity_desc = 'activity_description' . $n; ?>
+													
+														<?php while (rwmb_meta($activity_title) !== '') { ?>
+														<div class="lecture-phase-activity-details-container row-fluid">
+															<div class="span10">
+																<h6><?php echo rwmb_meta($activity_title); ?></h6>
+																<?php echo rwmb_meta($activity_desc); ?>
+															</div>
+														
+														
+															<div class="span2">
+															<div class="lecture-phase-activity-detail-chart">
+																<div class="chart-container">
+																	<div class="lecture-phase-activity-detail-chart-hours"><?php echo rwmb_meta($activity_hours); ?></div>
+																	<canvas id="activity-detail-<?php echo $n; ?>" class="chart" width="150" height="150"></canvas>
+																	
+																	<script>
+																		jQuery(document).ready(function($) {
+																		
+																		var lectureOverview = [
+																		
+																		
+																		//LOOP THROUGH TOTAL CHART DATA
+																		<?php $i = 1; ?>
+																		<?php $activity_title = 'activity_title' . $i; ?>
+																		<?php $activity_hours = 'hours_per_week' . $i; ?>
+																		<?php $activity_desc = 'activity_description' . $i; ?>
+																		<?php $hours_before = 0; ?>
+																		<?php $hours_after = $total_hours - rwmb_meta($activity_hours); ?>
+		
+																		<?php while (rwmb_meta($activity_title) !== '') { ?>
+	
+																				<?php if ($n == $i) { ?>
+																					{value : <?php echo $hours_before; ?>, color : "#EFEFEF"},
+																					{value : <?php echo rwmb_meta($activity_hours); ?>, color : "#<?php echo $colors_10[$i]; ?>" },
+																					{value : <?php echo $hours_after; ?>, color : "#EFEFEF"},
+																				<?php } ?>
+																				
+																			<?php $hours_before = $hours_before + rwmb_meta($activity_hours); ?>
+																			
+																				
+																			<?php $i = $i + 1; ?>
+																			<?php $activity_title = 'activity_title' . $i; ?>
+																			<?php $activity_hours = 'hours_per_week' . $i; ?>
+																			<?php $activity_desc = 'activity_description' . $i; ?>
+																			<?php $hours_after = $total_hours - (rwmb_meta($activity_hours)+$hours_before); ?>
+																			
+																		<?php } ?>
+																		
+																			]
+																		var options = {
+																			segmentStrokeWidth : 3,
+																			percentageInnerCutout : 65,
+																		}
+																		var ctx = document.getElementById("activity-detail-<?php echo $n; ?>").getContext("2d");
+																		var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
+																			
+																				
+																		});			
+																	</script>
+																	
+																</div>
+															</div>
+															</div>
+														
+														</div><!--/.lecture-phase-detail-container-->
+														
+														<?php $n = $n + 1; ?>
+														<?php $activity_title = 'activity_title' . $n; ?>
+														<?php $activity_hours = 'hours_per_week' . $n; ?>
+														<?php $activity_desc = 'activity_description' . $n; ?>
+														<?php } ?>
+														
+													</div>
+												</div>
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
 											
 											
 											
@@ -482,7 +675,7 @@
 							<li><h2>Resources</h2>
 								<ul>									
 									<?php foreach ( $files as $info ){						
-											echo "<li><a href='{$info['url']}' target='_blank' title='{$info['title']}'>{$info['title']}</a></li>";
+											echo "<li><a href='{$info['url']}' target='_blank' title='{$info['title']}'><i class='icon-file-text'></i> {$info['title']}</a></li>";
 										} ?>
 								</ul>
 							</li>

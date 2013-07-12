@@ -1291,6 +1291,71 @@ position: relative;
 top: -1px;
 }
 
+
+
+
+
+
+/**** LEcture phase V2 Styles ****/
+
+.lecture-phase-overview-container {
+	margin-top: 40px;
+}
+
+
+.lecture-phase-overview-key {
+	margin: 0px;
+}
+
+.lecture-phase-overview-key li {
+	font-family:'HelveticaNeueW01-67MdCn 692710';
+	list-style-type: none;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	color: #444;
+}
+
+.lecture-phase-overview-color-block {
+	width: 12%;
+	height: 20px;
+	margin-right: 10px;
+	float: left;
+	border-radius: 3px;
+}
+
+.lecture-phase-activity-details-container {
+	position: relative;
+	border-bottom: 1px dashed #CCC;
+	padding: 15px 0px;
+}
+
+.lecture-phase-activity-details-container h6 {
+	font-size: 18px;
+	color: #444;
+	text-transform: uppercase;
+	margin-bottom: 0px;
+}
+
+.lecture-phase-activity-detail-chart {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.lecture-phase-activity-detail-chart-hours {
+	position: absolute;
+	width: 50%;
+	left: 0px;
+	top: 0px;
+	margin-left: 25%;
+	margin-top: 38%;
+	color: #CCC;
+	font-size: 24px;
+	font-family:'HelveticaNeueW01-77BdCn 692722';
+}
+
+
+
+
 .program-leaders {
 position: relative;
 margin-top: 20px;
@@ -1416,14 +1481,15 @@ float: left;
 .sidebar { float: right; margin-top: 10px; }
 .sidebar ul { list-style-type: none; margin: 0px 0px 0px 0px; }
 .sidebar ul > li { font-size: 18px; color: #777; text-transform: uppercase; margin: 40px 0px 30px 0px; }
+.sidebar ul > li i {margin-right: 7px;}
 .sidebar ul ul li {	font-size: 13px; margin: 0px; font-weight: 500;	text-transform: none; }
 .apply-button-window { overflow: hidden; height: 46px; position: relative;	margin: 30px 0px; box-sizing: border-box; -moz-box-sizing: border-box; border-radius: 3px; }
 .apply-button-window:hover .apply-button-container { left: -80%; }
 .apply-button-container { white-space: nowrap;	position: relative;	transition: .25s; -webkit-transition: .25s; -moz-transition: .25s; -o-transition: .25s; }
 .apply-button-container > div {	padding: 12px 14px; box-sizing: border-box; -moz-box-sizing: border-box; height: 46px; z-index: 9; }
 .apply-button-hover { width: 100%; background-color: #609FCE; float: left; }
-.apply-button-hover h4 { font-family: 'HelveticaNeueW01-77BdCn 692722';	margin: 2px 0px 0px 0px; font-size: 18px; text-align: center; color: white; position:relative;}
-.apply-button-hover i {	position:absolute; right: 0px; font-size: 16px; display: inline-block; width: 20%; border-left: 2px solid white; padding: 3px 0px 3px 4px; margin: -2px -10px 0px 0px; }
+.apply-button-hover h4 { font-family: 'HelveticaNeueW01-77BdCn 692722';	margin: 2px 0px 0px 0px; font-size: 18px; text-align: center; color: white; position:relative; width: 80%;}
+.apply-button-hover i {	position:absolute; left: 100%; font-size: 16px; display: inline-block; width: 40%; border-left: 2px solid white; padding: 3px 0px 3px 4px; margin: -2px -10px 0px 0px; }
 .apply-button-active { width: 80%; text-align: center; background-color: #555; left: 80%; color: white;	position: absolute;	left: 100%; }
 .apply-button-active a { color: white; font-family: 'HelveticaNeueW01-67MdCn 692710'; text-transform: uppercase; }
 .apply-button-active i { margin-right: 6px; }
@@ -1997,6 +2063,23 @@ margin-top: 30px;
 
 
 
+
+/********* CHART STYLES ***********/
+.chart-container {
+	position: relative;
+	padding: 50% 50%;
+	text-align: center;
+}
+
+.chart {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 100% !important;
+	height: 100% !important;
+}
 
 
 

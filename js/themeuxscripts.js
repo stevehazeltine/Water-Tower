@@ -328,21 +328,6 @@
 			});
 		});
 		
-		
-		
-		//FUNCTION TO SWAP TO VIDEO ON PROGRAM ARCHIVE PAGE
-			function swap_media(programid) {
-				$('#' + programid + ' .program-archive-featured-image').toggleClass( 'media-swap-show-video' ).promise().done(function(){
-				
-					if ($('#' + programid + ' .program-archive-featured-image').hasClass( 'media-swap-show-video' )) {
-						$('#' + programid + ' a.swap_to_video').css('display', 'none');
-						$('#' + programid + ' a.swap_to_image').css('display', 'block');
-					} else {
-						$('#' + programid + ' a.swap_to_video').css('display', 'block');
-						$('#' + programid + ' a.swap_to_image').css('display', 'none');
-					}
-				});
-			};
 			
 			
 		//REVEAL PHASE DESCRIPTIONS ON PROJECT PAGE

@@ -1201,7 +1201,6 @@ $meta_boxes[] = array(
 			'options'  => array (
 					'international' 	=> 'International',
 					'domestic'			=> 'Domestic',
-					'local community'	=> 'Local Community',
 			)
 			,
 		),
