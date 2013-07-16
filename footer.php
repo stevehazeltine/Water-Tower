@@ -67,7 +67,7 @@
 										
 											
 											
-											<div class="span3 footer-upcoming-school-thumbnail">
+											<div class="span3 footer-upcoming-school-thumbnail" style="border-right: 3px solid #<?php echo get_program_color($post->ID); ?> ">
 												<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {
 													the_post_thumbnail( 'xs-thumbnail-card' );

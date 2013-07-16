@@ -23,9 +23,85 @@ Template Name: Front Page
 	
 	
 	<?php $slider_featured_video = rwmb_meta( 'feat_video' ); ?>
-	
             
+            <?php //----- HOME PAGE BANNER -----// ?>
+            <div class="banner-image normal-slider">
+				<div id="homepage-banner-gallery" class="royalSlider rsDefault royal-slider-banner">
+				
+					<?php 
+						
+							$currentdate = date("Ymd");
+										
+							 $args = array(
+							   'posts_per_page' => '1',
+							   'post_type' => 'program',
+							   'meta_key' => 'start_date',
+							   'orderby' => 'meta_value_num',
+							   'order' => 'ASC',
+							   'meta_query' => array(
+								   array(
+									   'key' => 'start_date',
+									   'compare' => '>=',
+									   'value' => $currentdate,
+								   ),
+							   )
+							 ); ?>
+						   
+						   <?php $my_query = new WP_Query( $args ); ?>
+						   <?php if ( $my_query->have_posts() ) { ?>
+							   <?php while ( $my_query->have_posts() ) { ?>
+								   <?php $my_query->the_post(); ?>
+										<div class="rsContent">
+											<?php // check if the post has a Post Thumbnail assigned to it.
+												if ( has_post_thumbnail() ) {
+													the_post_thumbnail( 'full-banner');
+												} else {
+												echo '<img src="http://placehold.it/1200x600" />';
+											} ?>
+											
+											<div class="rsABlock frontpage-slider-content-title" style="background: #<?php echo get_program_color($post->ID); ?>;" 
+																								  data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
+												<h2><?php the_title(); ?></h2>
+												<p>Starts <?php echo date("F d, Y", strtotime(rwmb_meta( 'start_date' )));?></p>
+											</div>
+											
+											
+										</div>
+							   <?php } ?>
+						   <?php } ?>
+						   <?php wp_reset_postdata(); ?>
+				
+				
+				
+				
+				
+				    <img class="rsImg" src="placehold.it/1200x400" />
+					<img class="rsImg" src="placehold.it/1200x400" />
+
+				</div>
+
             
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
             
             <!---------------- UPCOMING SCHOOLS ----------------->
             <div class="row">
@@ -41,7 +117,7 @@ Template Name: Front Page
 							$currentdate = date("Ymd");
 										
 							 $args = array(
-							   'posts_per_page' => '3',
+							   'posts_per_page' => '4',
 							   'post_type' => 'program',
 							   'meta_key' => 'start_date',
 							   'orderby' => 'meta_value_num',
@@ -60,7 +136,7 @@ Template Name: Front Page
 							   <?php while ( $my_query->have_posts() ) { ?>
 								   <?php $my_query->the_post(); ?>
 
-									<div class="span4">
+									<div class="span3">
 										
 										<?php // check if the post has a Post Thumbnail assigned to it.
 											if ( has_post_thumbnail() ) {
@@ -70,10 +146,7 @@ Template Name: Front Page
 										} ?>
 										
 										
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2><?php the_title(); ?></h2></a>
-										<?php if (rwmb_meta( 'sub_title') !== '') { ?>
-											<h5><?php echo rwmb_meta( 'sub_title' ); ?></h5>
-										<?php } ?>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2 style="background: #<?php echo get_program_color($post->ID); ?>;"><?php the_title(); ?></h2></a>
 									</div>
 								   
 							   <?php } ?>
@@ -112,6 +185,10 @@ Template Name: Front Page
 									<div id="video<?php echo $i; ?>" class="royalSlider videoGallery rsDefault">
 									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
 									</div>
+									
+									<?php $obj = new PostRibbon($post->ID); ?>
+											<?php $obj->build_ribbon('vertical', 3); ?>
+									
 									<h2><?php the_title(); ?></h2>
 				            	</div>
 							   
@@ -133,13 +210,18 @@ Template Name: Front Page
             	<div class="span12 home-page-blogroll">
 	            	<h4>Recent Posts</h4>
             	
+            	
+						            	
+            	
+            	
+            	
 						<div class="row">
 						<?php //IF ALERT STATUS IS ACTIVATED FOR SLIDER PUSH LATEST POST TO FRONT, OTHERWISE EXCLUDE IT TO PREVENT DUPLICATION ?>
 						<?php if (rwmb_meta('alert_slider_activation') == 1) { $offset_posts = 0; } else { $offset_posts = 1; } ?>
 						
 							<?php $args = array(
 							'post_type' 	 			=>	'post',
-							'posts_per_page'			=>  3,
+							'posts_per_page'			=>  4,
 							'offset'					=>  $offset_posts,
 							); ?>
 							   
@@ -148,7 +230,7 @@ Template Name: Front Page
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<div class="span4">
+										<div class="span3">
 											
 											<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {
@@ -158,25 +240,39 @@ Template Name: Front Page
 											} ?>
 											
 											
+											
+											<?php $obj = new PostRibbon($post->ID); ?>
+											<?php $obj->build_ribbon('vertical', 3); ?>
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
 											<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2><?php the_title(); ?></h2></a>
-											<?php if (rwmb_meta( 'sub_title') !== '') { ?>
-												<h5><?php echo rwmb_meta( 'sub_title' ); ?></h5>
-											<?php } ?>
 										</div>
 									   
 								   <?php } ?>
 							   <?php } ?>
 							   <?php wp_reset_postdata(); ?>
 						</div>
-						
-				<div class="home-page-blogroll-more-options">
-					<ul>
-						<li>View All <i class="icon-double-angle-right" style="font-size: 20px;"></i></li>
-						<li><a href="<?php echo get_bloginfo ('template_directory'); ?>/blog/">Posts<i class="icon-pencil"></i></a></li>
-						<li><a href="<?php echo get_bloginfo ('template_directory'); ?>">Outreach Updates<i class="icon-globe"></i></a></li>
-						<li><a href="<?php echo get_bloginfo ('template_directory'); ?>">Project Updates<i class="icon-wrench"></i></a></li>
-					</ul>		
-				</div>
 			</div>
 		</div>
 		<?php endwhile; else: ?>

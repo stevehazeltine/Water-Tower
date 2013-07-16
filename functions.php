@@ -60,7 +60,7 @@
 				'description'   => 'Holds our programs and program specific data',
 				'public'        => true,
 				'menu_position' => 6,
-				'supports'      => array( 'title', 'editor', 'thumbnail', 'comments', 'revisions' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
 				'rewrite' => array('slug' => 'programs'), 
@@ -778,8 +778,91 @@
 		
 		
 		
+		//-----------------------------//
+		//----- POST RIBBON CLASS -----//
+		//-----------------------------//
+			class PostRibbon {
+				var $post_id;						
+				var $post_color_info;
+				var $total_terms;
+				
+				//----- GENERATE AND DECLARE POST COLOR INFORMAITON -----//
+				public function post_color_info() {
+					$this->post_color_info = array();
+					$this->total_terms = 0;
+					
+					//----- LOOP THROUGH RELATED PROGRAMS -----//
+					$related_programs = wp_get_post_terms($this->post_id, 'program_taxo');
+					foreach ($related_programs as $program) {
+						$program = get_page_by_path($program->slug, OBJECT, 'program');
+						
+						//----- GET COLOR DATA BASED ON PROGRAMS CLASSIFICATION -----//
+						$program_class = wp_get_post_terms($program->ID, 'program_classification');
+						foreach ($program_class as $classification) {
+							$class_slug = $classification->slug;
+	
+							if (array_key_exists($classification->slug, $this->post_color_info)) {
+								$this->post_color_info[$class_slug][count] = ++$this->post_color_info[$class_slug][count]; 
+							} else {
+								$this->post_color_info[$class_slug] = array('count' => 1, 'color' => get_program_color($program->ID));
+							}
+							
+							//----- UPDATE TOTAL TERMS EVERYTIME TERM IN FOUND -----//
+							$this->total_terms = ++$this->total_terms;
+						}
+					}
+					
+					
+	
+					
+					
+				}
+				
+				//----- DISPLAY POST RIBBON -----//
+				public function build_ribbon($orientation, $height) {
+					
+					//----- DEFINE STYLES -----//
+					$styles = 'height:' . $height . 'px;';
+				
+					//----- BUILD THE RIBBON -----//
+					echo '<div style="' . $styles . '" class="post-ribbon-container">';
+						foreach ($this->post_color_info as $ribbon) {
+							echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						}
+					echo '</div>';
+				}
+		
+				function __construct($post_id) {
+					$this->post_id = $post_id;
+					$this->post_color_info();
+				}
+				
+			}
+
 		
 		
+		//-----------------------------------------------------------------//
+		//----- FUNCTION TO GET PROGRAM COLOR BASED ON CLASSIFICATION -----//
+		//-----------------------------------------------------------------//
+		
+		function get_program_color($post_id) {
+
+			$terms = wp_get_post_terms($post_id, 'program_classification'); 
+			$program_slug = str_replace('-', '_', $terms[0]->slug) . '_color';
+	
+			$program_colors = get_option('theme_options');
+			
+			$program_color = $program_colors[$program_slug];
+			return $program_color;	
+		}
+		
+		function get_classification_color ($classification) {
+			$classification = str_replace('-', '_', $classification) . '_color';			
+		
+			$program_colors = get_option('theme_options');
+			$program_color = $program_colors[$classification];
+			return $program_color;
+		}
 		
 		
 		
@@ -804,7 +887,14 @@
 		
 			<?php // CHECK AND DISPLAY GALLERY ?>
 			<?php if ($banner_args["include-gallery"] == true) { ?>
-				<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner">
+				
+				<?php //----- GET PROGRAM COLOR IF NECESSARY -----//?>
+				<?php if ($banner_args['program-taxo'] != null) {
+					$color = get_program_color($banner_args['post-id']);
+					$color = 'style="border-bottom: 3px solid #' . $color . ';"';
+				} ?>
+			
+				<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
 				    <img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
 				    <?php // check if the post has a Post Thumbnail assigned to it.
 						$images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] );
@@ -1076,6 +1166,9 @@
 								} 
 							}
 							?>
+
+							<?php $objw = new PostRibbon(get_the_ID()); ?>
+							<?php $objw->build_ribbon('vertical', 3); ?>
 							
 							
 							
@@ -1184,22 +1277,6 @@
 								
 								
 								
-								
-								<?php //----- CHECK IF THE POST IS A SERIES -----// ?>
-								<?php //Variables -current_part_num -previous_part_ID -next_part_ID ?>
-								
-								
-								
-									<?php //check if post is in a series ?>
-									
-									<?php //if in a series check for previous post ?>
-										<?php //if not, it's the first post, do something cool Part1 ?>
-									
-									<?php //if in a series check for next post ?>
-										<?php //if not, it's the last post, do something cool Partx ?>
-								
-								
-								
 								<!------------COMMENT SECTION----------->
 								 <?php comments_template(); ?>
 									
@@ -1207,10 +1284,10 @@
 							 
 							 
 							 </div><!-- /.entry -->
-							 
 					 </div> <!-- /.post -->
-					 
 				</div>
+				
+				
 	 
 			 
 				<?php endwhile; else: ?>
@@ -1370,13 +1447,6 @@
 										<?php } ?>	
 									<?php } ?>
 								<?php }
-			
-			
-			
-			//----------------------------------------------//
-			//----- FUNCTION TO DISPLAY SCHOOL LEADERS -----//
-			//----------------------------------------------//
-			
 			
 			
 			//----------------------------------------------------//
@@ -1695,7 +1765,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			add_action('admin_menu', 'theme_options_page');
 			
 			function theme_options_page() {
-			add_utility_page('YWAM Montana, Lakeside Theme Options', 'Theme Options', 'manage_options', 'theme_options', 'theme_options_page_display');
+			add_theme_page('Water Tower Options', 'Water Tower', 'manage_options', 'theme_options', 'theme_options_page_display');
 			}
 
 			// display the admin options page
@@ -1716,27 +1786,77 @@ class ywammontana_walker_comment extends Walker_Comment {
 			<?php }
 			
 			// add the admin settings and such
-			add_action('admin_init', 'plugin_admin_init');
-			function plugin_admin_init(){
+			add_action('admin_init', 'water_tower_admin_init');
+			function water_tower_admin_init(){
 				register_setting( 'theme_options', 'theme_options' );
+				
 				add_settings_section('theme_options_main', 'Main Settings', 'theme_options_section_text', 'theme_options');
-				add_settings_field('asdfsad', 'Plugin Text Input', 'theme_options_setting_string', 'theme_options', 'theme_options_main');
-				add_settings_field('second_one', 'A Text Area', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
+					add_settings_field('asdfsad', 'Plugin Text Input', 'theme_options_setting_string', 'theme_options', 'theme_options_main');
+					add_settings_field('second_one', 'A Text Area', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
+					add_settings_field('second_oasdfne', 'asdfa', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
+					
+				add_settings_section('theme_options_colors', 'Color Settings', 'theme_options_colors_text', 'theme_options');
+					add_settings_field('discipleship_training_schools_color', 'Discipleship Training School Color', 'theme_options_dts_color', 'theme_options', 'theme_options_colors');
+					add_settings_field('biblical_studies_color', 'Biblical Studies Color', 'theme_options_biblical_studies_color', 'theme_options', 'theme_options_colors');
+					add_settings_field('secondary_schools_color', 'Secondary Schools Color', 'theme_options_secondary_schools_color', 'theme_options', 'theme_options_colors');
+					add_settings_field('seminars_color', 'Seminars Color', 'theme_options_seminars_color', 'theme_options', 'theme_options_colors');
+					add_settings_field('summer_programs_color', 'Summer Programs Color', 'theme_options_summer_programs_color', 'theme_options', 'theme_options_colors');
+					add_settings_field('career_discipleship_color', 'Career Discipleship Color', 'theme_options_career_discipleship_color', 'theme_options', 'theme_options_colors');
 			}
+			
+			
+			
 			
 			function theme_options_section_text() {
 				echo '<p>Main description of this section here.</p>';
 			}
+				
+				function theme_options_setting_string() {
+					$options = get_option('theme_options');
+					echo "<input id='theme_options_text_string' name='theme_options[asdfsad]' size='40' type='text' value='{$options['asdfsad']}' />";
+				}
+				
+				function theme_options_setting_string2() {
+					$options = get_option('theme_options');
+					echo "<input id='theme_options_text_string' name='theme_options[second_one]' size='40' type='text' value='{$options['second_one']}' />";
+				}
 			
-			function theme_options_setting_string() {
-				$options = get_option('theme_options');
-				echo "<input id='theme_options_text_string' name='theme_options[asdfsad]' size='40' type='text' value='{$options['asdfsad']}' />";
+			
+			//----- PROGRAM COLOR SETTINGS -----//
+			function theme_options_colors_text() {
+				echo '<p>Select the colors for each program classification.  These will be displayed in various places on the site and should only be changed after careful consideration.  These colors tie into the design, layout, and overall look and feel of the website.</p>';
 			}
 			
-			function theme_options_setting_string2() {
-				$options = get_option('theme_options');
-				echo "<input id='theme_options_text_string' name='theme_options[second_one]' size='40' type='text' value='{$options['second_one']}' />";
-			}
+				function theme_options_dts_color() {
+					$options = get_option('theme_options');
+					echo "<input id='theme_options_text_string' style='color: white; font-weight: bold; background: #{$options['discipleship_training_schools_color']};' name='theme_options[discipleship_training_schools_color]' name='theme_options[discipleship_training_schools_color]' size='40' type='text' value='{$options['discipleship_training_schools_color']}' />";
+				}
+				
+				function theme_options_biblical_studies_color() {
+					$options = get_option('theme_options');
+					echo "<input id='biblical_studies_color' style='color: white; font-weight: bold; background: #{$options['biblical_studies_color']};' name='theme_options[biblical_studies_color]' name='theme_options[biblical_studies_color]' size='40' type='text' value='{$options['biblical_studies_color']}' />";
+				}
+				
+				function theme_options_secondary_schools_color() {
+					$options = get_option('theme_options');
+					echo "<input id='secondary_schools_color' style='color: white; font-weight: bold; background: #{$options['secondary_schools_color']};' name='theme_options[secondary_schools_color]' size='40' type='text' value='{$options['secondary_schools_color']}' />";
+				}
+				
+				function theme_options_seminars_color() {
+					$options = get_option('theme_options');
+					echo "<input id='seminars_color' style='color: white; font-weight: bold; background: #{$options['seminars_color']};' name='theme_options[seminars_color]' name='theme_options[seminars_color]' size='40' type='text' value='{$options['seminars_color']}' />";
+				}
+				
+				function theme_options_summer_programs_color() {
+					$options = get_option('theme_options');
+					echo "<input id='summer_programs_color' style='color: white; font-weight: bold; background: #{$options['summer_programs_color']};' name='theme_options[summer_programs_color]' name='theme_options[summer_programs_color]' size='40' type='text' value='{$options['summer_programs_color']}' />";
+				}
+				
+				function theme_options_career_discipleship_color() {
+					$options = get_option('theme_options');
+					echo "<input id='career_discipleship_color' style='color: white; font-weight: bold; background: #{$options['career_discipleship_color']};' name='theme_options[career_discipleship_color]' name='theme_options[career_discipleship_color]' size='40' type='text' value='{$options['career_discipleship_color']}' />";
+				}
+
 		
 
 		

@@ -415,17 +415,20 @@ overflow: hidden;
 /********** HOME PAGE STYLES **************/
 
 .home-page-blogroll {
-margin-top: 30px;
-padding-bottom: 50px;
-border-bottom: 1px dashed #BBB;
+margin-top: 85px;
 position: relative;
+border-top: 1px solid #999;
 }
 
 .home-page-blogroll h2 {
-font-size: 20px;
+font-size: 16px;
 line-height: 24px !important;
-font-family:'HelveticaNeueW01-67MdCn 692710';
-margin-top: 5px;
+margin-top: 0px;
+padding: 5px 10px;
+font-family: 'HelveticaNeueW01-47LtCn 692689';
+letter-spacing: 1px;
+background: #444;
+color: white;
 }
 
 .home-page-blogroll h2 i {
@@ -436,8 +439,18 @@ padding: 11px 0px;
 
 .home-page-blogroll h4 {
 font-size: 28px;
-padding-bottom: 5px;
-font-family:'HelveticaNeueW01-77BdCn 692722';
+font-family: 'HelveticaNeueW01-77BdCn 692722';
+position: relative;
+margin-top: 15px;
+margin-bottom: 20px;
+margin-left: -150px;
+width: 300px;
+text-align: center;
+padding: 0px 0px;
+top: -22px;
+left: 50%;
+background: white;
+display: inline-block;
 }
 
 .home-page-blogroll h5 {
@@ -447,61 +460,38 @@ margin-top: -5px;
 font-style: italic;
 }
 
-.home-page-blogroll-more-options {
-position: absolute;
-bottom: -10px;
-right: 40px;
-background: white;
-padding: 0px 20px;
+
+/***** HOME PAGE STYLES *****/
+.frontpage-slider-content-title {
+	padding: 0px 20px 0px 90px;
+	min-width: 35%;
+	margin-top: 100px;
+	opacity: .95 !important;
 }
 
-.home-page-blogroll-more-options ul {
-margin: 0px;
+.frontpage-slider-content-title h2 {
+	color: white;
+	font-family: 'HelveticaNeueW01-47LtCn 692689';
+	letter-spacing: 1px;
 }
 
-.home-page-blogroll-more-options li:first-child {
-margin-left: 0px;
-font-size: 18px;
+.frontpage-slider-content-title p {
+	color: white;
+	text-transform: uppercase;
+	font-family:'HelveticaNeueW01-67MdCn 692710';
+	font-size: 14px;
+	
 }
 
-.home-page-blogroll-more-options ul li {
-list-style-type: none;
-float: left;
-padding: 2px 15px 2px 0px;
-margin-left: 15px;
-border-right: 1px solid #777;
-text-transform: uppercase;
-font-family: 'HelveticaNeueW01-67MdCn 692710';
-color: #444;
+.post-ribbon-container {
+	width: 100%;
+	background: #444;
 }
 
-.home-page-blogroll-more-options i {
-padding: 0px 0px 0px 10px;
-font-size: 16px;
-vertical-align: text-top;
+.post-ribbon {
+	height: 100%;
+	float: left;
 }
-
-
-@media (max-width: 767px) {
-.home-page-blogroll-more-options {
-position: relative;
-bottom: 0px;
-left: 0px;
-background: white;
-padding: 0px 0px;
-}
-
-.home-page-blogroll-more-options ul li {
-float: none;
-padding: 5px 0px;
-margin-left: 0px;
-border-right: none;
-border-bottom: 1px solid #999;
-}
-}
-
-
-
 
 
 
@@ -614,7 +604,6 @@ position: relative;
 .banner-image .attachment-full-banner {
 width: 1200px !important;
 max-width: 1200px;
-margin-left: -130px;
 }
 
 .banner-image #map_canvas {
@@ -1302,9 +1291,40 @@ top: -1px;
 	margin-top: 40px;
 }
 
+.lecture-overview-chart-hours {
+	position: absolute;
+	width: 50%;
+	left: 25%;
+	top: 42%;
+	font-size: 75px;
+	font-family: 'HelveticaNeueW01-77BdCn 692722';
+	color: #CCC;
+}
+
+.lecture-overview-hours-title {
+	font-size: 14px;
+	color: #CCC;
+}
+
+	@media (max-width: 1200px) {
+		.lecture-overview-chart-hours {
+			top: 36%;
+			font-size: 46px;
+		}
+		
+		.lecture-overview-hours-title {
+			font-size: 12px;
+		}
+		
+		.lecture-phase-activity-detail-chart-hours {
+			margin-top: 31% !important;
+			font-size: 20px !important;
+		}
+	}
+
 
 .lecture-phase-overview-key {
-	margin: 0px;
+	margin: 10px 0px 0px 30px;
 }
 
 .lecture-phase-overview-key li {
@@ -1318,9 +1338,31 @@ top: -1px;
 .lecture-phase-overview-color-block {
 	width: 12%;
 	height: 20px;
-	margin-right: 10px;
+	margin-right: 24px;
+	padding: 2px 4px;
 	float: left;
 	border-radius: 3px;
+	color: white;
+	font-family:'HelveticaNeueW01-77BdCn 692722';
+	text-align: center;
+	position: relative;
+	z-index: 1;
+}
+
+.lecture-overview-color-block-hours {
+	z-index: 9;	
+}
+
+.lecture-phase-overview-color-block .icon-long-arrow-right {
+	position: absolute;
+	right: -16px;
+	top: -1px;
+	font-size: 26px;
+	z-index: -1;
+}
+
+.lecture-phase-overview-color-block .icon-plus {
+	font-size: 11px;
 }
 
 .lecture-phase-activity-details-container {
@@ -1483,7 +1525,7 @@ float: left;
 .sidebar ul > li { font-size: 18px; color: #777; text-transform: uppercase; margin: 40px 0px 30px 0px; }
 .sidebar ul > li i {margin-right: 7px;}
 .sidebar ul ul li {	font-size: 13px; margin: 0px; font-weight: 500;	text-transform: none; }
-.apply-button-window { overflow: hidden; height: 46px; position: relative;	margin: 30px 0px; box-sizing: border-box; -moz-box-sizing: border-box; border-radius: 3px; }
+.apply-button-window { overflow: hidden; height: 46px; position: relative;	margin: 60px 0px 0px 0px; box-sizing: border-box; -moz-box-sizing: border-box; border-radius: 3px; }
 .apply-button-window:hover .apply-button-container { left: -80%; }
 .apply-button-container { white-space: nowrap;	position: relative;	transition: .25s; -webkit-transition: .25s; -moz-transition: .25s; -o-transition: .25s; }
 .apply-button-container > div {	padding: 12px 14px; box-sizing: border-box; -moz-box-sizing: border-box; height: 46px; z-index: 9; }
@@ -2120,7 +2162,7 @@ border: none !important;
 .banner-image .attachment-full-banner {
 width: 1350px !important;
 max-width: 1350px;
-margin-left: -90px;
+margin-left: 0px;
 }
 
 .banner-image #map_canvas {
@@ -2176,7 +2218,6 @@ padding: 0px 5px;
 .banner-image .attachment-full-banner {
 width: 979px !important;
 max-width: 979px;
-margin-left: -130px;
 }
 
 }

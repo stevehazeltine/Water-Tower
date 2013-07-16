@@ -75,7 +75,7 @@
 																var lectureOverview = [
 																
 																
-																//LOOP THROUGH TOTAL CHART DATA
+																//LOOP THROUGH CHART DATA
 																<?php $i = 1; ?>
 																
 																<?php $activity_title = 'activity_title' . $i; ?>
@@ -115,6 +115,10 @@
 																		
 																});			
 															</script>
+															<div class="lecture-overview-chart-hours">
+																<?php echo $total_hours; ?><br />
+																<span class="lecture-overview-hours-title">Hours/Week</span>
+															</div>
 														</div>
 													</div>
 												
@@ -127,8 +131,11 @@
 														<?php $activity_hours = 'hours_per_week' . $i; ?>
 														<?php while (rwmb_meta($activity_title) !== '') { ?>
 																<li>
-																	<div class="lecture-phase-overview-color-block" style="background: #<?php echo $colors_10[$i]; ?>;"></div>
-																	<?php echo rwmb_meta($activity_title); ?> | <?php echo rwmb_meta($activity_hours) . ' Hours/Week'; ?>
+																	<div class="lecture-phase-overview-color-block" style="background: #<?php echo $colors_10[$i]; ?>;">
+																	<i class="icon-plus"></i>
+																	 <span class="lecture-overview-color-block-hours"><?php echo rwmb_meta($activity_hours); ?></span>
+																	<i class="icon-long-arrow-right" style="color: #<?php echo $colors_10[$i]; ?>;"></i></div>
+																	<?php echo rwmb_meta($activity_title); ?>
 																</li>	
 																
 															<?php $i = $i + 1; ?>
@@ -376,32 +383,40 @@
 															if (rwmb_meta('has_spouse', '', $post_id=$leader_id) == 1) {
 																$terms =  rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$leader_id );
 																
-																//-----GET SPOUSE ID-----//
-																foreach ($terms as $term) {
-																	$spouse_raw_slug = $term->slug;
-																	$spouse_slug = 'cap-' . $term->slug;
-																	$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
-																	$spouse_id = $spouse->ID;
+																
+																//-----SPOUSE ACTIVATED BUT NO SPOUSE SELECTED FAILSAFE-----//
+																if (!empty($terms)) {
+																
+																	//-----GET SPOUSE ID-----//
+																	foreach ($terms as $term) {
+																		$spouse_raw_slug = $term->slug;
+																		$spouse_slug = 'cap-' . $term->slug;
+																		$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
+																		$spouse_id = $spouse->ID;
+																		}
+																		
+																	//-----CHECK IF SPOUSE IS PRESENT-----//
+																	foreach ($leaders as $i_spouse) {
+																		$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
+																		$i_spouse_id = $leader_object->ID;
+																		
+																		if ($i_spouse_id == $spouse_id) {
+																			$spouse_present = true;
+																		}  else {
+																			$spouse_present = false;
+																		}
 																	}
 																	
-																//-----CHECK IF SPOUSE IS PRESENT-----//
-																foreach ($leaders as $i_spouse) {
-																	$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
-																	$i_spouse_id = $leader_object->ID;
+																	//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
+																	if ($spouse_present = true) {
+																		$married_couples .= $leader_id . '-' . $spouse_id . ',';
+																		$skip_leaders[] = $spouse_raw_slug;
 																	
-																	if ($i_spouse_id == $spouse_id) {
-																		$spouse_present = true;
-																	}  else {
-																		$spouse_present = false;
+																	//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
+																	} else {
+																		$singles .= $leader_id . ',';
 																	}
-																}
 																
-																//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
-																if ($spouse_present = true) {
-																	$married_couples .= $leader_id . '-' . $spouse_id . ',';
-																	$skip_leaders[] = $spouse_raw_slug;
-																
-																//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
 																} else {
 																	$singles .= $leader_id . ',';
 																}
@@ -412,56 +427,62 @@
 															}
 														}											
 													}
-													$married_couples = explode(',', rtrim($married_couples, ','));
+													
+													if (!empty($married_couples)) {
+														$married_couples = explode(',', rtrim($married_couples, ','));
+													}
+													
 													$singles = explode(',', rtrim($singles, ','));?>
 													
 													
 													<?php //-----DISPLAY MARRIED COUPLES-----//?>
-													<?php foreach($married_couples as $married_couple) { ?>
-														<?php $spouses = explode('-', $married_couple) ?>
-														<div class="school-leader-container">
-														
-														
-															<div class="row-fluid">
-																<div class="span3">
-																	
+													<?php if (isset($married_couples)) { ?>
+														<?php foreach($married_couples as $married_couple) { ?>
+															<?php $spouses = explode('-', $married_couple) ?>
+															<div class="school-leader-container">
+															
+															
+																<div class="row-fluid">
+																	<div class="span3">
+																		
+																			<?php foreach ($spouses as $spouse) { ?>
+																			<div class="row-fluid married-avatar-container">
+																				<?php $spouse_object = get_coauthors($spouse); ?>
+																				<div class="span12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
+																			</div>
+																			<?php } ?>
+																		
+																	</div>
+																															
+																
+																	<div class="span9">
+																		<?php //-----DISPLAY NAMES-----//?>
+																		<h5>
+																		<?php $n = 1; ?>
 																		<?php foreach ($spouses as $spouse) { ?>
-																		<div class="row-fluid married-avatar-container">
 																			<?php $spouse_object = get_coauthors($spouse); ?>
-																			<div class="span12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
-																		</div>
+																			<?php if ($n==1) { 
+																					echo $spouse_object[0]->first_name . ' & ';
+																					$coutner = ++$n;
+																				} else {
+																					echo $spouse_object[0]->display_name;
+																				} ?>
 																		<?php } ?>
-																	
+																		</h5>
+																		
+																		<p>
+																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
+																		</p>
+																	</div>
+																
 																</div>
-																														
-															
-																<div class="span9">
-																	<?php //-----DISPLAY NAMES-----//?>
-																	<h5>
-																	<?php $n = 1; ?>
-																	<?php foreach ($spouses as $spouse) { ?>
-																		<?php $spouse_object = get_coauthors($spouse); ?>
-																		<?php if ($n==1) { 
-																				echo $spouse_object[0]->first_name . ' & ';
-																				$coutner = ++$n;
-																			} else {
-																				echo $spouse_object[0]->display_name;
-																			} ?>
-																	<?php } ?>
-																	</h5>
-																	
-																	<p>
-																		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
-																	</p>
-																</div>
-															
+																
 															</div>
-															
-														</div>
+														<?php } ?>
 													<?php } ?>
 													
 													
-													<?php //-----DISPLAY MARRIED COUPLES-----//?>
+													<?php //-----DISPLAY SINGLES-----//?>
 													<?php foreach($singles as $single) { ?>
 														<div class="school-leader-container">
 														
@@ -493,7 +514,7 @@
 											
 											
 											
-											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo' );
+											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$program_id );
 												foreach ( $terms as $term ) {
 												   $leader_string .= $term->slug . ',';
 												}

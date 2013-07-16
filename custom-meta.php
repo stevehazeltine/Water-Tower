@@ -7,9 +7,6 @@ global $meta_boxes;
 $meta_boxes = array();
 
 
-
-
-
 $meta_boxes[] = array(
 	'title'  => 'Additional Information',
 	'pages' => array( 'guest-author'),
@@ -22,7 +19,6 @@ $meta_boxes[] = array(
 			'name' => 'Married',
 			'id'   => "{$prefix}has_spouse",
 			'type' => 'checkbox',
-			// Value can be 0 or 1
 			'std'  => 0,
 		),
 		

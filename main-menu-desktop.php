@@ -255,7 +255,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 								   <label>Discipleship Training Schools</label>
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('discipleship-training-schools'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   
@@ -286,7 +286,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 								   <label>Biblical Studies</label>
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('biblical-studies'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   
@@ -317,7 +317,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 							       <label>Seminars</label>
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('seminars'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   
@@ -351,7 +351,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 								   <label>Secondary Schools</label>	
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('secondary-schools'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   
@@ -382,7 +382,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 								   <label>Summer Programs</label>
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('summer-programs'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   
@@ -413,7 +413,7 @@
 							   <?php $my_query = new WP_Query( $args ); ?>
 							   <?php if ( $my_query->have_posts() ) { ?>
 								   <label>Career Discipleship</label>
-								   <ul>
+								   <ul style="border-left: 2px solid #<?php echo get_classification_color('career-discipleship'); ?>; padding-left: 5px;">
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 									   

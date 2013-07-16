@@ -98,41 +98,24 @@
 			
 		
 
+			//BANNER GALLERY FOR ROYAL SLIDER
+			jQuery(document).ready(function($) {		   
+				$('#homepage-banner-gallery').royalSlider({
+					autoScaleSliderWidth: 1350,     
+					autoScaleSliderHeight: 450,
+					
+					controlNavigation: 'bullets',
+					arrowsNav: true,
+					arrowsNavAutoHide: false,
+					
+					slidesSpacing: 0,
+					
+					imgWidth: 1350,
+					imgHeight: 450,
+				})   
+			});
 
-
-
-
-
-		   //CALL ORBIT TO COME IN FOR HOME PAGE
-		   $(window).load(function() {
-		       $("#front-page-slider").orbit({
-				   animation: 'fade',
-				   animationSpeed: 400,
-			       bullets: true,
-			       bulletThumbs: true,
-					advanceSpeed: 8000,
-					resetTimerOnClick: false,
-					pauseOnHover: true,
-		       });
-		   });
-
-		   //CALL ORBIT TO COME IN FOR PAGES WITH SIMPLE GALLERIES
-		   $(window).load(function() {
-		       $(".bullet-slider").orbit({
-			       animation: 'fade',
-				   animationSpeed: 400,
-			       bullets: true,
-					advanceSpeed: 8000,
-					resetTimerOnClick: false,
-					pauseOnHover: true,
-		       });
-		   });
-		   
-		   
-		   
-
-		   
-		   //BANNER GALLERY FOR ROYAL SLIDER
+			//BANNER GALLERY FOR ROYAL SLIDER
 			jQuery(document).ready(function($) {		   
 				$('#banner-gallery').royalSlider({
 					autoScaleSliderWidth: 1350,     
