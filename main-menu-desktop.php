@@ -54,7 +54,9 @@
 															the_post_thumbnail( 'menu-banner' );
 														} else { ?>
 															<img src="http://placehold.it/1200x200" />
-													<?php } ?>	
+													<?php } ?>
+													<?php $obj = new PostRibbon($post->ID); ?>
+													<?php $obj->build_ribbon('horizontal', 3); ?>
 													
 													
 													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>

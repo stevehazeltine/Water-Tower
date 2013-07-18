@@ -25,62 +25,58 @@ Template Name: Front Page
 	<?php $slider_featured_video = rwmb_meta( 'feat_video' ); ?>
             
             <?php //----- HOME PAGE BANNER -----// ?>
-            <div class="banner-image normal-slider">
+            <div class="banner-image normal-slider frontpage-slider">
 				<div id="homepage-banner-gallery" class="royalSlider rsDefault royal-slider-banner">
 				
-					<?php 
+						<?php $featuredschool = get_upcoming_schools(1, true); ?>
+						<?php $featuredschool = $featuredschool->schools; ?>
+						<?php print_r($featuredschool); ?>
 						
-							$currentdate = date("Ymd");
-										
-							 $args = array(
-							   'posts_per_page' => '1',
-							   'post_type' => 'program',
-							   'meta_key' => 'start_date',
-							   'orderby' => 'meta_value_num',
-							   'order' => 'ASC',
-							   'meta_query' => array(
-								   array(
-									   'key' => 'start_date',
-									   'compare' => '>=',
-									   'value' => $currentdate,
-								   ),
-							   )
-							 ); ?>
+							<div class="rsContent">
+								<?php echo get_the_post_thumbnail( $featuredschool[0]['program_id'], 'full-banner'); ?>
+								
+								<div class="rsABlock frontpage-slider-content-title frontpage-slider-content-left" style="background: #<?php echo get_program_color($featuredschool[0]['program_id']); ?>;" data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
+									<h2><?php echo get_the_title($featuredschool[0]['program_id']); ?></h2>
+									<p>Starts <?php echo date("F d, Y", strtotime($featuredschool[0]['start_date']));?></p>
+								</div>
+								
+								
+							</div>
 						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-										<div class="rsContent">
-											<?php // check if the post has a Post Thumbnail assigned to it.
-												if ( has_post_thumbnail() ) {
-													the_post_thumbnail( 'full-banner');
-												} else {
-												echo '<img src="http://placehold.it/1200x600" />';
-											} ?>
-											
-											<div class="rsABlock frontpage-slider-content-title" style="background: #<?php echo get_program_color($post->ID); ?>;" 
-																								  data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
+						   
+					
+					
+					
+					<?php $args = array(
+					'post_type' 	 			=>	'videos',
+					'posts_per_page'			=>  1,
+					); ?>
+					
+					
+					   <?php $my_query = new WP_Query( $args ); ?>
+					   <?php if ( $my_query->have_posts() ) { ?>
+						   <?php while ( $my_query->have_posts() ) { ?>
+							   <?php $my_query->the_post(); ?>
+							   <div class="rsContent">
+									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>"></a>
+									  
+									  <div class="rsABlock frontpage-slider-content-title frontpage-slider-content-right frontpage-video" 
+																								  data-move-effect="right" data-move-offset="800" data-easing="easeOutSine">
 												<h2><?php the_title(); ?></h2>
-												<p>Starts <?php echo date("F d, Y", strtotime(rwmb_meta( 'start_date' )));?></p>
+												<p><?php the_content(); ?></p>
+												
+												<?php $obj = new PostRibbon($post->ID); ?>
+												<?php print_r($obj); ?>
+												<?php $obj->build_ribbon('horizontal', 3); ?>
 											</div>
-											
-											
-										</div>
-							   <?php } ?>
+							   </div>
 						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-				
-				
-				
-				
-				
-				    <img class="rsImg" src="placehold.it/1200x400" />
-					<img class="rsImg" src="placehold.it/1200x400" />
+					   <?php } ?>
+					   <?php wp_reset_postdata(); ?>
 
 				</div>
 
-            
+            </div>
 			
 			
 			
@@ -104,58 +100,45 @@ Template Name: Front Page
 			
             
             <!---------------- UPCOMING SCHOOLS ----------------->
-            <div class="row">
+            
+            <?php $upcomingschools = get_upcoming_schools(4, true); ?>
+            <?php $upcomingschools = $upcomingschools->schools; ?>
+  			
+  			<div class="row">
             	<div class="span12 home-page-blogroll">
 	            	<h4>Upcoming Schools</h4>
 				
 					<div class="row">
-					<?php //IF ALERT STATUS IS ACTIVATED FOR SLIDER PUSH LATEST POST TO FRONT, OTHERWISE EXCLUDE IT TO PREVENT DUPLICATION ?>
-					<?php if (rwmb_meta('alert_slider_activation') == 1) { $offset_posts = 0; } else { $offset_posts = 1; } ?>
 					
-						<?php 
-						
-							$currentdate = date("Ymd");
+								<?php foreach($upcomingschools as $school) { ?>					
+									<div class="blogroll-slideup-container span3">
 										
-							 $args = array(
-							   'posts_per_page' => '4',
-							   'post_type' => 'program',
-							   'meta_key' => 'start_date',
-							   'orderby' => 'meta_value_num',
-							   'order' => 'ASC',
-							   'meta_query' => array(
-								   array(
-									   'key' => 'start_date',
-									   'compare' => '>=',
-									   'value' => $currentdate,
-								   ),
-							   )
-							 ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-
-									<div class="span3">
-										
-										<?php // check if the post has a Post Thumbnail assigned to it.
-											if ( has_post_thumbnail() ) {
-												the_post_thumbnail( 'thumbnail-card');
-											} else {
-											echo '<img src="http://placehold.it/1200x600" />';
-										} ?>
-										
-										
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2 style="background: #<?php echo get_program_color($post->ID); ?>;"><?php the_title(); ?></h2></a>
+										<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
+																				
+										<div class="blogroll-slideup">
+										<a href="<?php echo get_permalink($school['program_id']); ?>" rel="bookmark">
+										<h2 style="background: #<?php echo get_program_color($school['program_id']); ?>;"><?php if (rwmb_meta('shortname', '', $post_id=$school['program_id']) == '') {echo get_the_title($school['program_id']);} else {echo rwmb_meta('short-name', '', $post_id=$school['program_id']);} ?></h2></a>
+										<div class="blogroll-slideup-content">
+											<p>Starts <?php echo date("F d, Y", strtotime($school['start_date']));?></p>
+										</div>
+										</div>
 									</div>
-								   
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
+
+								<?php } ?>
+
 					</div>
 				</div>
 			</div>
-
+          
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
             
             
@@ -187,7 +170,7 @@ Template Name: Front Page
 									</div>
 									
 									<?php $obj = new PostRibbon($post->ID); ?>
-											<?php $obj->build_ribbon('vertical', 3); ?>
+									<?php $obj->build_ribbon('horizontal', 3); ?>
 									
 									<h2><?php the_title(); ?></h2>
 				            	</div>

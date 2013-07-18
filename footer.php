@@ -40,6 +40,7 @@
 								<?php
 	
 								$currentdate = date("Ymd");
+								echo $currentdate;
 								
 								 $args = array(
 								   'posts_per_page' => '4',
@@ -50,8 +51,9 @@
 								   'meta_query' => array(
 									   array(
 										   'key' => 'start_date',
-										   'compare' => '>=',
 										   'value' => $currentdate,
+										   'compare' => '>=',
+										   'type' => 'DATE',
 									   ),
 								   )
 								 );

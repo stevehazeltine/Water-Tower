@@ -778,71 +778,78 @@
 		
 		
 		
+		
+		
+		//----- FUNCTION TO RETRIEVE AND DISPLAY POST OR PAGE SLUG -----//
+		function the_slug() {
+		    $post_data = get_post($post->ID, ARRAY_A);
+		    $slug = $post_data['post_name'];
+		    return $slug; 
+		}
+		
+		
+		
 		//-----------------------------//
 		//----- POST RIBBON CLASS -----//
 		//-----------------------------//
-			class PostRibbon {
-				var $post_id;						
-				var $post_color_info;
-				var $total_terms;
-				
-				//----- GENERATE AND DECLARE POST COLOR INFORMAITON -----//
-				public function post_color_info() {
-					$this->post_color_info = array();
-					$this->total_terms = 0;
-					
-					//----- LOOP THROUGH RELATED PROGRAMS -----//
-					$related_programs = wp_get_post_terms($this->post_id, 'program_taxo');
-					foreach ($related_programs as $program) {
-						$program = get_page_by_path($program->slug, OBJECT, 'program');
-						
-						//----- GET COLOR DATA BASED ON PROGRAMS CLASSIFICATION -----//
-						$program_class = wp_get_post_terms($program->ID, 'program_classification');
-						foreach ($program_class as $classification) {
-							$class_slug = $classification->slug;
-	
-							if (array_key_exists($classification->slug, $this->post_color_info)) {
-								$this->post_color_info[$class_slug][count] = ++$this->post_color_info[$class_slug][count]; 
-							} else {
-								$this->post_color_info[$class_slug] = array('count' => 1, 'color' => get_program_color($program->ID));
-							}
-							
-							//----- UPDATE TOTAL TERMS EVERYTIME TERM IN FOUND -----//
-							$this->total_terms = ++$this->total_terms;
-						}
-					}
-					
-					
-	
-					
-					
-				}
-				
-				//----- DISPLAY POST RIBBON -----//
-				public function build_ribbon($orientation, $height) {
-					
-					//----- DEFINE STYLES -----//
-					$styles = 'height:' . $height . 'px;';
-				
-					//----- BUILD THE RIBBON -----//
-					echo '<div style="' . $styles . '" class="post-ribbon-container">';
-						foreach ($this->post_color_info as $ribbon) {
-							echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
-						}
-					echo '</div>';
-				}
 		
-				function __construct($post_id) {
-					$this->post_id = $post_id;
-					$this->post_color_info();
-				}
+		class PostRibbon {
+			var $post_id;						
+			var $post_color_info;
+			var $total_terms;
+			
+			//----- GENERATE AND DECLARE POST COLOR INFORMAITON -----//
+			public function post_color_info() {
+				$this->post_color_info = array();
+				$this->total_terms = 0;
 				
+				//----- LOOP THROUGH RELATED PROGRAMS -----//
+				$related_programs = wp_get_post_terms($this->post_id, 'program_taxo');
+				foreach ($related_programs as $program) {
+					$program = get_page_by_path($program->slug, OBJECT, 'program');
+					
+					//----- GET COLOR DATA BASED ON PROGRAMS CLASSIFICATION -----//
+					$program_class = wp_get_post_terms($program->ID, 'program_classification');
+					foreach ($program_class as $classification) {
+						$class_slug = $classification->slug;
+
+						if (array_key_exists($classification->slug, $this->post_color_info)) {
+							$this->post_color_info[$class_slug][count] = ++$this->post_color_info[$class_slug][count]; 
+						} else {
+							$this->post_color_info[$class_slug] = array('count' => 1, 'color' => get_program_color($program->ID));
+						}
+						
+						//----- UPDATE TOTAL TERMS EVERYTIME TERM IN FOUND -----//
+						$this->total_terms = ++$this->total_terms;
+					}
+				}
 			}
+			
+			//----- DISPLAY POST RIBBON -----//
+			public function build_ribbon($orientation, $height) {
+				
+				//----- DEFINE STYLES -----//
+				$styles = 'height:' . $height . 'px;';
+			
+				//----- BUILD THE RIBBON -----//
+				echo '<div style="' . $styles . '" class="post-ribbon-container">';
+					foreach ($this->post_color_info as $ribbon) {
+						echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+					}
+				echo '</div>';
+			}
+	
+			function __construct($post_id) {
+				$this->post_id = $post_id;
+				$this->post_color_info();
+			}
+			
+		}
 
 		
 		
 		//-----------------------------------------------------------------//
-		//----- FUNCTION TO GET PROGRAM COLOR BASED ON CLASSIFICATION -----//
+		//----- FUNCTIONS TO GET PROGRAM COLOR BASED ON CLASSIFICATION -----//
 		//-----------------------------------------------------------------//
 		
 		function get_program_color($post_id) {
@@ -863,6 +870,109 @@
 			$program_color = $program_colors[$classification];
 			return $program_color;
 		}
+		
+		
+		
+		//---------------------------------------------------------------//
+		//----- CLASS TO RETIRVE AND RETURN UPCOMING SCHOOLS OBJECT -----//
+		//---------------------------------------------------------------//
+		
+		class ProgramDates {
+			var $cur_date;
+			var $schools;
+			var $featured;
+			
+			//---- BUILD UPCOMING SCHOOLS OBJECT -----//
+			public function get_schools() {
+				
+				//----- STORE ALL INSTANCES OF SCHOOLS IN ARRAY BASED ON SCHOOL ID -----//
+				$raw_programs = new WP_Query( 'post_type=program&nopaging=true' );
+				
+				if ( $raw_programs->have_posts() ) {
+					while ( $raw_programs->have_posts() ) {
+						$raw_programs->the_post();
+						
+						$i = 1;
+						$start_date = 'start_date' . $i;
+						while (rwmb_meta($start_date) != '') {
+							
+							if (rwmb_meta($start_date) >= $this->cur_date) {
+								$raw_program_dates[] = array(
+									'slug'			=>	$raw_programs->post->post_name,
+									'program_id'	=>	$raw_programs->post->ID,
+									'start_date'	=>	rwmb_meta($start_date),
+								);
+								print_r($post);
+							}
+							$i = ++$i;
+							$start_date = 'start_date' . $i;
+						}
+					}
+				$this->schools = $raw_program_dates;
+				usort($this->schools, array($this, 'sort_by_date'));
+
+				}
+			}
+			
+			
+			//----- SORT UPCOMING SCHOOLS BY DATE -----//
+			
+					public function sort_by_date($a, $b) {
+						return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+					}
+				
+			
+			
+			function __construct() {
+				$this->cur_date = date('Ymd');
+				$this->get_schools();
+			}
+		}
+		
+		//------------------------------------------------//
+		//----- PROGRAM DATES CLASS HELPER FUNCTIONS -----//
+		//------------------------------------------------//
+		
+			//----- GET UPCOMING SCHOOLS -----//
+			function get_upcoming_schools($num_requested) {
+				$programs = new ProgramDates();
+				
+				//----- RANDOMIZE SCHOOLS WITH SAME DATE FOR FEATURED PROGRAM -----//
+				if ($programs->schools[0]['start_date'] == $programs->schools[1]['start_date']) {
+					
+					//----- FIND OUT HOW MANY SCHOOLS HAVE THE SAME DATE -----//
+					$cur_key = 0;
+					$cmp_key = 1;
+					$num_same_date = 1;
+					
+						//----- START BY COMPARING KEY 1 to KEY 2 -----//
+							while ($programs->schools[$cur_key]['start_date'] == $programs->schools[$cmp_key]['start_date']) {
+								$num_same_date = ++$num_same_date;
+								$cur_key = ++$cur_key;
+								$cmp_key = ++$cmp_key;
+							}
+							
+						
+					//----- ONCE NUMBER OF SAME DATES IS FOUND, SHUFFLE THE RANGE -----/
+					$programs_with_same_date = array_slice($programs->schools, 0, $num_same_date);
+					shuffle($programs_with_same_date);
+					
+					//----- REASSIGN ITEMS TO ARRAY -----//
+					$key = 0;
+					foreach ($programs_with_same_date as $shuffled_program) {
+						$programs->schools[$key] = $shuffled_program;
+						$key = ++$key;
+					}
+				}
+				
+				$programs->schools = array_slice($programs->schools, 0, $num_requested);
+				return $programs;
+			}
+		
+		
+		
+		
+		
 		
 		
 		
@@ -938,7 +1048,7 @@
 					   <?php while ( $my_query->have_posts() ) { ?>
 						   <?php $my_query->the_post(); ?>
 						   
-							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
+							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><?php $obj = new PostRibbon(get_the_ID()); ?><?php $obj->build_ribbon('vertical', 3); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
 						   
 					   <?php } ?>
 				   <?php } ?>
@@ -2087,19 +2197,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 								  <?php } ?>
 		<?php } 
 			
-			
-
-		
-
-
-
-
-		//FUNCTION TO RETRIEVE AND DISPLAY POST OR PAGE SLUG
-		function the_slug() {
-		    $post_data = get_post($post->ID, ARRAY_A);
-		    $slug = $post_data['post_name'];
-		    return $slug; 
-		}
+	
 
 
 		//PAGINATION FOR BLOG

@@ -3,7 +3,6 @@
 			$(document).ready(function() {
 				$('[id^=related-post-menu-item]').hover(function() {
 					var postID = $(this).attr('data-id');
-					var postClass 
 					$('.active-related-post-menu-item').removeClass('active-related-post-menu-item');
 					$('.active-related-post').removeClass('active-related-post');
 					
@@ -28,9 +27,7 @@
 			$(document).ready(function() {
 			
 			var programCompareCounter = 0;
-			
-			
-			
+
 				$('[id^=compare-programs-checkbox]').click(function() {
 					var programID = $(this).attr("data-programId");
 					var programTitle = $(this).attr("data-programTitle");
@@ -112,7 +109,20 @@
 					
 					imgWidth: 1350,
 					imgHeight: 450,
-				})   
+					
+					loopRewind: true,
+					autoPlay: {
+			    		enabled: true,
+			    		delay: 4000,
+			    		pauseOnHover: true,
+			    	},
+			    	
+			    	video: {
+				    	vimeoCode: '<iframe src="http://player.vimeo.com/video/%id%?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>',
+				    	autoHidArrows: false,
+				    	autoHideControlNav: false,
+			    	},
+				})
 			});
 
 			//BANNER GALLERY FOR ROYAL SLIDER
