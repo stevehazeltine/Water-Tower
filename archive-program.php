@@ -5,14 +5,14 @@
 
 		
 		<div class="span8 program-archive-container">
-		
 			<h1>Schools</h1>
 			<div class="row-fluid">
 				<div class="span12">
-				Mauris ac libero vitae tortor varius venenatis vel at lectus. Morbi ornare nisl eu est placerat id ultricies massa viverra. Sed suscipit porttitor nulla, et elementum urna volutpat a. Etiam imperdiet faucibus venenatis. Donec lacus est, convallis ut euismod at, iaculis ac felis. Aliquam erat volutpat. Pellentesque molestie blandit nisl. Aliquam iaculis enim vitae mauris tincidunt in malesuada felis fringilla. Phasellus ante quam, vulputate non sollicitudin at, sollicitudin a magna. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc ac metus quis sem viverra cursus. Maecenas non dolor eu ante ultrices tristique eu ac orci.
+					<?php //----- USE PROGRAM ARCHIVE PAGE IN BACKEND TO PULL INFO FROM -----// ?>
+					<?php $program_archive_content = get_post('1282'); ?>
+					<?php echo $program_archive_content->post_content; ?>
 				</div>
 			</div>
-		
 		
 		
 		
@@ -29,10 +29,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="discipleship-training-schools">
+		   <div id="discipleship-training-schools" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Discipleship Training Schools</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('discipleship-training-schools'); ?>;">Discipleship Training Schools</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -59,10 +59,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="biblical-studies">
+		   <div id="biblical-studies" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Biblical Studies</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('biblical-studies'); ?>;">Biblical Studies</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -86,10 +86,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="seminars">
+		   <div id="seminars" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Seminars</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('seminars'); ?>;">Seminars</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -114,10 +114,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="secondary-schools">
+		   <div id="secondary-schools" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Secondary Schools</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('secondary-schools'); ?>;">Secondary Schools</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -140,10 +140,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="summer-programs">
+		   <div id="summer-programs" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Summer Programs</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('summer-programs'); ?>;">Summer Programs</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -168,10 +168,10 @@
 		'orderby'					=> 	'meta_value',
 		); ?>
 		   
-		   <div id="career-discipleship">
+		   <div id="career-discipleship" class="program-archive-class-container">
 		   <?php $my_query = new WP_Query( $args ); ?>
 		   <?php if ( $my_query->have_posts() ) { ?>
-		   		<h4>Career Discipleship</h4>
+		   		<h4 style="background: #<?php echo get_classification_color('career-discipleship'); ?>;">Career Discipleship</h4>
 			   <?php while ( $my_query->have_posts() ) { ?>
 				   <?php $my_query->the_post(); ?>
 				   
@@ -202,12 +202,12 @@
 		<div class="span4 program-archive-nav visible-desktop" >
 			<div data-spy="affix" data-offset-top="210" id="scrollspy-nav" class="program-archive-menu">
 				<ul class="span4 nav">
-					<li><i class="icon-caret-right"></i><a href="#discipleship-training-schools">Discipleship Training Schools</a></li>
-					<li><i class="icon-caret-right"></i><a href="#biblical-studies">Biblical Studies</a></li>
-					<li><i class="icon-caret-right"></i><a href="#seminars">Seminars</a></li>
-					<li><i class="icon-caret-right"></i><a href="#secondary-schools">Secondary Schools</a></li>
-					<li><i class="icon-caret-right"></i><a href="#summer-programs">Summer Programs</a></li>
-					<li><i class="icon-caret-right"></i><a href="#career-discipleship">Career Discipleship</a></li>
+					<li id="discipleship-training-schools"><i class="icon-caret-right"></i><a href="#discipleship-training-schools">Discipleship Training Schools</a></li>
+					<li id="biblical-studies"><i class="icon-caret-right"></i><a href="#biblical-studies">Biblical Studies</a></li>
+					<li id="seminars"><i class="icon-caret-right"></i><a href="#seminars">Seminars</a></li>
+					<li id="secondary-schools"><i class="icon-caret-right"></i><a href="#secondary-schools">Secondary Schools</a></li>
+					<li id="summer-programs"><i class="icon-caret-right"></i><a href="#summer-programs">Summer Programs</a></li>
+					<li id="career-discipleship"><i class="icon-caret-right"></i><a href="#career-discipleship">Career Discipleship</a></li>
 					<li class="compare-programs-list-container">
 						
 						<h6>Compare Schools</h6>

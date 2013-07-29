@@ -115,7 +115,9 @@
 						$args = array(
 							'labels' => $labels,
 							'hierarchical' => true,
-							'rewrite' => array('hierarchical' => true ),
+							'rewrite' => array(
+								'hierarchical' => true,
+							),
 							'show_admin_column' => true,
 						);
 						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'teachings', 'user' ), $args );
@@ -916,10 +918,9 @@
 			
 			
 			//----- SORT UPCOMING SCHOOLS BY DATE -----//
-			
-					public function sort_by_date($a, $b) {
-						return ($a['start_date'] < $b['start_date']) ? -1 : 1;
-					}
+			public function sort_by_date($a, $b) {
+				return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+			}
 				
 			
 			

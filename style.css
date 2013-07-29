@@ -1108,9 +1108,11 @@ margin-top: 0px !important;
 }
 
 .program-archive-container h4 {
+font-family: 'HelveticaNeueW01-47LtCn 692689';
 font-size: 20px;
-padding-top: 80px;
-margin-top: 0px;
+margin: 0px 0px 20px 0px;
+padding: 10px;
+color: white;
 }
 
 .program-archive-school-title {
@@ -1142,6 +1144,10 @@ color: #666;
 margin-bottom: 20px;
 position: relative;
 border-bottom: 1px solid #EFEFEF;
+}
+
+.program-archive-class-container {
+	padding-top: 100px;
 }
 
 .program-archive-school-compare-link {
@@ -1185,7 +1191,6 @@ border-top: 1px solid #DDD;
 
 .program-archive-nav ul li {
 position: relative;
-padding: 10px 0px 10px 30px;
 border-bottom: 1px solid #DDD;
 list-style-type: none;
 background: #FCFCFC;
@@ -1194,7 +1199,10 @@ font-size: 16px;
 }
 
 .program-archive-nav ul.nav > li a {
-font-family:'HelveticaNeueW01-77BdCn 692722';
+font-family: 'HelveticaNeueW01-77BdCn 692722';
+text-transform: uppercase;
+font-size: 14px;
+padding: 10px 0px 10px 30px;
 }
 
 .program-archive-nav ul.nav > li > i {
@@ -2393,7 +2401,7 @@ padding-top: 10px;
 /***** SCROLLSPY NAV *****/
 /*************************/
 
-#scrollspy-nav .nav .active { background: #609FCE; }
+#scrollspy-nav .nav .active { background: #444; }
 #scrollspy-nav .nav .active a {	color: white; }
 #scrollspy-nav .nav .active i {position: absolute; display: block;}
 

@@ -278,10 +278,10 @@
 			  
 			if($('#map_canvas').hasClass('show-map')) {
 			  $(".hide-map-text").css("display", "block");
-			  $(".reveal-map-text").css("display", "none");
+			  $(".show-map-text").css("display", "none");
 			} else {
 			  $(".hide-map-text").css("display", "none");
-			  $(".reveal-map-text").css("display", "block");
+			  $(".show-map-text").css("display", "block");
 			}
 			  
 		    });

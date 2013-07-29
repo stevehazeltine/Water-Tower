@@ -10,19 +10,6 @@ Template Name: Front Page
 <?php if (have_posts()) : ?>
 <?php while (have_posts()) : the_post(); ?>
 
-	<?php //SLIDER VARIABLES ?>
-	<?php $slider_post_text_location = rwmb_meta( 'post_text_location' ); ?>
-	<?php $slider_post_override_id = rwmb_meta( 'override_post_id' ); ?>
-	
-	
-	<?php $terms = rwmb_meta( 'feat_program', 'type=taxonomy&taxonomy=program_taxo' ); ?>
-		<?php foreach ($terms as $term) {
-			$slider_featured_program = $term->slug;
-		}?>
-	<?php $slider_program_text_location = rwmb_meta( 'program_text_location' ); ?>
-	
-	
-	<?php $slider_featured_video = rwmb_meta( 'feat_video' ); ?>
             
             <?php //----- HOME PAGE BANNER -----// ?>
             <div class="banner-image normal-slider frontpage-slider">
@@ -30,7 +17,6 @@ Template Name: Front Page
 				
 						<?php $featuredschool = get_upcoming_schools(1, true); ?>
 						<?php $featuredschool = $featuredschool->schools; ?>
-						<?php print_r($featuredschool); ?>
 						
 							<div class="rsContent">
 								<?php echo get_the_post_thumbnail( $featuredschool[0]['program_id'], 'full-banner'); ?>
