@@ -1,7 +1,7 @@
 <div class="row main-menu-desktop-container visible-desktop">
 	<ul class="main-menu-desktop">
 		
-		<!--ABOUT LINK-->
+		<?php //----- ABOUT MENU -----// ?>
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up" style="color: #609FCE;"></i></span>
 		 	<!--ABOUT DROPDOWN-->
 		 	<ul class="dropdown-container">
@@ -12,7 +12,7 @@
 		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
 							<?php $args = array(
 							'nopaging'					=>  true ,
-							'post_type' 	 			=>	array('page', 'focus_ministries'),
+							'post_type' 	 			=>	'page',
 							'page_menu_location' 	=>  'about',
 							'order' => 'ASC',
 							'orderby'					=> 	'meta_value_num',
@@ -25,7 +25,7 @@
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><i class="icon-chevron-right"></i> <?php the_title(); ?></a></li>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
 									   
 								   <?php } ?>
 								   </ul>

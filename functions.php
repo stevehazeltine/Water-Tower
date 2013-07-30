@@ -999,20 +999,30 @@
 			<?php // CHECK AND DISPLAY GALLERY ?>
 			<?php if ($banner_args["include-gallery"] == true) { ?>
 				
-				<?php //----- GET PROGRAM COLOR IF NECESSARY -----//?>
-				<?php if ($banner_args['program-taxo'] != null) {
-					$color = get_program_color($banner_args['post-id']);
-					$color = 'style="border-bottom: 3px solid #' . $color . ';"';
-				} ?>
-			
-				<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
-				    <img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
-				    <?php // check if the post has a Post Thumbnail assigned to it.
-						$images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] );
-						foreach ( $images as $image ) { ?>
-						    <img class="rsImg" src="<?php echo str_replace( '.jpg', '-1350x450.jpg', $image[full_url]); ?>" />
-					<?php } ?> 
-				</div>
+				<?php //----- CHECK FOR ALTERNATE IMAGES -----// ?>
+				<?php $alt_images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] ); ?>
+				<?php if (!empty($alt_images)) { ?>
+				
+					<?php //----- GET PROGRAM COLOR IF NECESSARY -----//?>
+					<?php if ($banner_args['program-taxo'] != null) {
+						$color = get_program_color($banner_args['post-id']);
+						$color = 'style="border-bottom: 3px solid #' . $color . ';"';
+					} ?>
+				
+					<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
+						<?php // check if the post has a Post Thumbnail assigned to it.
+							foreach ( $alt_images as $image ) { ?>
+								<img class="rsImg" src="<?php echo str_replace( '.jpg', '-1350x450.jpg', $image[full_url]); ?>" />
+						<?php } ?> 
+					</div>
+				
+				<?php //----- IF NO ALTERNATE IMAGES EXIST, DISPLAY SINGLE IMAGE -----// ?>
+				<?php } else { ?>
+					<div class="royal-slider-banner">
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
+					</div>
+				<?php } ?>
 			<?php } ?>
 		
 		

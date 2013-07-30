@@ -202,6 +202,19 @@
 		<div class="span4 program-archive-nav visible-desktop" >
 			<div data-spy="affix" data-offset-top="210" id="scrollspy-nav" class="program-archive-menu">
 				<ul class="span4 nav">
+				
+					<?php //----- PROGRAM ARCHIVE MENU -----//
+						$classifications = get_terms('program_classification');
+						foreach ($classifications as $classification) {
+							$format = '<li id="%1$s"><i class="icon-caret-right"></i><a href="#%1$s">%2$s</a></li>';
+							$slug = $classification->slug;
+							$title = $classification->name;
+							
+							echo sprintf($format, $slug, $title);
+						}
+						
+					?> 
+				
 					<li id="discipleship-training-schools"><i class="icon-caret-right"></i><a href="#discipleship-training-schools">Discipleship Training Schools</a></li>
 					<li id="biblical-studies"><i class="icon-caret-right"></i><a href="#biblical-studies">Biblical Studies</a></li>
 					<li id="seminars"><i class="icon-caret-right"></i><a href="#seminars">Seminars</a></li>

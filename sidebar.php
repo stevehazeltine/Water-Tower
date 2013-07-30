@@ -1,5 +1,9 @@
 <ul id="sidebar">
-	<?php if ( ! dynamic_sidebar() ) : ?>
+	<?php if ( !dynamic_sidebar() ) : ?>
+		
+		
+		<?php if (is_singular()) { ?>
+		
 		
 		
 		<li class="sidebar-about-the-author">
@@ -18,6 +22,8 @@
 		
 		</li>
 		
+		<?php } ?>
+		
 		
 		
 		<?php //----- RECENT POSTS -----// ?>
@@ -33,7 +39,7 @@
 		<!-------------------CATEGORIES----------------->
 		<li id="categories">
 		<?php if ( 'teachings' == get_post_type()) { ?>
-			<?php _e('Teaching Types'); ?>
+			<h2><?php _e('Teaching Types'); ?></h2>
 			<ul>
 				<?php wp_list_categories('title_li=&taxonomy=teaching_types'); ?>
 			</ul>
@@ -44,6 +50,14 @@
 			</ul>
 			
 		<?php }?>
+		</li>
+		
+		<?php //----- SUBSCRIBE WIDGET -----// ?>
+		<li>
+			<h2><?php _e('Subscribe'); ?></h2>
+			<div>
+				<?php echo do_shortcode('[gravityform id="2" name="Contact Form" title="false" description="false" ajax="true"]'); ?>
+			</div>
 		</li>
 		
 

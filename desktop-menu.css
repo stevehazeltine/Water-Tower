@@ -154,16 +154,6 @@
 
 }
 
-.main-menu-desktop ul ul li a{
-	font-size: 16px;
-	color: white;
-	font-family:'HelveticaNeueW01-47LtCn 692689';
-	text-transform: uppercase;
-	transition: .35s;
-	-webkit-transition: .35s;
-	
-}
-
 .main-menu-desktop ul ul li a:hover {
 	color: white;
 	text-decoration: none !important;
@@ -275,10 +265,32 @@
 		bottom:0px;
 		left: 0px;
 		padding: 20px 30px 20px 180px !important;
-		background-color: #609FCE;
 		width: 180px !important;
+		border-right: 1px dashed #666;
 		
 	}
+	
+.primary-menu ul > a > li {
+	padding: 8px !important;
+	border-bottom: 1px solid #444;
+	transition: .15s;
+	-webkit-transition: .15s;
+}
+
+.primary-menu ul > a > li:hover {
+	background: #609FCE;
+}
+
+
+.primary-menu a li{
+	font-size: 16px;
+	color: white;
+	font-family:'HelveticaNeueW01-47LtCn 692689';
+	text-transform: uppercase;
+}
+
+
+
 
 /***** RELATED POSTS *****/
 

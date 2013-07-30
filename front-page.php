@@ -26,7 +26,6 @@ Template Name: Front Page
 									<p>Starts <?php echo date("F d, Y", strtotime($featuredschool[0]['start_date']));?></p>
 								</div>
 								
-								
 							</div>
 						   
 						   
@@ -97,17 +96,20 @@ Template Name: Front Page
 					<div class="row">
 					
 								<?php foreach($upcomingschools as $school) { ?>					
-									<div class="blogroll-slideup-container span3">
+									<div class="blogroll-upcoming-school span3">
 										
-										<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
+										<div class="blogroll-upcoming-school-image">
+											<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
+											<div class="blogroll-upcoming-school-rollover" style="background: #<?php echo get_program_color($school['program_id']); ?>">
+												<div class="blogroll-upcoming-school-rollover-meta">
+													<p class="blogroll-upcoming-school-meta-title">Starts</p>
+													<p><?php echo date("F d, Y", strtotime($school['start_date'])); ?></p>
+												</div>
+											</div>
+										</div>
 																				
-										<div class="blogroll-slideup">
 										<a href="<?php echo get_permalink($school['program_id']); ?>" rel="bookmark">
 										<h2 style="background: #<?php echo get_program_color($school['program_id']); ?>;"><?php if (rwmb_meta('shortname', '', $post_id=$school['program_id']) == '') {echo get_the_title($school['program_id']);} else {echo rwmb_meta('short-name', '', $post_id=$school['program_id']);} ?></h2></a>
-										<div class="blogroll-slideup-content">
-											<p>Starts <?php echo date("F d, Y", strtotime($school['start_date']));?></p>
-										</div>
-										</div>
 									</div>
 
 								<?php } ?>
