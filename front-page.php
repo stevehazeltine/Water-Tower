@@ -102,7 +102,7 @@ Template Name: Front Page
 											<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
 											<div class="blogroll-upcoming-school-rollover" style="background: #<?php echo get_program_color($school['program_id']); ?>">
 												<div class="blogroll-upcoming-school-rollover-meta">
-													<p class="blogroll-upcoming-school-meta-title">Starts</p>
+													<h6 class="blogroll-upcoming-school-meta-title"><i class="icon-calendar"></i> Starts</h6>
 													<p><?php echo date("F d, Y", strtotime($school['start_date'])); ?></p>
 												</div>
 											</div>

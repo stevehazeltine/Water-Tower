@@ -52,11 +52,24 @@
 		<?php }?>
 		</li>
 		
+		
+		
 		<?php //----- SUBSCRIBE WIDGET -----// ?>
-		<li>
+		<li class="subscribe-widget-container">
 			<h2><?php _e('Subscribe'); ?></h2>
+			
+			<p>Want us to send you an email every time we post new content to the site?  Fill out the form below and we'll be sure to keep you updated</p>
+			
 			<div>
-				<?php echo do_shortcode('[gravityform id="2" name="Contact Form" title="false" description="false" ajax="true"]'); ?>
+				<?php echo do_shortcode('[gravityform id="2" name="Subscribe Form" title="false" description="false" ajax="true"]'); ?>
+			</div>
+			<div class="subscribe-widget-footer">
+				<ul>
+					<li><i class="icon-rss"></i>RSS</li>
+					<li><i class="icon-facebook"></i></li>
+					<li><i class="icon-twitter"></i></li>
+					<li><i class="icon-instagram"></i></li>
+				</ul>
 			</div>
 		</li>
 		

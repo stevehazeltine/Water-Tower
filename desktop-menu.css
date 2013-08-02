@@ -1,30 +1,6 @@
 
 /******************** MENU STYLES **********************/
 
-.navbar .btn-navbar {
-	display: block;
-	background-image: none;
-	background-color: #999;
-	text-shadow: none;
-	border: none;
-}
-
-.navbar-inverse .brand {
-	color: #999;
-	text-shadow: none;
-}
-
-.navbar-inverse .btn-navbar:hover, .navbar-inverse .btn-navbar:focus {
-	background-color: #CCC;
-}
-
-
-		/* MAX 979 PX */
-		@media (max-width: 979px) {
-				.navbar-fixed-top {
-					position: relative !important;
-				}
-		}
 
 .main-menu-desktop-container {
 	margin-bottom: 40px;
@@ -299,6 +275,12 @@
 	position: relative;
 	min-height: 310px;
 	border-left: 1px dashed #666;
+}
+
+@media (max-width: 1200px) {
+	.training-related-posts {
+		display: none;
+	}
 }
 
 .main-menu-desktop .related-post-title {

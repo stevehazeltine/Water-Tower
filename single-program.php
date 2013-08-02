@@ -108,6 +108,7 @@
 																var options = {
 																	segmentStrokeWidth : 10,
 																	percentageInnerCutout : 65,
+																	animation: false,
 																}
 																var ctx = document.getElementById("lecture-overview").getContext("2d");
 																var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
@@ -213,6 +214,7 @@
 																		var options = {
 																			segmentStrokeWidth : 3,
 																			percentageInnerCutout : 65,
+																			animation: false,
 																		}
 																		var ctx = document.getElementById("activity-detail-<?php echo $n; ?>").getContext("2d");
 																		var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
@@ -256,7 +258,7 @@
 										   
 										   
 										   
-										   
+										   <!--
 										    
 												 <?php// LECTURE SECTION ?>										 
 													 <h4><?php echo rwmb_meta( 'lecture_phase_title' ); ?></h4>
@@ -332,15 +334,22 @@
 																					
 																				<?php } ?>
 																		</p>
-																	</div><!-------/.lecture-phase-info-desc------>
-																</div><!-------/.lecture-phase-info----->
+																	</div>
+																</div>
 														   
 														   <?php $i = $i+1; ?>
 														   <?php $title = 'activity_title'.$i; ?>
 														   <?php $desc = 'activity_description'.$i; ?>
 														   <?php $hours = 'hours_per_week'.$i; ?>
 														 <?php endwhile ?>
-													 </div><!--------/.lecture-phase-info-container------->
+													 </div>
+										   
+										   -->
+										   
+										   
+										   
+										   
+										   
 										   
 											<?php if (rwmb_meta( 'outreach_phase_desc' ) != '') { ?>
 												 <?php// OUTREACH SECTION ?>										 

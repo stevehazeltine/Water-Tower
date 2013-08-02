@@ -1286,7 +1286,7 @@ $meta_boxes[] = array(
 //PAGE MAIN DISPLAY CONTROLS
 $meta_boxes[] = array(
 	'title'  => 'Display Controls',
-	'pages' => array( 'page' ),
+	'pages' => array( 'page', 'focus_ministries' ),
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(

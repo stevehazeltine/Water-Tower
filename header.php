@@ -66,18 +66,20 @@
 	        				<a href="<?php echo get_bloginfo ('url'); ?>"><img style="opacity: 100;" src="<?php echo get_bloginfo ('template_directory'); ?>/images/Logo_cleaner.png" /></a>
 	        			</div>
 						
-						<div class="header-functions-nav">
+						<div class="header-functions-container">
 							
-							<div class="header-functions-display">
-								<div class="established">EST. 1985</div>
+							<div class="header-functions">
+								<div class="header-functions-buttons">
+									<i class="icon-rss"></i>
+								</div>
+								
 								<div class="search-bar"><?php get_search_form( true ); ?></div>
+								<div class="established">EST. 1985</div>
+								
 		
 							</div>
 							
-							<div class="header-functions-buttons">
-								<i class="icon-rss"></i>
-								<i class="icon-search"></i>
-							</div>
+							
 							
 						</div>
         			</div>

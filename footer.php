@@ -119,7 +119,7 @@
 				
 				
 				<!---- USER OPTIONS ----->
-				<div class="span3 footer-user-options">
+				<div class="span4 footer-user-options">
 				
 				<div class="footer-social-media">
 					<img src="<?php echo get_bloginfo ('template_directory'); ?>/img/social-media/facebook-128.png" />
@@ -184,7 +184,7 @@
         
         
         
-        <!--#container-->
+        </div><!--#container-->
         </div> <!--#page-wrap-->
 
         <script src="<?php echo get_bloginfo ('template_directory'); ?>/js/vendor/bootstrap.min.js"></script>

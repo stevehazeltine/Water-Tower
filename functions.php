@@ -1001,7 +1001,7 @@
 				
 				<?php //----- CHECK FOR ALTERNATE IMAGES -----// ?>
 				<?php $alt_images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] ); ?>
-				<?php if (!empty($alt_images)) { ?>
+				<?php if ($alt_images != '') { ?>
 				
 					<?php //----- GET PROGRAM COLOR IF NECESSARY -----//?>
 					<?php if ($banner_args['program-taxo'] != null) {
@@ -1197,54 +1197,28 @@
 	
 		
 		
-		<div id="map_canvas" class="visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
+		<div id="map_canvas" class="hidden-phone <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
 			
 			
 			
-			<div class="map-reveal-button-container visible-desktop">
-			<div class="map-reveal-button">
-				
-				<div class="map-reveal-button-hover">
-					<a href="#_"><i class="icon-globe"><span class="reveal-button-label">Map</span></i></a>
-				</div>
-				
-				<div class="map-reveal-button-extension">
-					<div class="map-reveal-button-extension-text">
-						<a href="#_"><span class="show-map-text">Show Outreach Map</span></a>
-						<a href="#_"><span class="hide-map-text">Hide Outreach Map</span></a>
-					</div>
+			<div class="map-reveal-button-container hidden-phone">
+				<div class="map-reveal-button">
+						<a href="#_"><span class="show-map-text"><i class="icon-globe"></i> Show Map</span></a>
+						<a href="#_"><span class="hide-map-text"><i class="icon-remove-circle"></i> Hide Map</span></a>
 				</div>
 				
 			</div>
-			</div>
+
 			
 			
 			
 			
 		<?php } ?>
 		
-		<div class="map-key-container visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
-			<div class="map-key">
-				<div class="key-outreach-updates">Outreach Story<div class="key-marker"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/map_poi.png"></div></div>
-				<div class="key-countries-visited">Countries Visited<div class="key-visited"></div></div>
-			</div>
-			
-			<div class="map-key-button-container">
-				
-				<div class="map-key-button-hover">
-					<a href="#_"><i class="icon-key"><span class="key-button-label">Key</span></i></a>
-				</div>
-				
-				<div class="map-key-button-extension">
-					<div class="map-key-button-extension-text">
-						<a href="#_"><span class="map-key-show-text">Show Map Legend</span></a>
-						<a href="#_"><span class="map-key-hide-text">Hide Map Legend</span></a>
-					</div>
-				</div>
-				
-			</div>
+		<div class="map-key-container <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
+			<p>some stuff</p>
 		</div>
 		<?php } //ENDIF FOR INCLUDE MAP CHECK ?>
 		

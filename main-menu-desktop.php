@@ -2,21 +2,21 @@
 	<ul class="main-menu-desktop">
 		
 		<?php //----- ABOUT MENU -----// ?>
-		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up" style="color: #609FCE;"></i></span>
+		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>
 		 	<!--ABOUT DROPDOWN-->
-		 	<ul class="dropdown-container">
+		 	<ul id="about-dropdown" class="dropdown-container">
 		 		<div class="span2 primary-menu">
 		 			<div>
 			 				<!----------ABOUT MENU PRIMARY SECTION------------>
 
 		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
 							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'page',
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	'page',
 							'page_menu_location' 	=>  'about',
-							'order' => 'ASC',
-							'orderby'					=> 	'meta_value_num',
-							'meta_key' => 'menu_priority',
+							'order' 				=> 'ASC',
+							'orderby'				=> 	'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
 							); ?>
 							   
 							   <?php $my_query = new WP_Query( $args ); ?>
@@ -86,7 +86,7 @@
 						   
 							   <?php while ( $my_query->have_posts() ) { ?>
 								   <?php $my_query->the_post(); ?>
-								   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
+								   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="about-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
 								   			<?php echo $i; ?>
 								   		</li>
 								   <?php $i = ++$i; ?>
@@ -167,9 +167,24 @@
 		 
 		 
 		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 		 <!--TRAINING LINK-->
 		 <li class="span"><span class="link-wrapper"><a href="#">Training</a><i class="icon-caret-up"></i></span>
-		 	<!--TRAINING DROPDOWN-->
+		 	
+			
+			<!--TRAINING DROPDOWN-->
 			<ul class="dropdown-container">
 		 		<div class="span2 primary-menu">
 		 			<div>
@@ -189,7 +204,7 @@
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
 									   
 								   <?php } ?>
 								   </ul>
@@ -202,7 +217,7 @@
 		 		
 		 		
 		 		<!-------- RESOURCES RELATED POSTS --------->
-		 		<div class="span3 menu-related-posts">
+		 		<div class="span3 menu-related-posts training-related-posts">
 			 			
 			 			<!--LATEST POSTS--->
 						   <?php $args = array(
@@ -443,7 +458,7 @@
 		 <li class="span"><span class="link-wrapper"><a href="#">Outreach</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--OUTREACH DROPDOWN-->
-		 	<ul class="dropdown-container">
+		 	<ul id="outreach-dropdown" class="dropdown-container">
 		 		<div class="span2 primary-menu">
 		 			<div>
 			 			<!----------OUTREACH MENU PRIMARY SECTION------------>
@@ -462,7 +477,7 @@
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
 									   
 								   <?php } ?>
 								   </ul>
@@ -470,41 +485,65 @@
 							   <?php wp_reset_postdata(); ?>
 		 			</div>
 		 		</div>
-		 		
-		 		<div class="span8 menu-related-posts">
 			 			
-			 			<!--LATEST POSTS--->
-						   <?php $args = array(
-								'posts_per_page' 	=> 2,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-								'category_name'		=> 'outreach-updates',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div class="sub-main-menu-two-up related-post">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'xs-mobile-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x400" />
-													<?php } ?>	
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo substr( get_the_content(), 0, 200 ); ?></p>
-													<h6 class="related-post-author">Written By <?php coauthors_posts_links() ?></h6>
-												</div>
+				<div class="span8 menu-related-posts">
+					
+					<!--LATEST POSTS--->
+					   <?php $outreach_blogroll = array(
+							'posts_per_page' 	=> 6,
+							'post_type' 		=> 'post',
+							'orderby'			=> 'date',
+					   ); ?>
+					   
+					   <?php $my_query = new WP_Query( $outreach_blogroll ); ?>
+					   <?php if ( $my_query->have_posts() ) { ?>
+					   <?php $i = 1; ?>
+						   <?php while ( $my_query->have_posts() ) { ?>
+							   <?php $my_query->the_post(); ?>
+											<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
+												<?php // check if the post has a Post Thumbnail assigned to it.
+													if ( has_post_thumbnail() ) {
+														the_post_thumbnail( 'menu-banner' );
+													} else { ?>
+														<img src="http://placehold.it/1200x200" />
+												<?php } ?>
+												<?php $obj = new PostRibbon($post->ID); ?>
+												<?php $obj->build_ribbon('horizontal', 3); ?>
 												
-							   <?php } ?>
+												
+												<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+												<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
+												
+											</div>
+						   <?php $i = ++$i; ?>
 						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-			 			
-			 			
-		 		</div> 		
+					   <?php } ?>
+					   <?php wp_reset_postdata(); ?>
+				</div> 
+
+		 		
+		 		
+				<div class="related-posts-menu-container">
+					<ul class="related-posts-menu">
+						<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
+							<!--LATEST POSTS MENU--->
+							   
+							   <?php $my_query = new WP_Query( $outreach_blogroll ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+							   <?php $i = 1; ?>
+							   
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+											<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="outreach-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
+												<?php echo $i; ?>
+											</li>
+									   <?php $i = ++$i; ?>
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						<li class="related-posts-menu-archive-link">View All Posts</li>
+					</ul>
+				</div>		
 		 		
 		 		<div class="span2 center-highlight">
 		 			<div class="sub-main-menu">
@@ -583,7 +622,7 @@
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
 									   
 								   <?php } ?>
 								   </ul>
@@ -670,7 +709,7 @@
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
 									   
 								   <?php } ?>
 								   </ul>
