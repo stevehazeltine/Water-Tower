@@ -2,7 +2,22 @@
 
 	<div class="row archive-content-container">
 		<div class="span9">
-			<?php insert_loop('excerpt'); ?>
+		
+				<?php //----- BEGIN CHECK FOR DIFFERENT POST TYPES -----// ?>
+					
+					
+					
+					<?php //----- BEGIN PROJECTS POST TYPE INDEX -----// ?>
+						<?php if ('projects' == get_post_type()) { ?>
+
+								<?php get_active_project_index() ?>
+						
+					<?php //----- EVERYTHING ELSE'S POST TYPE INDEX -----// ?>
+					<?php } else { ?>
+						<?php insert_loop('excerpt'); ?>
+					
+					<?php } ?>
+				<?php //----- END CHECK FOR DIFFERENT POST TYPES -----// ?>
 		</div><!--span10-->
 		
 		

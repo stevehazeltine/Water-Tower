@@ -186,12 +186,7 @@
         
         </div><!--#container-->
         </div> <!--#page-wrap-->
-
-        <script src="<?php echo get_bloginfo ('template_directory'); ?>/js/vendor/bootstrap.min.js"></script>
-        <script src="<?php echo get_bloginfo ('template_directory'); ?>/js/jquery.foundation.orbit.js"></script>
 		
-        		
-
         <script>
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

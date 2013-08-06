@@ -1,17 +1,21 @@
 <?php get_header() ?>
 
-	<?php if (is_front_page()) { ?>            
-            
-            
+	<?php if ( have_posts() ) { while ( have_posts() ) { the_post(); ?>
 
+
+
+			<?php $banner_args = array(); ?>
 			
-
-    <?php } else { ?>
+			<?php get_banner($banner_args); ?>
+		    
+		    
+		    <div class="row">
+			    <div class="span12">
+			    	<h2><?php the_title(); ?></h2>
+					<?php the_content(); ?>
+			    </div>
+		    </div>
             
-            <p>some stuff</p>
-           
-    <?php } ?>
-            
-            
-			 
+			<?php	} // end while ?>
+	<?php } // end if ?>
  <?php get_footer() ?>

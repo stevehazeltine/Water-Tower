@@ -14,21 +14,22 @@
 			wp_deregister_script('jquery');
 		    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", false, null);
 		    wp_enqueue_script('jquery');
-			
+		    
+		    //TAKE CARE OF BOOTSTRAP
+		    wp_register_script('bootstrap', get_template_directory_uri().'/js/vendor/bootstrap.js', array('jquery',), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
-		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery'), '1.0', true);
-		    wp_register_script('smoothscroll', get_template_directory_uri().'/js/smoothscroll.js', array('jquery'), '1.0', true);
-		    wp_register_script('royalslider', get_template_directory_uri().'/royalslider/jquery.royalslider.min.js', array('jquery'), '9.4.0', true);
-		    wp_register_script('charts', get_template_directory_uri().'/js/Chart.min.js', array('jquery'), '0.2', true);
+		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery', 'bootstrap'), '1.0', true);
+		    wp_register_script('royalslider', get_template_directory_uri().'/royalslider/jquery.royalslider.min.js', array('jquery', 'bootstrap'), '9.4.0', true);
+		    wp_register_script('charts', get_template_directory_uri().'/js/Chart.min.js', array('jquery', 'bootstrap'), '0.2', true);
 		    
 		    
 		    //QUEUE UP YOUR SCRIPTS
 		    wp_enqueue_script('jquery');
-		    wp_enqueue_script('themeuxscripts');
-		    wp_enqueue_script('smoothscroll');
+		    wp_enqueue_script('bootstrap');
 		    wp_enqueue_script('royalslider');
 		    wp_enqueue_script('charts');
+			wp_enqueue_script('themeuxscripts');
 		}
 
 
@@ -474,98 +475,7 @@
 		
 		
 		
-		//PROJECTS
-	    function my_custom_post_projects() {
-			$labels = array(
-				'name'               => _x( 'Projects', 'post type general name' ),
-				'singular_name'      => _x( 'Project', 'post type singular name' ),
-				'add_new'            => _x( 'Add New', 'book' ),
-				'add_new_item'       => __( 'Add New Project' ),
-				'edit_item'          => __( 'Edit Project' ),
-				'new_item'           => __( 'New Project' ),
-				'all_items'          => __( 'All Projects' ),
-				'view_item'          => __( 'View Project' ),
-				'search_items'       => __( 'Search Projects' ),
-				'not_found'          => __( 'No Projects found' ),
-				'not_found_in_trash' => __( 'No Projects found in the Trash' ), 
-				'parent_item_colon'  => '',
-				'menu_name'          => 'Projects',
-			);
-			$args = array(
-				'labels'        => $labels,
-				'description'   => 'Holds our Project specific data',
-				'public'        => true,
-				'menu_position' => 23,
-				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-				'has_archive'   => true,
-				'taxonomies' 	=> array('post_tag'),
-			);
-			register_post_type( 'projects', $args );	
-		}
-		add_action( 'init', 'my_custom_post_projects' );
-		
-		
-		//ADD PROJECTS TO POSTS, VIDEOS, STORIES, & TEACHINGS
-					function my_taxonomies_project_taxo() {
-						$labels = array(
-							'name'              => _x( 'Projects', 'taxonomy general name' ),
-							'singular_name'     => _x( 'Projects', 'taxonomy singular name' ),
-							'search_items'      => __( 'Search Projects' ),
-							'all_items'         => __( 'All Projects' ),
-							'parent_item'       => __( 'Parent Project' ),
-							'parent_item_colon' => __( 'Parent Project:' ),
-							'edit_item'         => __( 'Edit Project' ), 
-							'update_item'       => __( 'Update Project' ),
-							'add_new_item'      => __( 'Add New Project' ),
-							'new_item_name'     => __( 'New Project' ),
-							'menu_name'         => __( 'Projects' ),
-						);
-						$args = array(
-							'labels' => $labels,
-							'hierarchical' => true,
-							'rewrite' 		=> array('slug' => 'project-posts'), 
-							'show_admin_column' => true,
-						);
-						register_taxonomy( 'project_taxo', array( 'post', 'videos' ), $args );
-					}
-					add_action( 'init', 'my_taxonomies_project_taxo', 0 );
-					
-					
-					
-					//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-					function post_project_update($post_id){
-					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-						  return $post_id;
-					  }
-			
-					  $post_obj = get_post($post_id);
-					  $raw_title = $post_obj->post_title;
-					  $post_type = $post_obj->post_type;
-					  $slug_title = sanitize_title($raw_title);
-			
-					  if (($post_type == 'projects') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-						 // get the terms associated with this custom post type
-						 $terms = get_the_terms($post_id, 'project_taxo');
-						 $term_id = $terms[0]->term_id;
-						 // if term exists then update term
-						 if ($term_id > 0) {
-							 wp_update_term($term_id,
-											'project_taxo',
-											array(
-											  'description' => $raw_title,
-											  'slug' => $raw_title,
-											  'name' => $raw_title)
-											);
-						 } else {
-							// creates a new term in the program_taxo taxonomy
-							wp_set_object_terms($post_id, $raw_title, 'project_taxo', false);
-						 }
-					  }
-					}
-			
-					add_action('save_post', 'post_project_update');
-		
-		
+				
 		
 		
 		
@@ -782,12 +692,258 @@
 		
 		
 		
+		
+		
+		
+		//-----------------------------------------------//
+		//----- PROJECT POST TYPE/CLASSES/FUNCTIONS -----//
+		//-----------------------------------------------//
+		
+		
+			//----- DECLARE POST TYPE AND TAXONOMY -----//
+		    function my_custom_post_projects() {
+				$labels = array(
+					'name'               => _x( 'Projects', 'post type general name' ),
+					'singular_name'      => _x( 'Project', 'post type singular name' ),
+					'add_new'            => _x( 'Add New', 'book' ),
+					'add_new_item'       => __( 'Add New Project' ),
+					'edit_item'          => __( 'Edit Project' ),
+					'new_item'           => __( 'New Project' ),
+					'all_items'          => __( 'All Projects' ),
+					'view_item'          => __( 'View Project' ),
+					'search_items'       => __( 'Search Projects' ),
+					'not_found'          => __( 'No Projects found' ),
+					'not_found_in_trash' => __( 'No Projects found in the Trash' ), 
+					'parent_item_colon'  => '',
+					'menu_name'          => 'Projects',
+				);
+				$args = array(
+					'labels'        => $labels,
+					'description'   => 'Holds our Project specific data',
+					'public'        => true,
+					'menu_position' => 23,
+					'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+					'has_archive'   => true,
+					'taxonomies' 	=> array('post_tag'),
+				);
+				register_post_type( 'projects', $args );	
+			}
+			add_action( 'init', 'my_custom_post_projects' );
+			
+			
+			
+			function my_taxonomies_project_taxo() {
+				$labels = array(
+					'name'              => _x( 'Projects', 'taxonomy general name' ),
+					'singular_name'     => _x( 'Projects', 'taxonomy singular name' ),
+					'search_items'      => __( 'Search Projects' ),
+					'all_items'         => __( 'All Projects' ),
+					'parent_item'       => __( 'Parent Project' ),
+					'parent_item_colon' => __( 'Parent Project:' ),
+					'edit_item'         => __( 'Edit Project' ), 
+					'update_item'       => __( 'Update Project' ),
+					'add_new_item'      => __( 'Add New Project' ),
+					'new_item_name'     => __( 'New Project' ),
+					'menu_name'         => __( 'Projects' ),
+				);
+				$args = array(
+					'labels' => $labels,
+					'hierarchical' => true,
+					'rewrite' 		=> array('slug' => 'project-posts'), 
+					'show_admin_column' => true,
+				);
+				register_taxonomy( 'project_taxo', array( 'post', 'videos' ), $args );
+			}
+			add_action( 'init', 'my_taxonomies_project_taxo', 0 );
+						
+						
+						
+			//----- AUTOMATICALLY UPDATE PROJECT TAXONOMY BASED ON POSTS IN POST TYPE -----//
+			function post_project_update($post_id){
+			  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+				  return $post_id;
+			  }
+	
+			  $post_obj = get_post($post_id);
+			  $raw_title = $post_obj->post_title;
+			  $post_type = $post_obj->post_type;
+			  $slug_title = sanitize_title($raw_title);
+	
+			  if (($post_type == 'projects') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
+				 // get the terms associated with this custom post type
+				 $terms = get_the_terms($post_id, 'project_taxo');
+				 $term_id = $terms[0]->term_id;
+				 // if term exists then update term
+				 if ($term_id > 0) {
+					 wp_update_term($term_id,
+									'project_taxo',
+									array(
+									  'description' => $raw_title,
+									  'slug' => $raw_title,
+									  'name' => $raw_title)
+									);
+				 } else {
+					// creates a new term in the program_taxo taxonomy
+					wp_set_object_terms($post_id, $raw_title, 'project_taxo', false);
+				 }
+			  }
+			}
+	
+			add_action('save_post', 'post_project_update');
+			
+			//----- PROJECT STATUS CLASS -----//
+			class projectStatus {
+				var $project_phases;
+				var $project_completion;
+				var $project_finances;
+				var $project_updates;
+								
+				
+				function __construct($post_id) {
+				
+						//----- POPULATE PHASE COLORS VARIABLE -----//
+						$phase_colors = array ('C1D9EC', '92BDDD', '609FCE', '3A83BB', '2B628C');
+
+						//----- DECLARE PROJECT PHASES -----//
+						$i = 1;
+						$phase_title = 'phase' . $i . '_title';
+						$phase_total = 'phase' . $i . '_total_comp';
+						$phase_actual = 'phase' . $i . '_actual_comp';
+						$phase_tbc = rwmb_meta($phase_total, '', $post_id) - rwmb_meta($phase_actual, '', $post_id);
+						$phase_color = 'phase' . $i . '_color';
+						while (rwmb_meta($phase_title, '', $post_id) !== '') {
+						
+								$this->project_phases[rwmb_meta($phase_title, '', $post_id)] = array(
+									'phase_total'	=>	rwmb_meta($phase_total, '', $post_id),
+									'phase_actual'	=>	rwmb_meta($phase_actual, '', $post_id),
+									'phase_tbc'		=>	$phase_tbc,
+									'phase_color'	=>	$phase_colors[$i-1],
+								);
+								
+								$global_completeness = $global_completeness + rwmb_meta($phase_actual, '', $post_id);
+								
+							$i = $i + 1;
+							$phase_title = 'phase' . $i . '_title';
+							$phase_total = 'phase' . $i . '_total_comp';
+							$phase_actual = 'phase' . $i . '_actual_comp';
+							$phase_tbc = rwmb_meta($phase_total, '', $post_id) - rwmb_meta($phase_actual, '', $post_id);
+							$phase_color = 'phase' . $i . '_color';
+						}
+						
+						$this->project_completion = $global_completeness;
+						
+						
+						//----- DECLARE PROJECT FINANCES -----//
+						$this->project_finances = array(
+							'project_budget' 	=> rwmb_meta('project_total_funds_needed', '', $post_id),
+							'funds_acquired'	=> rwmb_meta('project_total_funds_acquired', '', $post_id),
+							'percent_raised'	=> 100*(rwmb_meta('project_total_funds_acquired', '', $post_id)/rwmb_meta('project_total_funds_needed', '', $post_id)),
+							'funds_needed'		=> rwmb_meta('project_total_funds_needed', '', $post_id)-rwmb_meta('project_total_funds_acquired', '', $post_id),
+						);
+						
+						//----- DELCARE PROJECT UPDATES -----//
+						$this->project_updates = array (
+						
+						);
+						
+						
+				}
+			}
+			
+			//----- GET PROJECT STATUS FUNCTION -----//
+			function get_project_status($post_id) {
+				$project_status = new projectStatus($post_id);
+				
+				return $project_status;
+			}
+			
+			
+			//----- GET ACTIVE PROJECT INDEX -----//
+			function get_active_project_index() { ?>
+				<div class="project-index">
+					<?php $args = array (
+							'post_type' => 'projects',
+					); ?>
+					
+					<?php $projects = new WP_Query( $args ); ?>
+					<?php while ( $projects->have_posts() ) { ?>
+					<?php $projects->the_post(); ?>
+					
+					<?php //----- RETRIEVE PROJECT STATUS -----// ?>
+					<?php $project_status = get_project_status($post->ID); ?>
+
+					<?php //----- DISPLAY CONTENT -----// ?>
+					<div class="row-fluid project-container">
+						<div class="span12">
+							<div class="row-fluid">
+								<div class="span3 project-thumbnail">
+									<?php the_post_thumbnail( '16:9-media' ); ?>
+								</div>
+								
+								<div class="hidden-desktop project-mobile-thumbnail">
+										<?php the_post_thumbnail('full-banner'); ?>
+								</div>
+								
+								<div class="span9 project-content-container">
+									<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+																				
+									<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>
+									
+									<?php the_excerpt(); ?>
+									
+									
+								</div>
+							</div>
+							
+							<div class="row-fluid">
+								<div class="span12 project-status-meter">
+									<div class="project-finances-title">
+										<h6><?php echo $project_status->project_completion; ?>% Complete</h6>
+									</div>
+									<div class="project-status-outer-meter">
+										
+										<?php foreach ($project_status->project_phases as $phase) {
+											echo '<div class="project-status-inner-actual" style="width: ' . $phase['phase_actual'] . '%; background: #' . $phase['phase_color'] . '"></div>';
+											echo '<div class="project-status-inner-tbc" style="width: ' . $phase['phase_tbc'] . '%;"></div>';
+										} ?>
+										
+									
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+					<?php } ?>
+			</div>
+		
+		<?php }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//----- FUNCTION TO RETRIEVE AND DISPLAY POST OR PAGE SLUG -----//
 		function the_slug() {
 		    $post_data = get_post($post->ID, ARRAY_A);
 		    $slug = $post_data['post_name'];
 		    return $slug; 
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		

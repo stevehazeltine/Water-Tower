@@ -279,17 +279,26 @@
 		      $(".map-reveal-button-container").toggleClass("mobile-map-active");
 		      $("body").toggleClass("lock-body");
 			  
-			if($('#map_canvas').hasClass('show-map')) {
-			  $(".hide-map-text").css("display", "block");
-			  $(".show-map-text").css("display", "none");
-			} else {
-			  $(".hide-map-text").css("display", "none");
-			  $(".show-map-text").css("display", "block");
-			}
+			  
+			  	if ($("body").hasClass('touch')) {
+			  		if($('#map_canvas').hasClass('show-map')) {
+				  		document.ontouchmove = function(e){ e.preventDefault(); }
+				  	} else {
+					  	document.ontouchmove = function(e){ return true; }
+				  	}
+			  	}
+			  
+			  
+				if($('#map_canvas').hasClass('show-map')) {
+				  $(".hide-map-text").css("display", "block");
+				  $(".show-map-text").css("display", "none");
+				} else {
+				  $(".hide-map-text").css("display", "none");
+				  $(".show-map-text").css("display", "block");
+				}
 			  
 		    });
 		});
-
 
 		
 		//ACTIVATE SEARCH FORM ON HEADER

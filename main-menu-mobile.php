@@ -168,7 +168,8 @@
 	</div>
 	
 	<div class="mobile-menu-ribbon">
-		<?php //----- PROGRAM ARCHIVE MENU HIGHLIGHT COLORS -----//
+		
+		<?php //----- MENU HIGHLIGHT COLORS -----//
 			$classifications = get_terms('program_classification');
 			$width = 100*(1/count($classifications));
 			foreach ($classifications as $classification) {

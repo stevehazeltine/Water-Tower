@@ -9,7 +9,7 @@
 .main-menu-desktop {
 	margin: 0px;
 	position: relative;
-	z-index: 9;
+	z-index: 99999999999999999;
 }
 
 .main-menu-desktop > li {

@@ -79,7 +79,7 @@ $meta_boxes[] = array(
 
 $meta_boxes[] = array(
 	'title'  => 'Slider Options',
-	'pages' => array( 'target_nations', 'program'),
+	'pages' => array( 'target_nations', 'program', 'page'),
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
@@ -1314,6 +1314,25 @@ $meta_boxes[] = array(
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
+	
+		array(
+			'before' => '<h4 style="font-size: 16px; color: #666; text-shadow: 1px 1px 1px #FFF;">Project Financial Information</h4>',
+			'name'  => 'Phase Title',
+			'id'    => "{$prefix}project_total_funds_needed",
+			'desc'  => 'Enter the estimated total cost of the project',
+			'type'  => 'number',
+		),
+		
+		array (
+			'name'  => 'Phase Title',
+			'id'    => "{$prefix}project_total_funds_acquired",
+			'desc'  => 'Enter the acquired funds',
+			'type'  => 'number',
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+		),
 	
 		array(
 			'before' => '<h4 style="font-size: 16px; color: #666; text-shadow: 1px 1px 1px #FFF;">Project Phase 1</h4>',
