@@ -17,7 +17,7 @@ Template Name: Outreach Locations
 		
 		
 		<div class="row">
-			<div class="span8">
+			<div class="col-lg-8">
 				<h1><?php the_title(); ?></h1>
 			</div>
 			
@@ -26,7 +26,7 @@ Template Name: Outreach Locations
 			
 			
 			<!------------------------------------- SIDEBAR --------------------------------------->
-			<div class="span4 sidebar">
+			<div class="col-lg-4 sidebar">
 			
 			<ul>	
 			
@@ -46,12 +46,12 @@ Template Name: Outreach Locations
 									   
 											<li>
 											
-												<div class="row-fluid sidebar-related-post">
-													<div class="sidebar-thumbnail-container visible-desktop span4">
+												<div class="row sidebar-related-post">
+													<div class="sidebar-thumbnail-container visible-desktop col-lg-4">
 														<?php the_post_thumbnail( 'thumbnail-card' ); ?>
 													</div>
 													
-													<div class="sidebar-related-post-content span8">
+													<div class="sidebar-related-post-content col-lg-8">
 														<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
 														<p><?php the_time( 'F j, Y' ); ?></p>
 													</div>
@@ -68,7 +68,7 @@ Template Name: Outreach Locations
 									
 										<!--RELATED POST MORE BUTTONS-->
 										<li>
-											<div class="row-fluid sidebar-related-posts-more">
+											<div class="row sidebar-related-posts-more">
 												<div class="sidebar-related-posts-view-all">
 													<a href="#_">View All (<?php echo $num; ?>) </a>
 												</div>

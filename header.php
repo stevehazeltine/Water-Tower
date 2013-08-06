@@ -61,7 +61,7 @@
         	<div class="container">
         	
         		<div class="header-bar  row visible-desktop" style="margin-bottom: 40px;">
-        			<div class="span12">
+        			<div class="col-lg-12">
 	        			<div class="header-logo-container">
 	        				<a href="<?php echo get_bloginfo ('url'); ?>"><img style="opacity: 100;" src="<?php echo get_bloginfo ('template_directory'); ?>/images/Logo_cleaner.png" /></a>
 	        			</div>

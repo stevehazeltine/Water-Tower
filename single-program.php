@@ -24,7 +24,7 @@
 		 
 				
 					
-					<div class="span8 school-main-content-container">
+					<div class="col-lg-8 school-main-content-container">
 							<div class="school-title-container">
 								<h2 class="school-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
 									<span class="school-long-title"><?php the_title(); ?></span>
@@ -34,7 +34,7 @@
 				 		
 				 		 <!--MAIN CONTENT FOR PROGRAM PAGE-->
 				 		 		<div class="row">
-								 <div class="span8 post school-main-content">
+								 <div class="col-lg-8 post school-main-content">
 														
 										 <!--OVERVIEW OF THE SCHOOL-->
 										 <div class="entry">
@@ -61,11 +61,11 @@
 												<p><?php echo rwmb_meta('lecture_phase_desc'); ?></p>
 												<?php // LECTURE PHASE OVERVIEW ?>
 												
-												<div class="lecture-phase-overview-container row-fluid">
+												<div class="lecture-phase-overview-container row">
 												
 												
 												
-													<div class="span4">
+													<div class="col-lg-4">
 														<div class="chart-container">
 															<canvas id="lecture-overview" class="chart" width="800" height="800"></canvas>
 														
@@ -124,7 +124,7 @@
 													</div>
 												
 												
-													<div class="span8">
+													<div class="col-lg-8">
 														<ul class="lecture-phase-overview-key">
 														<?php $i = 1 ?>
 														
@@ -154,24 +154,24 @@
 												
 												<?php // LECTURE PHASE DETAILS ?>
 												<div class="lecture-phase-detail-container row">
-													<div class="span4">
+													<div class="col-lg-4">
 													</div>
 													
-													<div class="span8 lectture-phase-details">
+													<div class="col-lg-8 lectture-phase-details">
 														<?php $n = 1; ?>
 														<?php $activity_title = 'activity_title' . $n; ?>
 														<?php $activity_hours = 'hours_per_week' . $n; ?>
 														<?php $activity_desc = 'activity_description' . $n; ?>
 													
 														<?php while (rwmb_meta($activity_title) !== '') { ?>
-														<div class="lecture-phase-activity-details-container row-fluid">
-															<div class="span10">
+														<div class="lecture-phase-activity-details-container row">
+															<div class="col-lg-10">
 																<h6><?php echo rwmb_meta($activity_title); ?></h6>
 																<?php echo rwmb_meta($activity_desc); ?>
 															</div>
 														
 														
-															<div class="span2">
+															<div class="col-lg-2">
 															<div class="lecture-phase-activity-detail-chart">
 																<div class="chart-container">
 																	<div class="lecture-phase-activity-detail-chart-hours"><?php echo rwmb_meta($activity_hours); ?></div>
@@ -272,8 +272,8 @@
 														 
 														 <?php while (rwmb_meta($title) != '') :?>
 														   
-														   		<div class="row-fluid lecture-phase-info">
-																	<div class="span12 lecture-phase-info-title">
+														   		<div class="row lecture-phase-info">
+																	<div class="col-lg-12 lecture-phase-info-title">
 																		<h6><?php echo rwmb_meta($title); ?> <i class="icon-long-arrow-right" style="margin: 0px 10px;"></i><?php echo rwmb_meta($hours); ?> Hours/Week</h6>
 																		
 																		<p>
@@ -451,20 +451,20 @@
 															<div class="school-leader-container">
 															
 															
-																<div class="row-fluid">
-																	<div class="span3">
+																<div class="row">
+																	<div class="col-lg-3">
 																		
 																			<?php foreach ($spouses as $spouse) { ?>
-																			<div class="row-fluid married-avatar-container">
+																			<div class="row married-avatar-container">
 																				<?php $spouse_object = get_coauthors($spouse); ?>
-																				<div class="span12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
+																				<div class="col-lg-12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
 																			</div>
 																			<?php } ?>
 																		
 																	</div>
 																															
 																
-																	<div class="span9">
+																	<div class="col-lg-9">
 																		<?php //-----DISPLAY NAMES-----//?>
 																		<h5>
 																		<?php $n = 1; ?>
@@ -496,8 +496,8 @@
 														<div class="school-leader-container">
 														
 														
-															<div class="row-fluid">
-																<div class="span3 avatar-container">
+															<div class="row">
+																<div class="col-lg-3 avatar-container">
 
 																	<?php $single_object = get_coauthors($single); ?>
 																	<?php echo get_the_post_thumbnail($single_object[0]->ID, 'thumbnail'); ?>
@@ -505,7 +505,7 @@
 																</div>
 																														
 															
-																<div class="span9">
+																<div class="col-lg-9">
 																	<?php //-----DISPLAY NAMES-----//?>
 																	<h5><?php echo $single_object[0]->display_name; ?></h5>
 																	<p><?php echo $single_object[0]->description; ?></p>
@@ -601,7 +601,7 @@
 										 </div><!-- .entry -->
 								 </div> <!-- .post -->
 							</div>
-					</div><!--span9 content container-->
+					</div><!--col-lg-9 content container-->
 							 
 					
 					
@@ -609,11 +609,11 @@
 					
 					
 					<!--PROGRAM SIDEBAR-->							 
-					 <div class="span4 sidebar">
+					 <div class="col-lg-4 sidebar">
 					 
 					 
-						<div  class="row-fluid">
-						 	<div class="span12">
+						<div  class="row">
+						 	<div class="col-lg-12">
 						 		<div class="apply-button-window">
 						 			
 						 			

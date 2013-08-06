@@ -90,13 +90,13 @@ Template Name: Front Page
             <?php $upcomingschools = $upcomingschools->schools; ?>
   			
   			<div class="row">
-            	<div class="span12 home-page-blogroll">
+            	<div class="col-lg-12 home-page-blogroll">
 	            	<h4>Upcoming Schools</h4>
 				
 					<div class="row">
 					
 								<?php foreach($upcomingschools as $school) { ?>					
-									<div class="blogroll-upcoming-school span3">
+									<div class="blogroll-upcoming-school col-lg-3">
 										
 										<div class="blogroll-upcoming-school-image">
 											<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
@@ -132,7 +132,7 @@ Template Name: Front Page
             
              <!---------------- FEATURED VIDEOS ----------------->
             <div class="row">
-            	<div class="span12 home-page-blogroll">
+            	<div class="col-lg-12 home-page-blogroll">
 	            	<h4>Featured Videos</h4>
             	
             	
@@ -152,7 +152,7 @@ Template Name: Front Page
 						   <?php while ( $my_query->have_posts() ) { ?>
 							   <?php $my_query->the_post(); ?>
 	
-							    <div class="span4">
+							    <div class="col-lg-4">
 									<div id="video<?php echo $i; ?>" class="royalSlider videoGallery rsDefault">
 									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
 									</div>
@@ -178,7 +178,7 @@ Template Name: Front Page
 
             <!---------------- RECENT POSTS ----------------->
             <div class="row">
-            	<div class="span12 home-page-blogroll">
+            	<div class="col-lg-12 home-page-blogroll">
 	            	<h4>Recent Posts</h4>
             	
             	
@@ -201,7 +201,7 @@ Template Name: Front Page
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<div class="span3">
+										<div class="col-lg-3">
 											
 											<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {

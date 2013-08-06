@@ -5,14 +5,14 @@
 	<div class="row">
 	
 	
-		<div class="span6">
+		<div class="col-lg-6">
 			<h1>Contact Us</h1>
 			<p><?php the_content(); ?><p>
-		</div><!--/.span5-->
+		</div><!--/.col-lg-5-->
 		
-		<div class="span6">
+		<div class="col-lg-6">
 			<?php echo do_shortcode('[gravityform id="1" name="Contact Form" title="false" description="false" ajax="true"]'); ?>
-		</div><!--/.span7-->
+		</div><!--/.col-lg-7-->
 	
 	</div><!--/.row-->
 <?php endwhile; else: endif; ?>

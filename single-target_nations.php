@@ -13,7 +13,7 @@
 		
 		
 		<!-------- TARGET NATION CONTENT ------->
-		<div class="span8 content-container">
+		<div class="col-lg-8 content-container">
 	
 			<div class="target-nations-title">
 				<h1><?php the_title(); ?></h1>
@@ -26,7 +26,7 @@
 		
 		<!------- TARGET NATION SIDEBAR ------->
 		
-		<div class="span4 sidebar">
+		<div class="col-lg-4 sidebar">
 			
 			
 			
@@ -38,36 +38,36 @@
 			
 			
 			<!------GLOBAL PARTNERS -------->
-			<div class="row-fluid target-nations-global-partners">
-				<div class="span12">
+			<div class="row target-nations-global-partners">
+				<div class="col-lg-12">
 				<h2>Global Partners</h2>
 					
-					<div class="row-fluid tn-global-partner-group-container">
-						<div class=" span3 target-nations-global-partner">
+					<div class="row tn-global-partner-group-container">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
 					</div>
 					
-					<div class="row-fluid tn-global-partner-group-container">
-						<div class=" span3 target-nations-global-partner">
+					<div class="row tn-global-partner-group-container">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
-						<div class=" span3 target-nations-global-partner">
+						<div class=" col-lg-3 target-nations-global-partner">
 							<img src="http://placehold.it/150x150" />
 						</div>
 					</div>

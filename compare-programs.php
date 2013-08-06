@@ -12,7 +12,7 @@ Template Name: Compare Programs
 		<?php $programs = explode('-', $_GET["ids"]); ?>
 		<?php $compare_count = count($programs); ?>
 		
-				<div class="span12">
+				<div class="col-lg-12">
 				<table class="compare-programs-table">
 					<tr id="compare-programs-titles">
 						<td class="compare-tier-one-bracket-placeholder"><?php //PLACEHOLDER LABEL FOR BLANK CELL AT 0x0 ?></td>

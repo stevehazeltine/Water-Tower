@@ -8,7 +8,7 @@
 	<?php //----- POST POST TYPE -----// ?>
 	<?php if ($post_type == 'post') { ?>
 		<div class="row">
-			<div class="span9 school-main-content-container">
+			<div class="col-lg-9 school-main-content-container">
 				
 				<div class="taxonomy-archive-title-container">
 					<h2 style="background: #<?php echo get_program_color($program_id); ?>;"><?php echo get_the_title($program_id); ?>: Blog</h2>

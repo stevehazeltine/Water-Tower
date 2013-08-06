@@ -3,18 +3,18 @@
 		<?php get_banner($banner_args); ?>
 		
 		<div class="row single-post-container">
-			<div class="span9">
+			<div class="col-lg-9">
 				<?php insert_loop(); ?>		
 			</div>
 			
-			<div class="span3 sidebar">
+			<div class="col-lg-3 sidebar">
 				<?php get_sidebar(); ?>
 			</div><!--sidebar-container-->
 		</div>
 		
 			
 		<div class="row">
-			<div class="span7 offset2 pagination">
+			<div class="col-lg-7 offset2 pagination">
 				<div class="alignleft">
 				     <?php next_posts_link('&laquo; Previous Entries') ?>
 				</div>

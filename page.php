@@ -10,7 +10,7 @@
 		    
 		    
 		    <div class="row">
-			    <div class="span12">
+			    <div class="col-lg-12">
 			    	<h2><?php the_title(); ?></h2>
 					<?php the_content(); ?>
 			    </div>
