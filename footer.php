@@ -1,8 +1,8 @@
 
 	
 				<!-------------BREADCRUMB ROW ---------->
-						<div class="row visible-desktop">
-						<div class="span12 breadcrumb-bar-container">
+						<div class="row visible-lg">
+						<div class="col-lg-12 breadcrumb-bar-container">
 							<div class="breadcrumb-bar">
 								<?php if ( function_exists('yoast_breadcrumb') ) {
 									yoast_breadcrumb('<p id="breadcrumbs"><span class="breadcrumb-title">You Are Here <i class="icon-arrow-right"></i></span><span style=
@@ -14,7 +14,7 @@
 				
 		
 			<div class="row global-footer">
-				<div class="span12 footer-container">
+				<div class="col-lg-12 footer-container">
 				
 			
 
@@ -28,10 +28,10 @@
 			
 				
 				<!--------UPCOMING SCHOOLS---------->
-				<div class="row-fluid footer-info">
+				<div class="row footer-info">
 		
 					
-					<div class="span4 footer-upcoming-schools-container hidden-phone">
+					<div class="col-lg-4 footer-upcoming-schools-container hidden-sm">
 						<h5>Upcoming Schools</h5>
 						
 						<?php //GET THE UPCOMING SCHOOLS BY COMPARING ALL SCHOOL DATES ?>
@@ -65,11 +65,11 @@
 								
 								<?php while ( $query->have_posts() ) : ?>
 								<?php $query->the_post(); ?>
-										<div class="upcoming-school row-fluid">			
+										<div class="upcoming-school row">			
 										
 											
 											
-											<div class="span3 footer-upcoming-school-thumbnail" style="border-right: 3px solid #<?php echo get_program_color($post->ID); ?> ">
+											<div class="col-lg-3 footer-upcoming-school-thumbnail" style="border-right: 3px solid #<?php echo get_program_color($post->ID); ?> ">
 												<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {
 													the_post_thumbnail( 'xs-thumbnail-card' );
@@ -93,19 +93,19 @@
 				
 				<!------ RECENT POSTS ---->
 				
-				<div class="span4 visible-desktop">
+				<div class="col-lg-4 visible-lg">
 					<h5>Recent Posts</h5>
 						<?php $query = new WP_Query( array('posts_per_page'=>'4', 'post_type'=>'post')); ?>
 						
 						<ul class="footer-recent-posts">
 							<?php while ( $query->have_posts() ) : $query->the_post();?>
 							
-								<div class="row-fluid footer-related-post-container">
-									<div class="span3 footer-related-post-thumbnail">
+								<div class="row footer-related-post-container">
+									<div class="col-lg-3 footer-related-post-thumbnail">
 										<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
 									</div><!-- /.footer-related-post-thumbnail -->
 									
-									<div class="span9 footer-related-post-title">
+									<div class="col-lg-9 footer-related-post-title">
 										<a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a>
 									</div><!-- /.footer-related-post-title -->
 								</div><!-- /.footer-related-post-container -->
@@ -119,7 +119,7 @@
 				
 				
 				<!---- USER OPTIONS ----->
-				<div class="span4 footer-user-options">
+				<div class="col-lg-4 footer-user-options">
 				
 				<div class="footer-social-media">
 					<img src="<?php echo get_bloginfo ('template_directory'); ?>/img/social-media/facebook-128.png" />
@@ -164,7 +164,7 @@
         
 				<!------- LINK FOOTER ------>
 					<div class="row">
-						<div class="span12 link-footer-container"> 
+						<div class="col-lg-12 link-footer-container"> 
 							<div class="link-footer">
 								 
 								<a href="#_">© YWAM Montana-Lakeside 2013</a>

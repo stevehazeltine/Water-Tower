@@ -4,10 +4,10 @@
 		
 
 		
-		<div class="span8 program-archive-container">
+		<div class="col-lg-8 program-archive-container">
 			<h1>Schools</h1>
-			<div class="row-fluid">
-				<div class="span12">
+			<div class="row">
+				<div class="col-lg-12">
 					<?php //----- USE PROGRAM ARCHIVE PAGE IN BACKEND TO PULL INFO FROM -----// ?>
 					<?php $program_archive_content = get_post('1282'); ?>
 					<?php echo $program_archive_content->post_content; ?>
@@ -206,8 +206,8 @@
 		
 		
 		
-		<div id="scrollspy-nav" class="span4 program-archive-nav visible-desktop">
-			<ul data-spy="affix" data-offset-top="210" class="span4 nav">
+		<div id="scrollspy-nav" class="col-lg-4 program-archive-nav visible-lg">
+			<ul data-spy="affix" data-offset-top="210" class="col-lg-4 nav">
 			
 				<?php //----- PROGRAM ARCHIVE MENU -----//
 					$classifications = get_terms('program_classification');

@@ -37,15 +37,15 @@ if ( post_password_required() )
 	
 	} ?>
 	
-	<div class="row-fluid respond-container">
-		<div class="span2 comments-avatar-container">
+	<div class="row respond-container">
+		<div class="col-lg-2 comments-avatar-container">
 			<?php
 			$current_user = wp_get_current_user();
 			if ( ($current_user instanceof WP_User) ) {
 				echo get_avatar( $current_user->ID, 150 );
 			} ?>
 		</div>
-		<div class="span10">
+		<div class="col-lg-10">
 			<?php
 			$args = array(
 				'must_log_in' => '<p class="must-log-in">' .  sprintf( __( 'You must be <a href="%s">logged in</a> to post a comment.' ), wp_login_url( apply_filters( 'the_permalink', get_permalink( ) ) ) ) . ' You can use the links below to login using account you already have with trusted services and sites.</p>',

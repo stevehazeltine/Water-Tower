@@ -1,11 +1,11 @@
-<div class="row main-menu-desktop-container visible-desktop">
+<div class="row main-menu-desktop-container visible-lg">
 	<ul class="main-menu-desktop">
 		
 		<?php //----- ABOUT MENU -----// ?>
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>
 		 	<!--ABOUT DROPDOWN-->
 		 	<ul id="about-dropdown" class="dropdown-container">
-		 		<div class="span2 primary-menu">
+		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 				<!----------ABOUT MENU PRIMARY SECTION------------>
 
@@ -34,7 +34,7 @@
 		 			</div>
 		 		</div>
 		 		
-		 		<div class="span8 menu-related-posts">
+		 		<div class="col-lg-8 menu-related-posts">
 			 			
 			 			<!--LATEST POSTS--->
 						   <?php $about_blogroll = array(
@@ -105,7 +105,7 @@
 		 		
 		 		
 		 		
-		 		<div class="span2 center-highlight">
+		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 						
 						
@@ -186,7 +186,7 @@
 			
 			<!--TRAINING DROPDOWN-->
 			<ul class="dropdown-container">
-		 		<div class="span2 primary-menu">
+		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------TRAINING MENU PRIMARY SECTION------------>
 							
@@ -217,7 +217,7 @@
 		 		
 		 		
 		 		<!-------- RESOURCES RELATED POSTS --------->
-		 		<div class="span3 menu-related-posts training-related-posts">
+		 		<div class="col-lg-3 menu-related-posts training-related-posts">
 			 			
 			 			<!--LATEST POSTS--->
 						   <?php $args = array(
@@ -253,7 +253,7 @@
 		 		</div>
 
 		 		
-		 		<div class="span7 center-highlight center-highlight-programs-menu">
+		 		<div class="col-lg-7 center-highlight center-highlight-programs-menu">
 		 			<div>
 		 				<div class="sub-main-menu sub-main-menu-two-up">
 						
@@ -459,7 +459,7 @@
 		 
 		 <!--OUTREACH DROPDOWN-->
 		 	<ul id="outreach-dropdown" class="dropdown-container">
-		 		<div class="span2 primary-menu">
+		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------OUTREACH MENU PRIMARY SECTION------------>
 							
@@ -486,7 +486,7 @@
 		 			</div>
 		 		</div>
 			 			
-				<div class="span8 menu-related-posts">
+				<div class="col-lg-8 menu-related-posts">
 					
 					<!--LATEST POSTS--->
 					   <?php $outreach_blogroll = array(
@@ -545,7 +545,7 @@
 					</ul>
 				</div>		
 		 		
-		 		<div class="span2 center-highlight">
+		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 			
 		 						<!----------TARGET NATIONS------------>
@@ -604,7 +604,7 @@
 		 
 		 <!--RESOURCES DROPDOWN-->
 		 	<ul class="dropdown-container">
-		 		<div class="span2 primary-menu">
+		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------RESOURCES MENU PRIMARY SECTION------------>
 							
@@ -634,7 +634,7 @@
 		 		
 		 		
 		 		<!-------- RESOURCES RELATED POSTS --------->
-		 		<div class="span8 menu-related-posts">
+		 		<div class="col-lg-8 menu-related-posts">
 			 			
 			 			<!--LATEST POSTS--->
 						   <?php $args = array(
@@ -669,7 +669,7 @@
 			 			
 		 		</div>
 		 		
-		 		<div class="span2 center-highlight">
+		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 				<label>Post Categories</label>
 		 				<ul>
@@ -693,7 +693,7 @@
 		 
 		 <!--GET INVOLVED DROPDOWN-->
 		 	<ul class="dropdown-container">
-		 		<div class="span2 primary-menu">
+		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			
 			 				<!----------GET INVOLVED MENU PRIMARY SECTION------------>
@@ -718,7 +718,7 @@
 		 			</div>
 		 		</div>
 		 		
-		 		<div class="span8 menu-related-posts">
+		 		<div class="col-lg-8 menu-related-posts">
 			 			
 			 			<!--LATEST POSTS--->
 						   <?php $args = array(
@@ -752,7 +752,7 @@
 			 			
 		 		</div>
 		 		
-		 		<div class="span2 center-highlight">
+		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 					<!---------- COMMUNITY EVENTS ------------>
 							<?php $args = array(

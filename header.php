@@ -10,10 +10,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <link type="text/css" rel="stylesheet" href="http://fast.fonts.com/cssapi/f090b0ab-a29c-44bc-8584-7393a3fd9858.css"/>
-        <link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/css/font-awesome.min.css">
         <!--[if IE 7]><link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/css/font-awesome-ie7.min.css"><![endif]-->
-        <link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/royalslider/royalslider.css">
         <link rel="stylesheet" href="<?php echo get_bloginfo ('template_directory'); ?>/royalslider/skins/default/rs-default.css">
 		<link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>" type="text/css" media="screen" />
@@ -60,8 +59,8 @@
         <div class="row page-wrap">
         	<div class="container">
         	
-        		<div class="header-bar  row visible-desktop" style="margin-bottom: 40px;">
-        			<div class="span12">
+        		<div class="header-bar  row visible-lg" style="margin-bottom: 40px;">
+        			<div class="col-lg-12">
 	        			<div class="header-logo-container">
 	        				<a href="<?php echo get_bloginfo ('url'); ?>"><img style="opacity: 100;" src="<?php echo get_bloginfo ('template_directory'); ?>/images/Logo_cleaner.png" /></a>
 	        			</div>

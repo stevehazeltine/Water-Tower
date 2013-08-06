@@ -16,7 +16,7 @@
 		    wp_enqueue_script('jquery');
 		    
 		    //TAKE CARE OF BOOTSTRAP
-		    wp_register_script('bootstrap', get_template_directory_uri().'/js/vendor/bootstrap.js', array('jquery',), '2.3.2', true);
+		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery',), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
 		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery', 'bootstrap'), '1.0', true);
@@ -873,18 +873,18 @@
 					<?php $project_status = get_project_status($post->ID); ?>
 
 					<?php //----- DISPLAY CONTENT -----// ?>
-					<div class="row-fluid project-container">
-						<div class="span12">
-							<div class="row-fluid">
-								<div class="span3 project-thumbnail">
+					<div class="row project-container">
+						<div class="col-lg-12">
+							<div class="row">
+								<div class="col-lg-3 project-thumbnail">
 									<?php the_post_thumbnail( '16:9-media' ); ?>
 								</div>
 								
-								<div class="hidden-desktop project-mobile-thumbnail">
+								<div class="hidden-lg project-mobile-thumbnail">
 										<?php the_post_thumbnail('full-banner'); ?>
 								</div>
 								
-								<div class="span9 project-content-container">
+								<div class="col-lg-9 project-content-container">
 									<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 																				
 									<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>
@@ -895,8 +895,8 @@
 								</div>
 							</div>
 							
-							<div class="row-fluid">
-								<div class="span12 project-status-meter">
+							<div class="row">
+								<div class="col-lg-12 project-status-meter">
 									<div class="project-finances-title">
 										<h6><?php echo $project_status->project_completion; ?>% Complete</h6>
 									</div>
@@ -1353,13 +1353,13 @@
 	
 		
 		
-		<div id="map_canvas" class="hidden-phone <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
+		<div id="map_canvas" class="hidden-sm <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
 			
 			
 			
-			<div class="map-reveal-button-container hidden-phone">
+			<div class="map-reveal-button-container hidden-sm">
 				<div class="map-reveal-button">
 						<a href="#_"><span class="show-map-text"><i class="icon-globe"></i> Show Map</span></a>
 						<a href="#_"><span class="hide-map-text"><i class="icon-remove-circle"></i> Hide Map</span></a>
@@ -1407,8 +1407,8 @@
 			function insert_loop($post_length='full') { ?>
 			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-				<div class="row-fluid post-container">
-						<div class="span3 visible-desktop post-meta-container">
+				<div class="row post-container">
+						<div class="col-lg-3 visible-lg post-meta-container">
 							
 							<?php
 							if ($post_length == 'excerpt') {
@@ -1499,7 +1499,7 @@
 						</div>
 					 
 					 
-					 <div class="span9 post loop-content">
+					 <div class="col-lg-9 post loop-content">
 						
 						
 						<h2><a <?php if ($post_length == 'excerpt') { echo 'style="font-size: 24px;"';} ?> href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
@@ -1581,13 +1581,13 @@
 												   if ( $my_query->have_posts() ) { ?>
 													   
 													   <h4>Videos</h4>
-													   <div class="row-fluid school-video-section">
+													   <div class="row school-video-section">
 													   
 													   <?php while ( $my_query->have_posts() ) { ?>
 														   <?php $my_query->the_post(); ?>									   
 														   
 																<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-																<div class="<?php if($num == 0) { echo 'span10'; } else { echo 'span9'; } ?> featured-video">
+																<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																		<div id="video1" class="royalSlider videoGallery rsDefault">
 																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
 																		</div>
@@ -1623,7 +1623,7 @@
 											   <?php if ( $my_query->have_posts() ) { ?>
 
 												<h4>Videos</h4>
-												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-desktop">
+												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-lg">
 															<!--DISPLAY FEATURED VIDEO-->
 														   <?php $args = array (
 														   	'post_type' => 'videos',
@@ -1664,7 +1664,7 @@
 											   
 											   
 											   <!-- VIDEO MODULE FOR MOBILE DEVICES -->
-											   <div class="row-fluid school-video-section hidden-desktop">
+											   <div class="row school-video-section hidden-lg">
 											
 											
 											   <?php $args = array (
@@ -1679,7 +1679,7 @@
 												   <?php $my_query->the_post(); ?>									   
 												   
 														<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-														<div class="<?php if($num == 0) { echo 'span10'; } else { echo 'span9'; } ?> featured-video">
+														<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																<div id="video1" class="royalSlider videoGallery rsDefault">
 																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
 																</div>
@@ -1717,9 +1717,9 @@
 	while ( $program_query->have_posts() ) {
 		$program_query->the_post(); ?>
 			
-			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
+			<div class=" row program-archive-school-container" id="<?php echo $program_id; ?>">
 						
-						<div class="span4 program-archive-featured-media hidden-phone">
+						<div class="col-lg-4 program-archive-featured-media hidden-sm">
 							
 							<div class="program-archive-featured-image">
 								<?php echo the_post_thumbnail('thumbnail-card');  ?>
@@ -1727,10 +1727,10 @@
 							
 						</div>
 						
-						<div class="span8 program-archive-content">
+						<div class="col-lg-8 program-archive-content">
 						
 							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-desktop">
+								<div class="program-archive-school-compare-link visible-lg">
 									<span>Compare 
 										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
 										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
@@ -1806,12 +1806,12 @@
 								   <?php $my_query->the_post(); ?>
 								   
 										<li>
-											<div class="row-fluid sidebar-related-post">
-												<div class="sidebar-thumbnail-container visible-desktop span4">
+											<div class="row sidebar-related-post">
+												<div class="sidebar-thumbnail-container visible-lg col-lg-4">
 													<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
 												</div>
 												
-												<div class="sidebar-related-post-content span8">
+												<div class="sidebar-related-post-content col-lg-8">
 													<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
 													<p><?php the_time( 'F j, Y' ); ?></p>
 												</div>
@@ -1829,7 +1829,7 @@
 								
 									<!--RELATED POST MORE BUTTONS-->
 									<li>
-										<div class="row-fluid sidebar-related-posts-more">
+										<div class="row sidebar-related-posts-more">
 											<div class="sidebar-related-posts-view-all">
 												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
 											</div>
@@ -1931,20 +1931,20 @@ class ywammontana_walker_comment extends Walker_Comment {
 		$parent_class = ( empty( $args['has_children'] ) ? '' : 'parent' ); ?>
 		
 		<li <?php comment_class( $parent_class ); ?> id="comment-<?php comment_ID() ?>">
-			<div id="comment-body-<?php comment_ID() ?>" class="comment-body row-fluid">
+			<div id="comment-body-<?php comment_ID() ?>" class="comment-body row">
 			
-				<div class="span2 comment-author vcard author">
+				<div class="col-lg-2 comment-author vcard author">
 					<?php echo ( $args['avatar_size'] != 0 ? get_avatar( $comment, $args['avatar_size'] ) :'' ); ?>
 				</div><!-- /.comment-author -->
 
-				<div id="comment-content-<?php comment_ID(); ?>" class="span10 comment-content">
+				<div id="comment-content-<?php comment_ID(); ?>" class="col-lg-10 comment-content">
 					
 					
 						
 						<!-------- COMMENTS BODY---------->
-						<div class="row-fluid">
+						<div class="row">
 						
-							<div class="span12">
+							<div class="col-lg-12">
 							
 								<?php if( !$comment->comment_approved ) : ?>
 									<em class="comment-awaiting-moderation">Your comment is awaiting moderation.</em>	
@@ -1957,9 +1957,9 @@ class ywammontana_walker_comment extends Walker_Comment {
 						
 						
 						<!---------- COMMENTS META --------->
-						<div class="row-fluid">						
+						<div class="row">						
 							
-							<div class="span12 comment-footer">
+							<div class="col-lg-12 comment-footer">
 								<div class="comment-meta comment-meta-data">
 									<?php comment_date(); ?> at <?php comment_time(); ?> 					
 									
@@ -2302,7 +2302,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="span<?php echo $span; ?> instagram-container">
+		  		<div class="col-lg-<?php echo $span; ?> col-6 instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
@@ -2318,7 +2318,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  
 			  <?php if (!empty($result->data)) { ?>
 			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
-			  <div class="row-fluid instarow">
+			  <div class="row instarow">
 				  <?php foreach ($result->data as $post) { ?>
 					  <?php if ($row_i <= $rows) { ?> 
 							  	<?php if ($col_i <= $cols) { ?>
@@ -2327,7 +2327,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 								<?php } else { ?>
 								  </div>
 								  <?php $row_i = ++$row_i; ?>
-								  <div class="row-fluid instarow">
+								  <div class="row instarow">
 						  
 						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
 									<?php $col_i = 2; ?>
@@ -2385,12 +2385,12 @@ class ywammontana_walker_comment extends Walker_Comment {
 	function no_posts_found ($post_type) { ?>
 		<div class="row no_posts_found">
 			
-			<div class="span3">
+			<div class="col-lg-3">
 				<h1>Ooops,</h1>
 				<p>We searched our whole database and couldn't find any <?php echo $post_type; ?> like that, or by that name.  But we did manage to find these guy's in there. <a href="http://www.youtube.com/watch?v=6qsH_LFRr6k">No wonder it's been slow lately...</a></p>
 			</div>
 			
-			<div class="span7">
+			<div class="col-lg-7">
 				<img src="<?php echo get_bloginfo ('template_directory'); ?>/images/no-posts.jpg" />
 			</div>
 			

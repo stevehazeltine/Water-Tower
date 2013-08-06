@@ -5,13 +5,13 @@
 	<div class="row">
 	
 	
-		<div class="span6">
-			<div class="row-fluid">
-				<div class="span6">
+		<div class="col-lg-6">
+			<div class="row">
+				<div class="col-lg-6">
 					<h1 class="follow-us-title">Follow Us</h1>
 				</div>
 					
-				<div class="span6">
+				<div class="col-lg-6">
 					<h1 class="follow-us-title">
 						<span>
 							<i class="follow-us-title-icons icon-facebook"></i>
@@ -23,9 +23,9 @@
 				
 			</div>
 			<p><?php the_content(); ?><p>
-		</div><!--/.span5-->
+		</div><!--/.col-lg-5-->
 		
-		<div class="span6">
+		<div class="col-lg-6">
 			
 			
 				<?php get_instagram($insta_args); ?>
@@ -33,7 +33,7 @@
 				
 			
 			
-		</div><!--/.span6-->
+		</div><!--/.col-lg-6-->
 	
 	</div><!--/.row-->
 <?php endwhile; else: endif; ?>
