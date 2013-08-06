@@ -47,7 +47,7 @@ Template Name: Outreach Locations
 											<li>
 											
 												<div class="row sidebar-related-post">
-													<div class="sidebar-thumbnail-container visible-desktop col-lg-4">
+													<div class="sidebar-thumbnail-container visible-lg col-lg-4">
 														<?php the_post_thumbnail( 'thumbnail-card' ); ?>
 													</div>
 													

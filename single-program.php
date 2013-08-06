@@ -33,8 +33,8 @@
 					
 				 		
 				 		 <!--MAIN CONTENT FOR PROGRAM PAGE-->
-				 		 		<div class="row">
-								 <div class="col-lg-8 post school-main-content">
+				 		 		
+								 <div class="post school-main-content">
 														
 										 <!--OVERVIEW OF THE SCHOOL-->
 										 <div class="entry">
@@ -153,11 +153,9 @@
 												
 												
 												<?php // LECTURE PHASE DETAILS ?>
-												<div class="lecture-phase-detail-container row">
-													<div class="col-lg-4">
-													</div>
-													
-													<div class="col-lg-8 lectture-phase-details">
+												<div class="lecture-phase-detail-container">
+																								
+													<div class="lectture-phase-details">
 														<?php $n = 1; ?>
 														<?php $activity_title = 'activity_title' . $n; ?>
 														<?php $activity_hours = 'hours_per_week' . $n; ?>
@@ -165,13 +163,13 @@
 													
 														<?php while (rwmb_meta($activity_title) !== '') { ?>
 														<div class="lecture-phase-activity-details-container row">
-															<div class="col-lg-10">
+															<div class="col-9 col-lg-10">
 																<h6><?php echo rwmb_meta($activity_title); ?></h6>
 																<?php echo rwmb_meta($activity_desc); ?>
 															</div>
 														
 														
-															<div class="col-lg-2">
+															<div class="col-3 col-lg-2">
 															<div class="lecture-phase-activity-detail-chart">
 																<div class="chart-container">
 																	<div class="lecture-phase-activity-detail-chart-hours"><?php echo rwmb_meta($activity_hours); ?></div>
@@ -600,8 +598,7 @@
 
 										 </div><!-- .entry -->
 								 </div> <!-- .post -->
-							</div>
-					</div><!--col-lg-9 content container-->
+					</div><!--col-lg-8 content container-->
 							 
 					
 					

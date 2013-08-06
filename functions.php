@@ -16,7 +16,7 @@
 		    wp_enqueue_script('jquery');
 		    
 		    //TAKE CARE OF BOOTSTRAP
-		    wp_register_script('bootstrap', get_template_directory_uri().'/js/vendor/bootstrap.js', array('jquery',), '2.3.2', true);
+		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery',), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
 		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery', 'bootstrap'), '1.0', true);
@@ -880,7 +880,7 @@
 									<?php the_post_thumbnail( '16:9-media' ); ?>
 								</div>
 								
-								<div class="hidden-desktop project-mobile-thumbnail">
+								<div class="hidden-lg project-mobile-thumbnail">
 										<?php the_post_thumbnail('full-banner'); ?>
 								</div>
 								
@@ -1353,13 +1353,13 @@
 	
 		
 		
-		<div id="map_canvas" class="hidden-phone <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
+		<div id="map_canvas" class="hidden-sm <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
 			
 			
 			
-			<div class="map-reveal-button-container hidden-phone">
+			<div class="map-reveal-button-container hidden-sm">
 				<div class="map-reveal-button">
 						<a href="#_"><span class="show-map-text"><i class="icon-globe"></i> Show Map</span></a>
 						<a href="#_"><span class="hide-map-text"><i class="icon-remove-circle"></i> Hide Map</span></a>
@@ -1408,7 +1408,7 @@
 			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 				<div class="row post-container">
-						<div class="col-lg-3 visible-desktop post-meta-container">
+						<div class="col-lg-3 visible-lg post-meta-container">
 							
 							<?php
 							if ($post_length == 'excerpt') {
@@ -1623,7 +1623,7 @@
 											   <?php if ( $my_query->have_posts() ) { ?>
 
 												<h4>Videos</h4>
-												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-desktop">
+												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-lg">
 															<!--DISPLAY FEATURED VIDEO-->
 														   <?php $args = array (
 														   	'post_type' => 'videos',
@@ -1664,7 +1664,7 @@
 											   
 											   
 											   <!-- VIDEO MODULE FOR MOBILE DEVICES -->
-											   <div class="row school-video-section hidden-desktop">
+											   <div class="row school-video-section hidden-lg">
 											
 											
 											   <?php $args = array (
@@ -1719,7 +1719,7 @@
 			
 			<div class=" row program-archive-school-container" id="<?php echo $program_id; ?>">
 						
-						<div class="col-lg-4 program-archive-featured-media hidden-phone">
+						<div class="col-lg-4 program-archive-featured-media hidden-sm">
 							
 							<div class="program-archive-featured-image">
 								<?php echo the_post_thumbnail('thumbnail-card');  ?>
@@ -1730,7 +1730,7 @@
 						<div class="col-lg-8 program-archive-content">
 						
 							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-desktop">
+								<div class="program-archive-school-compare-link visible-lg">
 									<span>Compare 
 										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
 										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
@@ -1807,7 +1807,7 @@
 								   
 										<li>
 											<div class="row sidebar-related-post">
-												<div class="sidebar-thumbnail-container visible-desktop col-lg-4">
+												<div class="sidebar-thumbnail-container visible-lg col-lg-4">
 													<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
 												</div>
 												
@@ -2302,7 +2302,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="span<?php echo $span; ?> instagram-container">
+		  		<div class="col-lg-<?php echo $span; ?> col-6 instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					

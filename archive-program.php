@@ -206,7 +206,7 @@
 		
 		
 		
-		<div id="scrollspy-nav" class="col-lg-4 program-archive-nav visible-desktop">
+		<div id="scrollspy-nav" class="col-lg-4 program-archive-nav visible-lg">
 			<ul data-spy="affix" data-offset-top="210" class="col-lg-4 nav">
 			
 				<?php //----- PROGRAM ARCHIVE MENU -----//

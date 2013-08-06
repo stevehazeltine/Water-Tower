@@ -1,7 +1,7 @@
 
 	
 				<!-------------BREADCRUMB ROW ---------->
-						<div class="row visible-desktop">
+						<div class="row visible-lg">
 						<div class="col-lg-12 breadcrumb-bar-container">
 							<div class="breadcrumb-bar">
 								<?php if ( function_exists('yoast_breadcrumb') ) {
@@ -31,7 +31,7 @@
 				<div class="row footer-info">
 		
 					
-					<div class="col-lg-4 footer-upcoming-schools-container hidden-phone">
+					<div class="col-lg-4 footer-upcoming-schools-container hidden-sm">
 						<h5>Upcoming Schools</h5>
 						
 						<?php //GET THE UPCOMING SCHOOLS BY COMPARING ALL SCHOOL DATES ?>
@@ -93,7 +93,7 @@
 				
 				<!------ RECENT POSTS ---->
 				
-				<div class="col-lg-4 visible-desktop">
+				<div class="col-lg-4 visible-lg">
 					<h5>Recent Posts</h5>
 						<?php $query = new WP_Query( array('posts_per_page'=>'4', 'post_type'=>'post')); ?>
 						

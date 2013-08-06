@@ -1,4 +1,4 @@
-<div class="row main-menu-desktop-container visible-desktop">
+<div class="row main-menu-desktop-container visible-lg">
 	<ul class="main-menu-desktop">
 		
 		<?php //----- ABOUT MENU -----// ?>

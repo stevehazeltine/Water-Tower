@@ -1,12 +1,11 @@
-<div class="navbar navbar-inverse navbar-fixed-top hidden-desktop">
-	<div class="navbar-inner">
+<div class="navbar navbar-inverse navbar-fixed-top hidden-lg">
 		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<a class="btn btn-default btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-align-justify"></i>
 			</a>
-			<a class="brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
+			<a class="navbar-brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
 			<div class="nav-collapse collapse">
-				<ul class="nav">
+				<ul class="navbar-nav nav">
 					
 					
 					<li class="dropdown">
@@ -164,7 +163,6 @@
 					
 				</ul>
 			</div><!--/.nav-collapse -->
-		</div>
 	</div>
 	
 	<div class="mobile-menu-ribbon">
