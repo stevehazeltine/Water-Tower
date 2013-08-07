@@ -952,9 +952,9 @@ float: left;
 	-webkit-transition: .35s;
 	color: white;
 	margin-bottom: 0px;
-	padding-right: 30px;
+	padding: 2px 30px 0px 8px;
 	box-sizing: border-box;
-	-moz-box-sizing:border-box;
+	-moz-box-sizing: border-box;
 	height: 30px;
 	
 }
@@ -963,6 +963,7 @@ float: left;
 	width: 150px;
 	border: 1px solid #CCC;
 	color: #444;
+	border-radius: 5px;
 }
 
 .header-functions .submit-search {
@@ -971,7 +972,7 @@ visibility: hidden;
 opacity: 0;
 position: relative;
 right: 29px;
-top: 1px;
+top: -1px;
 transition: .35s;
 -webkit-transition: .35s;
 }
@@ -1788,6 +1789,7 @@ float: left;
 
 .meta-list {
 	margin: 0px;
+	padding: 0px;
 	color: #609FCE;
 }
 
@@ -1810,7 +1812,7 @@ float: left;
 /**************************/
 
 .sidebar { float: right; margin-top: 10px; }
-.sidebar ul { list-style-type: none; margin: 0px 0px 0px 0px; }
+.sidebar ul { list-style-type: none; margin: 0px; padding: 0px; }
 .sidebar ul > li { font-size: 18px; color: #777; text-transform: uppercase; margin: 40px 0px 30px 0px; }
 .sidebar ul > li i {margin-right: 7px;}
 .sidebar ul ul li {	font-size: 13px; margin: 0px; font-weight: 500;	text-transform: none; }
@@ -1876,7 +1878,7 @@ height: 65px;
 color: #EFEFEF;
 width: 65px;
 margin: 0px auto;
-margin-top: 13px;
+margin-top: 12px;
 background: #444;
 border-radius: 36px;
 }
@@ -2345,6 +2347,10 @@ font-family:'HelveticaNeueW01-57Cn';
 
 .sidebar-related-post-content p { color: #999; font-size: 12px; margin-bottom: 5px; }
 
+.sidebar-thumbnail-container {
+	padding-right: 0px;
+}
+
 .sidebar-related-posts-more {
 border-top: 1px dashed #DDD;
 margin-top: 15px;
@@ -2482,14 +2488,23 @@ padding: 5px 5px 5px 5px !important;
 
 
 /****************** MOBILE NAVBAR OVERRIDES ********************/
-@media (max-width: 979px) {
-
+@media (max-width: 992px) {
+	
+	.navbar {
+		padding: 0px;
+	}
+	
 	.touch .lock-body .navbar {
 		position: fixed !important;
 	}
 	
+	.navbar .navbar-brand {
+		float: left;
+	}
+	
 	.navbar .navbar-brand img {
 		height: 25px;
+		width: auto;
 	}	
 	
 	.navbar-fixed-top {
@@ -2504,6 +2519,8 @@ padding: 5px 5px 5px 5px !important;
 		border-top: 1px solid #666;
 		border-bottom: 1px solid #333;
 		background: #555;
+		border-radius: 4px;
+		margin-bottom: 1px;
 	}
 	
 	.nav-collapse .nav>li>a:hover {
@@ -2527,8 +2544,40 @@ padding: 5px 5px 5px 5px !important;
 		padding: 10px 0px;
 	}
 	
-	.nav-collapse .nav {
-		padding-top: 10px;
+	.navbar-inverse .dropdown-menu { /***** BOOTSTRAP OVERRIDE *****/
+		background: transparent;
+		width: 100%;
+		position: relative;
+		border: none;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+		border-radius: 0px;
+		padding: 0px 15px;
+	}
+	
+	@media (min-width: 68px) {
+		
+		.nav-collapse {
+			margin-top: 0px !important;
+			padding: 10px 0px;
+		}
+		
+		.navbar-nav > li {
+			margin-left: 2px !important;
+		}
+		
+	}
+	
+	.navbar .collapsing {
+		margin-top: 10px;
+		width: 100%;
+	}
+	
+	
+	
+	.nav-collapse {
+		width: 100%;
+		margin-top: 65px;
 	}
 	
 	.nav-collapse .dropdown-menu a {
@@ -2538,16 +2587,14 @@ padding: 5px 5px 5px 5px !important;
 		font-weight: normal;
 	}
 	
-	.navbar .btn-navbar {
-		display: block;
-		background-image: none;
-		background-color: #555;
-		text-shadow: none;
-		border: none;
+	.navbar-inverse .btn-default {
+		float: right;
+		margin-top: 8px;
 	}
 	
 	.navbar-inverse .btn-navbar:hover {
 		background: #222;
+		border-bottom: 1px solid #444;
 	}
 	
 	.navbar-fixed-top .navbar-inner {
@@ -2563,7 +2610,7 @@ padding: 5px 5px 5px 5px !important;
 		box-sizing: border-box;
 	}
 	
-	.navbar-inverse .navbar-inner {
+	.navbar-inverse {
 		background-color: #333 !important;
 		background-image: none !important;
 		border: none !important;
@@ -2598,20 +2645,6 @@ margin-left: -90px;
 
 .school-title .title-acronym {
 display: block !important;
-}
-
-.main-menu-desktop ul > div {
-padding: 0px 0px 0px 0px;
-margin: 0px;
-}
-
-.main-menu-desktop ul {
-left: -85px;
-}
-
-.main-menu-desktop .dropdown-container {
-width: 1170px;
-padding: 0px 90px;
 }
 
 }

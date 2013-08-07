@@ -1,14 +1,14 @@
 <div class="navbar navbar-inverse navbar-fixed-top hidden-lg">
 		<div class="container">
-			<a class="btn btn-default btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<a class="btn btn-default btn-navbar hidden-md" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-align-justify"></i>
 			</a>
 			<a class="navbar-brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
-			<div class="nav-collapse collapse">
-				<ul class="navbar-nav nav">
+			<div class="nav-collapse collapse clearfix">
+				<ul class="navbar-nav hidden-lg nav">
 					
 					
-					<li class="dropdown">
+					<li class="dropdown clearfix">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
 							
@@ -39,7 +39,7 @@
 					
 					
 					
-					<li class="dropdown">
+					<li class="dropdown clearfix">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Training</a>
 						<ul class="dropdown-menu">
 							
@@ -69,7 +69,7 @@
 					</li>
 					
 					
-					<li class="dropdown">
+					<li class="dropdown clearfix">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Outreach</a>
 						<ul class="dropdown-menu">
 							
@@ -99,7 +99,7 @@
 					</li>
 					
 					
-					<li class="dropdown">
+					<li class="dropdown clearfix">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources</a>
 						<ul class="dropdown-menu">
 							
@@ -130,7 +130,7 @@
 					
 					
 					
-					<li class="dropdown">
+					<li class="dropdown clearfix">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Get Involved</a>
 						<ul class="dropdown-menu">
 							

@@ -206,20 +206,21 @@
 		
 		
 		
-		<div id="scrollspy-nav" class="col-lg-4 program-archive-nav visible-lg">
-			<ul data-spy="affix" data-offset-top="210" class="col-lg-4 nav">
-			
-				<?php //----- PROGRAM ARCHIVE MENU -----//
-					$classifications = get_terms('program_classification');
-					foreach ($classifications as $classification) {
-					  $format = '<li id="%1$s"><i class="icon-caret-right"></i><a href="#%1$s">%2$s</a></li>';
-					  $slug = $classification->slug;
-					  $title = $classification->name;
-					  
-					  echo sprintf($format, $slug, $title);
-					}
-				
-				 ?> 
+		<div class="col-lg-4 program-archive-nav visible-lg" >
+	       <div data-spy="affix" data-offset-top="210" id="scrollspy-nav" class="program-archive-menu">
+	         <ul class="nav">
+	        
+	          <?php //----- PROGRAM ARCHIVE MENU -----//
+	            $classifications = get_terms('program_classification');
+	            foreach ($classifications as $classification) {
+	              $format = '<li id="%1$s"><i class="icon-caret-right"></i><a href="#%1$s">%2$s</a></li>';
+	              $slug = $classification->slug;
+	              $title = $classification->name;
+	              
+	              echo sprintf($format, $slug, $title);
+	            }
+	            
+	          ?> 
 			
 				<li class="compare-programs-list-container">
 					
@@ -230,6 +231,7 @@
 					<a id="compare-programs-link" href="<?php echo get_bloginfo ('url'); ?>/compare-programs?ids=">Compare Schools</a>
 				</li>
 			</ul>
+	       </div>
 		</div>
 		   
 		   

@@ -4,8 +4,8 @@
 		<?php //----- ABOUT MENU -----// ?>
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>
 		 	<!--ABOUT DROPDOWN-->
-		 	<ul id="about-dropdown" class="dropdown-container">
-		 		<div class="col-lg-2 primary-menu">
+		 	<ul id="about-dropdown" class="dropdown-container clearfix">
+		 		<div class="col-lg-3 primary-menu">
 		 			<div>
 			 				<!----------ABOUT MENU PRIMARY SECTION------------>
 
@@ -33,76 +33,6 @@
 							   <?php wp_reset_postdata(); ?>
 		 			</div>
 		 		</div>
-		 		
-		 		<div class="col-lg-8 menu-related-posts">
-			 			
-			 			<!--LATEST POSTS--->
-						   <?php $about_blogroll = array(
-								'posts_per_page' 	=> 6,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-						   <?php $i = 1; ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'menu-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x200" />
-													<?php } ?>
-													<?php $obj = new PostRibbon($post->ID); ?>
-													<?php $obj->build_ribbon('horizontal', 3); ?>
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
-													
-												</div>
-							   <?php $i = ++$i; ?>
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-						   
-						   
-						   
-						   
-						   
-		 		</div>
-		 		
-		 		
-			<div class="related-posts-menu-container">
-	   			<ul class="related-posts-menu">
-	   				<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
-	   					<!--LATEST POSTS MENU--->
-						   
-						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-						   <?php $i = 1; ?>
-						   
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="about-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
-								   			<?php echo $i; ?>
-								   		</li>
-								   <?php $i = ++$i; ?>
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-	   				<li class="related-posts-menu-archive-link">View All Posts</li>
-	   			</ul>
-   			</div>
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
 		 		
 		 		
 		 		<div class="col-lg-2 center-highlight">
@@ -159,6 +89,86 @@
 						
 		 			</div>
 		 		</div>
+		 		
+		 		
+		 		<div class="col-lg-7 menu-related-posts">
+			 			
+			 			<!--LATEST POSTS--->
+						   <?php $about_blogroll = array(
+								'posts_per_page' 	=> 6,
+								'post_type' 		=> 'post',
+								'orderby'			=> 'date',
+						   ); ?>
+						   
+						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
+						   <?php if ( $my_query->have_posts() ) { ?>
+						   <?php $i = 1; ?>
+							   <?php while ( $my_query->have_posts() ) { ?>
+								   <?php $my_query->the_post(); ?>
+								   				<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
+													<?php // check if the post has a Post Thumbnail assigned to it.
+														if ( has_post_thumbnail() ) {
+															the_post_thumbnail( 'menu-banner' );
+														} else { ?>
+															<img src="http://placehold.it/1200x200" />
+													<?php } ?>
+													<?php $obj = new PostRibbon($post->ID); ?>
+													<?php $obj->build_ribbon('horizontal', 3); ?>
+													
+													
+													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+													<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
+													
+												</div>
+							   <?php $i = ++$i; ?>
+							   <?php } ?>
+						   <?php } ?>
+						   <?php wp_reset_postdata(); ?>
+						   
+						   
+						
+						
+						
+						
+						<div class="related-posts-menu-container">
+	   			<ul class="related-posts-menu">
+	   				<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
+	   					<!--LATEST POSTS MENU--->
+						   
+						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
+						   <?php if ( $my_query->have_posts() ) { ?>
+						   <?php $i = 1; ?>
+						   
+							   <?php while ( $my_query->have_posts() ) { ?>
+								   <?php $my_query->the_post(); ?>
+								   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="about-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
+								   			<?php echo $i; ?>
+								   		</li>
+								   <?php $i = ++$i; ?>
+							   <?php } ?>
+						   <?php } ?>
+						   <?php wp_reset_postdata(); ?>
+	   				<li class="related-posts-menu-archive-link">View All Posts</li>
+	   			</ul>
+   			</div>
+		 		
+						
+						
+						   
+						   
+						   
+		 		</div>
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
+		 		
 
 		 		
 		 		

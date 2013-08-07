@@ -1829,7 +1829,7 @@
 								
 									<!--RELATED POST MORE BUTTONS-->
 									<li>
-										<div class="row sidebar-related-posts-more">
+										<div class="sidebar-related-posts-more">
 											<div class="sidebar-related-posts-view-all">
 												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
 											</div>

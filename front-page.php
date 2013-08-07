@@ -201,7 +201,7 @@ Template Name: Front Page
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<div class="col-lg-3">
+										<div class="col-6 col-lg-3">
 											
 											<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {

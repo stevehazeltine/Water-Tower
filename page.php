@@ -1,11 +1,7 @@
 <?php get_header() ?>
 
 	<?php if ( have_posts() ) { while ( have_posts() ) { the_post(); ?>
-
-
-
-			<?php $banner_args = array(); ?>
-			
+		
 			<?php get_banner($banner_args); ?>
 		    
 		    
