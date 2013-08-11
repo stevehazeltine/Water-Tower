@@ -1,20 +1,18 @@
 
 	
 				<!-------------BREADCRUMB ROW ---------->
-						<div class="row visible-lg">
-						<div class="col-lg-12 breadcrumb-bar-container">
-							<div class="breadcrumb-bar">
+					<div class="row visible-lg">
+							<div class="breadcrumb-bar stretch-fullscreen">
 								<?php if ( function_exists('yoast_breadcrumb') ) {
 									yoast_breadcrumb('<p id="breadcrumbs"><span class="breadcrumb-title">You Are Here <i class="icon-arrow-right"></i></span><span style=
 									"margin-right: 10px;">/</span>','</p>');
 								} ?>
 							</div>
-						</div>
-						</div>
+					</div>
 				
 		
 			<div class="row global-footer">
-				<div class="col-lg-12 footer-container">
+				<div class="footer-container stretch-fullscreen">
 				
 			
 

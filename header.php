@@ -41,7 +41,7 @@
 				echo sprintf($format, $slug, $color);
 			}
 			
-		?> 
+		?>
 		</style>
 		
 		

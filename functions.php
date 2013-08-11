@@ -936,14 +936,11 @@
 		}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
+		//----- FUNCTION TO GET THE PROGRAMS CLASS AND RETURN OBJECT -----//
+		function get_program_class($program_id) {
+			$program_class = wp_get_post_terms($program_id, 'program_classification');
+			return $program_class;
+		}
 		
 		
 		
@@ -967,20 +964,27 @@
 					$program = get_page_by_path($program->slug, OBJECT, 'program');
 					
 					//----- GET COLOR DATA BASED ON PROGRAMS CLASSIFICATION -----//
-					$program_class = wp_get_post_terms($program->ID, 'program_classification');
+					$program_class = get_program_class($program->ID);
 					foreach ($program_class as $classification) {
 						$class_slug = $classification->slug;
 
 						if (array_key_exists($classification->slug, $this->post_color_info)) {
 							$this->post_color_info[$class_slug][count] = ++$this->post_color_info[$class_slug][count]; 
 						} else {
-							$this->post_color_info[$class_slug] = array('count' => 1, 'color' => get_program_color($program->ID));
+							$this->post_color_info[$class_slug] = array('slug' => $class_slug, 'count' => 1, 'color' => get_program_color($program->ID));
 						}
 						
 						//----- UPDATE TOTAL TERMS EVERYTIME TERM IN FOUND -----//
 						$this->total_terms = ++$this->total_terms;
 					}
 				}
+				
+				usort($this->post_color_info, array($this, 'sort_by_count'));
+			}
+			
+			//----- SORT CLASSIFICATIONS BASED ON COUNT -----//
+			public function sort_by_count($a, $b) {
+				return ($a['count'] > $b['count']) ? -1 : 1;
 			}
 			
 			//----- DISPLAY POST RIBBON -----//
@@ -1012,10 +1016,10 @@
 		
 		function get_program_color($post_id) {
 
-			$terms = wp_get_post_terms($post_id, 'program_classification'); 
+			$terms = get_program_class($post_id); 
 			$program_slug = str_replace('-', '_', $terms[0]->slug) . '_color';
 	
-			$program_colors = get_option('theme_options');
+			$program_colors = get_option('display_options');
 			
 			$program_color = $program_colors[$program_slug];
 			return $program_color;	
@@ -1024,7 +1028,7 @@
 		function get_classification_color ($classification) {
 			$classification = str_replace('-', '_', $classification) . '_color';			
 		
-			$program_colors = get_option('theme_options');
+			$program_colors = get_option('display_options');
 			$program_color = $program_colors[$classification];
 			return $program_color;
 		}
@@ -1166,17 +1170,17 @@
 					} ?>
 				
 					<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
-						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>" />
 						<?php // check if the post has a Post Thumbnail assigned to it.
 							foreach ( $alt_images as $image ) { ?>
-								<img class="rsImg" src="<?php echo str_replace( '.jpg', '-1350x450.jpg', $image[full_url]); ?>" />
+								<img class="rsImg" src="<?php $img = wp_get_attachment_image_src( $image[ID] , '16:9-media'); echo $img[0];?>" />
 						<?php } ?> 
 					</div>
 				
 				<?php //----- IF NO ALTERNATE IMAGES EXIST, DISPLAY SINGLE IMAGE -----// ?>
 				<?php } else { ?>
 					<div class="royal-slider-banner">
-						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>" />
 					</div>
 				<?php } ?>
 			<?php } ?>
@@ -1589,7 +1593,7 @@
 																<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
 																<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																		<div id="video1" class="royalSlider videoGallery rsDefault">
-																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																		</div>
 																</div><!--Video Section Featured Video-->
 														   
@@ -1681,7 +1685,7 @@
 														<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
 														<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																<div id="video1" class="royalSlider videoGallery rsDefault">
-																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																</div>
 														</div><!--Video Section Featured Video-->
 												   
@@ -2009,109 +2013,187 @@ class ywammontana_walker_comment extends Walker_Comment {
 
 
 		
+		//----------------------------------------//
+		//----- ADD WATER TOWER OPTIONS PAGE -----//
+		//----------------------------------------//
+			?>
+			<style>
+			#icon-water-tower-settings {
+				background: #444;;
+			}
+			</style>
+			<?php
 		
-		//ADD DASHBOARD WIDGET FOR YWAM MONTANA THEME
-		
-			// add the admin options page
-			add_action('admin_menu', 'theme_options_page');
-			
+			//----- ADD THEME OPTIONS LINK UNDER APPEARANCE TAB -----//
 			function theme_options_page() {
 			add_theme_page('Water Tower Options', 'Water Tower', 'manage_options', 'theme_options', 'theme_options_page_display');
 			}
+			add_action('admin_menu', 'theme_options_page');
 
 			// display the admin options page
 			function theme_options_page_display() {
 			?>
 			<div class="wrap">
 			<?php screen_icon(); ?>
-			<h2>My custom plugin</h2>
+			<h2>Water Tower Settings</h2>
+			
+			<?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'display_options'; ?> 
+			
+			<h2 class="nav-tab-wrapper">  
+	            <a href="?page=theme_options&tab=display_options" class="nav-tab <?php echo $active_tab == 'display_options' ? 'nav-tab-active' : ''; ?>">Display</a>
+	            <a href="?page=theme_options&tab=front_page_options" class="nav-tab <?php echo $active_tab == 'front_page_options' ? 'nav-tab-active' : ''; ?>">Front Page</a>  
+	            <a href="#" class="nav-tab">Programs</a>
+	            <a href="#" class="nav-tab">Authors</a>  
+	        </h2>
+			
 			<p>Options relating to the Custom Plugin.</p>
 				<form action="options.php" method="post">
-				<?php settings_fields('theme_options'); ?>
-				<?php do_settings_sections('theme_options'); ?>
-				 
-				<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" class="button button-primary" />
+					
+					<?php if ( $active_tab == 'display_options' ) { ?>
+						<?php settings_fields('display_options'); ?>
+						<?php do_settings_sections('display_options'); ?>
+					<?php } elseif ( $active_tab == 'front_page_options' ) { ?>
+						<?php settings_fields('front_page_options'); ?>
+						<?php do_settings_sections('front_page_options'); ?>
+					<?php } else { ?>
+					<?php } ?>
+					 
+					<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" class="button button-primary" />
 				</form>
 			</div>
 			 
 			<?php }
 			
-			// add the admin settings and such
-			add_action('admin_init', 'water_tower_admin_init');
+			
+			//----- REGISTER ALL SETTINGS -----//			
 			function water_tower_admin_init(){
-				register_setting( 'theme_options', 'theme_options' );
 				
-				add_settings_section('theme_options_main', 'Main Settings', 'theme_options_section_text', 'theme_options');
-					add_settings_field('asdfsad', 'Plugin Text Input', 'theme_options_setting_string', 'theme_options', 'theme_options_main');
-					add_settings_field('second_one', 'A Text Area', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
-					add_settings_field('second_oasdfne', 'asdfa', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
-					
-				add_settings_section('theme_options_colors', 'Color Settings', 'theme_options_colors_text', 'theme_options');
-					add_settings_field('discipleship_training_schools_color', 'Discipleship Training School Color', 'theme_options_dts_color', 'theme_options', 'theme_options_colors');
-					add_settings_field('biblical_studies_color', 'Biblical Studies Color', 'theme_options_biblical_studies_color', 'theme_options', 'theme_options_colors');
-					add_settings_field('secondary_schools_color', 'Secondary Schools Color', 'theme_options_secondary_schools_color', 'theme_options', 'theme_options_colors');
-					add_settings_field('seminars_color', 'Seminars Color', 'theme_options_seminars_color', 'theme_options', 'theme_options_colors');
-					add_settings_field('summer_programs_color', 'Summer Programs Color', 'theme_options_summer_programs_color', 'theme_options', 'theme_options_colors');
-					add_settings_field('career_discipleship_color', 'Career Discipleship Color', 'theme_options_career_discipleship_color', 'theme_options', 'theme_options_colors');
+			
+				//----- REGISTER DISPLAY OPTIONS SETTINGS -----//
+				register_setting( 'display_options', 'display_options' );
+				
+					//----- CLASSIFICATION COLOR SETTINGS -----//	
+					add_settings_section('classification_colors', 'Color Settings', 'classification_colors_text', 'display_options');
+						add_settings_field('discipleship_training_schools_color', 'Discipleship Training School Color', 'display_options_dts_color', 'display_options', 'classification_colors');
+						add_settings_field('biblical_studies_color', 'Biblical Studies Color', 'display_options_biblical_studies_color', 'display_options', 'classification_colors');
+						add_settings_field('secondary_schools_color', 'Secondary Schools Color', 'display_options_secondary_schools_color', 'display_options', 'classification_colors');
+						add_settings_field('seminars_color', 'Seminars Color', 'display_options_seminars_color', 'display_options', 'classification_colors');
+						add_settings_field('summer_programs_color', 'Summer Programs Color', 'display_options_summer_programs_color', 'display_options', 'classification_colors');
+						add_settings_field('career_discipleship_color', 'Career Discipleship Color', 'display_options_career_discipleship_color', 'display_options', 'classification_colors');
+			
+			
+				//----- REGISTER FRONT PAGE SETTINGS -----//
+				register_setting( 'front_page_options', 'front_page_options');
+				
+					//----- FRONT PAGE BANNER SETTINGS -----//
+					add_settings_section('front_page_banner_settings', 'Banner Settings', 'banner_settings_text', 'front_page_options');
+						add_settings_field('alert_status', 'Enable Alert Status', 'get_alert_status', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('alert_status_message', 'Alert Status Message', 'get_alert_status_message', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('alert_ribbon_color', 'Alert Ribbon Color', 'get_alert_ribbon_color', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('program_override_status', 'Program Override', 'get_program_override_status', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('program_override_id', 'Program Override ID', 'get_program_override_id', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('video_override_status', 'Video Override', 'get_video_override_status', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('video_override_id', 'Video Override ID', 'get_video_override_id', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('post_override_status', 'Post Override', 'get_post_override_status', 'front_page_options', 'front_page_banner_settings');
+						add_settings_field('post_override_id', 'Post Override ID', 'get_post_override_id', 'front_page_options', 'front_page_banner_settings');
+							
+					//----- FRONT PAGE MODULES -----//
+			
+			
 			}
+			add_action('admin_init', 'water_tower_admin_init');
 			
 			
 			
 			
-			function theme_options_section_text() {
-				echo '<p>Main description of this section here.</p>';
-			}
-				
-				function theme_options_setting_string() {
-					$options = get_option('theme_options');
-					echo "<input id='theme_options_text_string' name='theme_options[asdfsad]' size='40' type='text' value='{$options['asdfsad']}' />";
-				}
-				
-				function theme_options_setting_string2() {
-					$options = get_option('theme_options');
-					echo "<input id='theme_options_text_string' name='theme_options[second_one]' size='40' type='text' value='{$options['second_one']}' />";
-				}
-			
-			
-			//----- PROGRAM COLOR SETTINGS -----//
-			function theme_options_colors_text() {
+			//----- PROGRAM CLASSIFICATION COLOR SETTINGS MARKUP -----//
+			function classification_colors_text() {
 				echo '<p>Select the colors for each program classification.  These will be displayed in various places on the site and should only be changed after careful consideration.  These colors tie into the design, layout, and overall look and feel of the website.</p>';
 			}
 			
-				function theme_options_dts_color() {
-					$options = get_option('theme_options');
-					echo "<input id='theme_options_text_string' style='color: white; font-weight: bold; background: #{$options['discipleship_training_schools_color']};' name='theme_options[discipleship_training_schools_color]' name='theme_options[discipleship_training_schools_color]' size='40' type='text' value='{$options['discipleship_training_schools_color']}' />";
+				function display_options_dts_color() {
+					$options = get_option('display_options');
+					echo "<input id='display_options_text_string' style='color: white; font-weight: bold; background: #{$options['discipleship_training_schools_color']};' name='display_options[discipleship_training_schools_color]' name='display_options[discipleship_training_schools_color]' size='40' type='text' value='{$options['discipleship_training_schools_color']}' />";
 				}
 				
-				function theme_options_biblical_studies_color() {
-					$options = get_option('theme_options');
-					echo "<input id='biblical_studies_color' style='color: white; font-weight: bold; background: #{$options['biblical_studies_color']};' name='theme_options[biblical_studies_color]' name='theme_options[biblical_studies_color]' size='40' type='text' value='{$options['biblical_studies_color']}' />";
+				function display_options_biblical_studies_color() {
+					$options = get_option('display_options');
+					echo "<input id='biblical_studies_color' style='color: white; font-weight: bold; background: #{$options['biblical_studies_color']};' name='display_options[biblical_studies_color]' name='display_options[biblical_studies_color]' size='40' type='text' value='{$options['biblical_studies_color']}' />";
 				}
 				
-				function theme_options_secondary_schools_color() {
-					$options = get_option('theme_options');
-					echo "<input id='secondary_schools_color' style='color: white; font-weight: bold; background: #{$options['secondary_schools_color']};' name='theme_options[secondary_schools_color]' size='40' type='text' value='{$options['secondary_schools_color']}' />";
+				function display_options_secondary_schools_color() {
+					$options = get_option('display_options');
+					echo "<input id='secondary_schools_color' style='color: white; font-weight: bold; background: #{$options['secondary_schools_color']};' name='display_options[secondary_schools_color]' size='40' type='text' value='{$options['secondary_schools_color']}' />";
 				}
 				
-				function theme_options_seminars_color() {
-					$options = get_option('theme_options');
-					echo "<input id='seminars_color' style='color: white; font-weight: bold; background: #{$options['seminars_color']};' name='theme_options[seminars_color]' name='theme_options[seminars_color]' size='40' type='text' value='{$options['seminars_color']}' />";
+				function display_options_seminars_color() {
+					$options = get_option('display_options');
+					echo "<input id='seminars_color' style='color: white; font-weight: bold; background: #{$options['seminars_color']};' name='display_options[seminars_color]' name='display_options[seminars_color]' size='40' type='text' value='{$options['seminars_color']}' />";
 				}
 				
-				function theme_options_summer_programs_color() {
-					$options = get_option('theme_options');
-					echo "<input id='summer_programs_color' style='color: white; font-weight: bold; background: #{$options['summer_programs_color']};' name='theme_options[summer_programs_color]' name='theme_options[summer_programs_color]' size='40' type='text' value='{$options['summer_programs_color']}' />";
+				function display_options_summer_programs_color() {
+					$options = get_option('display_options');
+					echo "<input id='summer_programs_color' style='color: white; font-weight: bold; background: #{$options['summer_programs_color']};' name='display_options[summer_programs_color]' name='display_options[summer_programs_color]' size='40' type='text' value='{$options['summer_programs_color']}' />";
 				}
 				
-				function theme_options_career_discipleship_color() {
-					$options = get_option('theme_options');
-					echo "<input id='career_discipleship_color' style='color: white; font-weight: bold; background: #{$options['career_discipleship_color']};' name='theme_options[career_discipleship_color]' name='theme_options[career_discipleship_color]' size='40' type='text' value='{$options['career_discipleship_color']}' />";
+				function display_options_career_discipleship_color() {
+					$options = get_option('display_options');
+					echo "<input id='career_discipleship_color' style='color: white; font-weight: bold; background: #{$options['career_discipleship_color']};' name='display_options[career_discipleship_color]' name='display_options[career_discipleship_color]' size='40' type='text' value='{$options['career_discipleship_color']}' />";
 				}
-
-		
-
-		
-		
+			
+			
+			
+			
+			//----- FRONT PAGE SETTINGS MARKUP -----//
+			function banner_settings_text() {
+				echo '<p>Use this section to alter how the banner on the front page functions.  Through this section you can do things like activate the alert status that allows you to relay a message through our front page banner, or you can simply override slides by activating the override and selecting the ID of the post you would like to display in its place.</p>';
+			}
+				function get_alert_status() {
+					$options = get_option('front_page_options');
+					echo "<input id='alert_status' name='front_page_options[alert_status]' type='checkbox' value='0' " . checked(0, $options['alert_status'], false) . "/>";
+				}
+				
+				function get_alert_status_message() {
+					$options = get_option('front_page_options');
+					echo "<textarea id='alert_status_message' name='front_page_options[alert_status_message]' rows='5' cols='50'>";
+					echo $options['alert_status_message'];
+					echo '</textarea>';
+				}
+				
+				function get_alert_ribbon_color() {
+					$options = get_option('front_page_options');
+					echo "<input id='alert_ribbon_color' style='color: white; font-weight: bold; background: #{$options['alert_ribbon_color']};' name='front_page_options[alert_ribbon_color]' type='text' value='{$options['alert_ribbon_color']}'";
+				}
+				
+				function get_program_override_status() {
+					$options = get_option('front_page_options');
+					echo "<input id='program_override_status' name='front_page_options[program_override_status]' type='checkbox' value='0' " . checked(0, $options['program_override_status'], false) . "/>";
+				}
+				
+				function get_program_override_id() {
+					$options = get_option('front_page_options');
+					echo "<input id='program_override_id' name='front_page_options[program_override_id]' type='text' value='{$options['program_override_id']}' ";
+				}
+				
+				function get_video_override_status() {
+					$options = get_option('front_page_options');
+					echo "<input id='video_override_status' name='front_page_options[video_override_status]' type='checkbox' value='0' " . checked(0, $options['video_override_status'], false) . "/>";
+				}
+				
+				function get_video_override_id() {
+					$options = get_option('front_page_options');
+					echo "<input id='video_override_id' name='front_page_options[video_override_id]' type='text' value='{$options['video_override_id']}' ";
+				}
+				
+				function get_post_override_status() {
+					$options = get_option('front_page_options');
+					echo "<input id='post_override_status' name='front_page_options[post_override_status]' type='checkbox' value='0' " . checked(0, $options['post_override_status'], false) . "/>";
+				}
+				
+				function get_post_override_id() {
+					$options = get_option('front_page_options');
+					echo "<input id='post_override_id' name='front_page_options[post_override_id]' type='text' value='{$options['post_override_id']}' ";
+				}
 		
 					
 		

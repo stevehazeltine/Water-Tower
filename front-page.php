@@ -19,9 +19,9 @@ Template Name: Front Page
 						<?php $featuredschool = $featuredschool->schools; ?>
 						
 							<div class="rsContent">
-								<?php echo get_the_post_thumbnail( $featuredschool[0]['program_id'], 'full-banner'); ?>
+								<?php echo get_the_post_thumbnail( $featuredschool[0]['program_id'], '16:9-media'); ?>
 								
-								<div class="rsABlock frontpage-slider-content-title frontpage-slider-content-left" style="background: #<?php echo get_program_color($featuredschool[0]['program_id']); ?>;" data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
+								<div class="rsABlock frontpage-slider-content frontpage-slider-content-left" style="background: #<?php echo get_program_color($featuredschool[0]['program_id']); ?>;" data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
 									<h2><?php echo get_the_title($featuredschool[0]['program_id']); ?></h2>
 									<p>Starts <?php echo date("F d, Y", strtotime($featuredschool[0]['start_date']));?></p>
 								</div>
@@ -42,17 +42,15 @@ Template Name: Front Page
 					   <?php if ( $my_query->have_posts() ) { ?>
 						   <?php while ( $my_query->have_posts() ) { ?>
 							   <?php $my_query->the_post(); ?>
+							   						   
 							   <div class="rsContent">
-									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>"></a>
+									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 									  
-									  <div class="rsABlock frontpage-slider-content-title frontpage-slider-content-right frontpage-video" 
+									  <div class="rsABlock frontpage-slider-content frontpage-slider-content-right frontpage-video" 
 																								  data-move-effect="right" data-move-offset="800" data-easing="easeOutSine">
 												<h2><?php the_title(); ?></h2>
-												<p><?php the_content(); ?></p>
-												
-												<?php $obj = new PostRibbon($post->ID); ?>
-												<?php print_r($obj); ?>
-												<?php $obj->build_ribbon('horizontal', 3); ?>
+												<p><?php the_content(); ?><?php print_r($ribbon); ?></p>
+
 											</div>
 							   </div>
 						   <?php } ?>

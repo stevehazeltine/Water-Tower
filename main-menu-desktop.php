@@ -4,7 +4,7 @@
 		<?php //----- ABOUT MENU -----// ?>
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>
 		 	<!--ABOUT DROPDOWN-->
-		 	<ul id="about-dropdown" class="dropdown-container clearfix">
+		 	<ul id="about-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		<div class="col-lg-3 primary-menu">
 		 			<div>
 			 				<!----------ABOUT MENU PRIMARY SECTION------------>
@@ -132,7 +132,7 @@
 						
 						<div class="related-posts-menu-container">
 	   			<ul class="related-posts-menu">
-	   				<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
+	   				<li id="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
 	   					<!--LATEST POSTS MENU--->
 						   
 						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
@@ -195,7 +195,7 @@
 		 	
 			
 			<!--TRAINING DROPDOWN-->
-			<ul class="dropdown-container">
+			<ul class="dropdown-container stretch-fullscreen clearfix">
 		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------TRAINING MENU PRIMARY SECTION------------>
@@ -468,7 +468,7 @@
 		 <li class="span"><span class="link-wrapper"><a href="#">Outreach</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--OUTREACH DROPDOWN-->
-		 	<ul id="outreach-dropdown" class="dropdown-container">
+		 	<ul id="outreach-dropdown" class="dropdown-container  stretch-fullscreen clearfix">
 		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------OUTREACH MENU PRIMARY SECTION------------>
@@ -613,7 +613,7 @@
 		 <li class="span"><span class="link-wrapper"><a href="#">Resources</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--RESOURCES DROPDOWN-->
-		 	<ul class="dropdown-container">
+		 	<ul class="dropdown-container stretch-fullscreen clearfix">
 		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			<!----------RESOURCES MENU PRIMARY SECTION------------>
@@ -702,7 +702,7 @@
 		 <li class="span"><span class="link-wrapper"><a href="#">Get Involved</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--GET INVOLVED DROPDOWN-->
-		 	<ul class="dropdown-container">
+		 	<ul class="dropdown-container stretch-fullscreen clearfix">
 		 		<div class="col-lg-2 primary-menu">
 		 			<div>
 			 			

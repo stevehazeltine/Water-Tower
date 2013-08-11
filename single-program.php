@@ -65,7 +65,7 @@
 												
 												
 												
-													<div class="col-lg-4">
+													<div class="col-5 col-lg-4 col-sm-4">
 														<div class="chart-container">
 															<canvas id="lecture-overview" class="chart" width="800" height="800"></canvas>
 														
@@ -116,15 +116,15 @@
 																		
 																});			
 															</script>
-															<div class="lecture-overview-chart-hours">
-																<?php echo $total_hours; ?><br />
-																<span class="lecture-overview-hours-title">Hours/Week</span>
+															<div class="lecture-overview-chart-hours hidden-sm">
+																<?php echo $total_hours; ?>
+																<div class="lecture-overview-hours-title">Hours/Week</div>
 															</div>
 														</div>
 													</div>
 												
 												
-													<div class="col-lg-8">
+													<div class="col-7 col-lg-8 col-sm-8">
 														<ul class="lecture-phase-overview-key">
 														<?php $i = 1 ?>
 														
@@ -132,11 +132,10 @@
 														<?php $activity_hours = 'hours_per_week' . $i; ?>
 														<?php while (rwmb_meta($activity_title) !== '') { ?>
 																<li>
-																	<div class="lecture-phase-overview-color-block" style="background: #<?php echo $colors_10[$i]; ?>;">
-																	<i class="icon-plus"></i>
-																	 <span class="lecture-overview-color-block-hours"><?php echo rwmb_meta($activity_hours); ?></span>
-																	<i class="icon-long-arrow-right" style="color: #<?php echo $colors_10[$i]; ?>;"></i></div>
-																	<?php echo rwmb_meta($activity_title); ?>
+																
+																	<div class="key-item">
+																		<i class="icon-circle-blank" style="color: #<?php echo $colors_10[$i]; ?>;"></i><?php echo rwmb_meta($activity_title); ?>
+																	</div>
 																</li>	
 																
 															<?php $i = $i + 1; ?>
