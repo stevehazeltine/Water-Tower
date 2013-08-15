@@ -131,7 +131,7 @@ height: auto !important;
 @media (min-width: 767px) {
 	.banner-image.normal-slider .rsImg,
 	.banner-image.normal-slider .rsContent img {
-		margin-top: -10% !important;
+		margin-top: -8% !important;
 	}
 }
 
@@ -819,11 +819,21 @@ font-style: italic;
 	width: 400px;
 }
 
-.post-ribbon {
+.post-ribbon-container.horizontal .post-ribbon {
 	height: 100%;
 	float: left;
 }
 
+.post-ribbon-container.vertical .post-ribbon {
+	width: 100%;
+}
+
+.post-ribbon-container.vertical {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+}
 
 
 /***** TAXONOMY ARCHIVES *****/
@@ -998,7 +1008,6 @@ padding: 10px 0px 10px 0px;
 }
 
 .header-functions .search-bar {
-margin-top: -5px;
 height: 30px;
 float: left;
 }
@@ -1332,18 +1341,7 @@ background: #333;
 color: #888;
 font-size: 12px;
 position: relative;
-width: 960px;
-padding: 5px 170px 0px 170px;
-left: -170px;
-}
-
-/* MIN 1200 PX */
-@media (min-width: 1200px) {
-.breadcrumb-bar {
-width: 1170px;
-left: -90px;
-padding: 5px 90px 0px 90px;
-}
+margin-top: 40px;
 }
 
 
@@ -1361,6 +1359,13 @@ margin-top: 35px;
 .program-archive-nav .affix {
 top: 90px;
 margin-top: 0px !important;
+width: 293px;
+}
+
+@media (min-width: 1200px) {
+	.program-archive-nav .affix {
+		width: 370px;
+	}
 }
 
 .program-archive-container h3 {
@@ -1401,26 +1406,12 @@ color: #666;
 }
 
 .program-archive-school-container {
-margin-bottom: 20px;
+margin-top: 40px;
 position: relative;
-border-bottom: 1px solid #EFEFEF;
 }
 
 .program-archive-class-container {
-	padding-top: 100px;
-}
-
-.program-archive-school-compare-link {
-float: right;
-color: #666;
-font-size: 14px;
-}
-
-.program-archive-school-compare-link i {
-color: #999;
-font-size: 18px;
-vertical-align: text-top;
-padding: 0px 0px 0px 5px;
+	padding-top: 91px;
 }
 
 .program-archive-school-meta {
@@ -1444,6 +1435,118 @@ font-size: 13px;
 margin-bottom: 0px;
 }
 
+.program-archive-school-footer {
+	box-sizing: content-box;
+	margin-top: 20px;
+}
+
+.program-archive-school-footer-menu {
+	margin: 0px 15px;
+	border-bottom: 1px solid #D9D9D9;
+	color: #777;
+	font-size: 12px;
+	font-family: 'HelveticaNeueW01-67MdCn 692710';
+}
+
+.application-status i {
+	margin: 0px 0px 0px 5px !important;
+}
+
+.application-status.app-open i {
+	color: #12A157;
+}
+
+.application-status.app-closed i {
+	color: #EFEFEF;
+}
+
+.program-archive-school-footer-menu div {
+	float: right;
+	padding: 4px 10px;
+	border-left: 1px solid #D9D9D9;
+	border-top: 1px solid #D9D9D9;
+	border-right: 1px solid #D9D9D9;
+	border-bottom: 1px solid transparent;
+	border-radius: 5px 5px 0px 0px;
+	margin-bottom: -1px;
+	cursor: pointer;
+}
+
+.program-archive-school-footer-menu div.active {
+	border-bottom: 1px solid #F3F3F3;
+	background: #F3F3F3;
+	box-shadow: 0px -2px 8px -5px;
+	border-right: 1px solid #BBB;
+	border-left: 1px solid #BBB;
+	border-top: 1px solid #BBB;
+}
+
+.program-archive-school-footer-menu div i {
+	font-size: 12px;
+	position: relative;
+	margin: 0px 5px 0px 0px;
+}
+
+@media (max-width: 747px) {
+	.program-archive-school-footer-menu div i {
+		margin: 5px 5px;
+	}
+	
+	.program-archive-school-footer-button .hidden-sm {
+		display: none !important;
+	}
+}
+
+@media (min-width: 747px) {
+	.program-archive-school-footer-button .hidden-sm {
+		display: inline-block !important;
+	}
+}
+
+.program-archive-school-footer-content {
+	margin: 0px 15px;
+	background: #F3F3F3;
+	border-right: 1px solid #DDD;
+	border-left: 1px solid #DDD;
+	box-shadow: 0px -2px 8px -5px;
+}
+
+.program-archive-school-footer-content > div {
+	height: 0px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+.program-archive-footer-dropdown-content {
+	margin: 0px 0px !important;
+	border-bottom: 1px dashed #CCC;
+}
+
+.program-archive-footer-dropdown-header > div {
+	font-family: 'HelveticaNeueW01-47LtCn 692689' !important;
+}
+
+.program-archive-footer-dropdown-header > div > i {
+	margin-left: 5px;
+}
+
+@media (min-width: 1200px) {
+	.program-archive-footer-dropdown-content > div {
+		font-size: 14px !important;
+	}
+}
+
+.program-archive-footer-dropdown-content > div {
+	font-size: 13px;
+	font-family: 'HelveticaNeueW01-57Cn';
+	padding: 7px 0px;
+	text-align: center;
+}
+
+.program-archive-footer-dropdown-content > div i {
+	color: #999;
+}
+
 .program-archive-nav ul {
 margin-left: 0px;
 border-top: 1px solid #DDD;
@@ -1452,6 +1555,7 @@ border-top: 1px solid #DDD;
 .program-archive-nav ul li {
 position: relative;
 border-bottom: 1px solid #DDD;
+border-left: 5px solid #DDD;
 list-style-type: none;
 background: #FCFCFC;
 font-family:'HelveticaNeueW01-57Cn';
@@ -1492,6 +1596,7 @@ margin-top: 25px;
 #compare-programs-list {
 border-top: none;
 margin-left: 0px;
+padding-left: 0px;
 transition: height 5s;
 -webkit-transition: height 5s;
 }
@@ -1513,12 +1618,20 @@ padding: 0px 10px 0px 0px;
 cursor: pointer;
 }
 
+.program-archive-school-compare-link {
+	border: none !important;
+}
+
 #compare-programs-checkbox {
 color: #609FCE;
 cursor: pointer;
-width: 22px;
+width: 14px;
 display: inline-block;
 box-sizing: border-box;
+margin-left: 5px;
+margin-right: 0px;
+top: 1px;
+font-size: 14px;
 }
 
 #compare-programs-link {
@@ -1838,6 +1951,7 @@ float: left;
 .entry > div { margin-bottom: 15px; }
 
 .post-meta-container .wp-post-image { margin-top: 30px; }
+.post-meta-container .post-ribbon-container.vertical { right: 15px; }
 .meta-title { font-family:'HelveticaNeueW01-77BdCn 692722'; font-size: 18px; border-bottom: 1px solid #EFEFEF; margin-top: 20px; margin-bottom: 5px; color: #666; }
 
 .meta-list {
@@ -2817,12 +2931,26 @@ padding-top: 10px;
 	}
 }
 
+@media (max-width: 992px) and (min-width: 747px) {
+	.stretch-fullscreen {
+		width: 748px;
+		left: -165px;
+		box-sizing: content-box;
+	}
+}
+
+@media (max-width: 747px) {
+	.stretch-fullscreen {
+		width: 100%;
+	}
+}
+
 
 /*************************/
 /***** SCROLLSPY NAV *****/
 /*************************/
 
-#scrollspy-nav .nav .active { background: #444; }
+#scrollspy-nav .nav .active { background: #444; border-bottom: 1px solid transparent; }
 #scrollspy-nav .nav .active a {	color: white; }
 #scrollspy-nav .nav .active i {position: absolute; display: block;}
 

@@ -1,10 +1,10 @@
 <div class="navbar navbar-inverse navbar-fixed-top hidden-lg">
 		<div class="container">
-			<a class="btn btn-default btn-navbar hidden-md" data-toggle="collapse" data-target=".nav-collapse">
+			<a class="btn btn-default btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-align-justify"></i>
 			</a>
 			<a class="navbar-brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
-			<div class="nav-collapse collapse clearfix">
+			<div class="nav-collapse collapse">
 				<ul class="navbar-nav hidden-lg nav">
 					
 					
@@ -171,7 +171,7 @@
 			$classifications = get_terms('program_classification');
 			$width = 100*(1/count($classifications));
 			foreach ($classifications as $classification) {
-				$format = '<div id="%s" style="background: #%s; width:' . $width . '%%;"></div>';
+				$format = '<div class="%s" style="background: #%s; width:' . $width . '%%;"></div>';
 				$slug = $classification->slug;
 				$color = get_classification_color($slug);
 				

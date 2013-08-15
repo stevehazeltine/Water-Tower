@@ -1,3 +1,107 @@
+<?php
+/*
+ *	Function to display the related posts widget in Main Menu
+ *
+ *	@param string $category
+ *	@param string $title
+ *	@outputs HTML
+ */
+
+ 	function main_menu_latest_posts($section_slug, $category = null, $title = 'Blogroll') { ?>
+	<?php global $post; ?>
+	
+	   <?php $blogroll_args = array(
+			'posts_per_page' 	=> 6,
+			'post_type' 		=> 'post',
+			'category_name'		=> $category,
+			'orderby'			=> 'date',
+	   ); ?>
+	   
+	   <?php $blogroll = new WP_Query( $blogroll_args ); ?>
+	   <?php if ( $blogroll->have_posts() ) { ?>
+	   <?php $i = 1; ?>
+		   <?php while ( $blogroll->have_posts() ) { ?>
+			   <?php $blogroll->the_post(); ?>
+	   				<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
+						
+						<?php the_post_thumbnail( 'menu-banner' );?>
+						<?php $ribbon = new PostRibbon($post->ID); ?>
+						<?php $ribbon->build_ribbon('horizontal', 3); ?>
+						
+						
+						<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+						<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
+						
+					</div>
+		   <?php $i = ++$i; ?>
+		   <?php } ?>
+	   <?php } ?>
+	   <?php wp_reset_postdata(); ?>
+	   
+	<div class="related-posts-menu-container">
+		<ul class="related-posts-menu">
+			<li id="related-posts-menu-title"><?php echo $title; ?> <i class="icon-mail-forward"></i></li>
+			   <?php $blogroll = new WP_Query( $blogroll_args ); ?>
+			   <?php if ( $blogroll->have_posts() ) { ?>
+			   <?php $i = 1; ?>
+			   
+				   <?php while ( $blogroll->have_posts() ) { ?>
+					   <?php $blogroll->the_post(); ?>
+					   
+					   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="<?php echo $section_slug ?>-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
+					   			<?php echo $i; ?>
+					   		</li>
+					   <?php $i = ++$i; ?>
+				   <?php } ?>
+			   <?php } ?>
+			   <?php wp_reset_postdata(); ?>
+			<li class="related-posts-menu-archive-link">View All Posts</li>
+		</ul>
+	</div>
+ <?php } ?>
+
+
+
+<?php
+/*
+ *	Function to display Primary Menu Contents
+ *
+ *	@param string $menu_location
+ *	@outputs HTML
+ */
+
+ 	function disp_primary_menu($menu_location) {
+		$args = array(
+			'nopaging'				=>  true ,
+			'post_type' 	 		=>	'page',
+			'page_menu_location' 	=>  $menu_location,
+			'order' 				=>  'ASC',
+			'orderby'				=> 	'meta_value_num',
+			'meta_key' 				=>  'menu_priority',
+		);
+	   
+	   $my_query = new WP_Query( $args );
+	   if ( $my_query->have_posts() ) {
+		   
+		   echo '<ul>'; 
+		   
+		   while ( $my_query->have_posts() ) {
+			   $my_query->the_post();
+			   echo '<a href="' . get_permalink() . '" rel="bookmark" title="' . the_title_attribute(array('echo' => FALSE)) . '"><li>' . get_the_title() . '</li></a>';
+		   }
+		   
+		   echo '</ul>';
+	   }
+	   wp_reset_postdata();
+	}
+
+
+?>
+
+
+
+<?php //----- START DESKTOP MENU -----// ?>
+
 <div class="row main-menu-desktop-container visible-lg">
 	<ul class="main-menu-desktop">
 		
@@ -5,33 +109,10 @@
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>
 		 	<!--ABOUT DROPDOWN-->
 		 	<ul id="about-dropdown" class="dropdown-container stretch-fullscreen clearfix">
+		 		
+		 		
 		 		<div class="col-lg-3 primary-menu">
-		 			<div>
-			 				<!----------ABOUT MENU PRIMARY SECTION------------>
-
-		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
-							<?php $args = array(
-							'nopaging'				=>  true ,
-							'post_type' 	 		=>	'page',
-							'page_menu_location' 	=>  'about',
-							'order' 				=> 'ASC',
-							'orderby'				=> 	'meta_value_num',
-							'meta_key' 				=> 'menu_priority',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <ul>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 			</div>
+			 		<?php disp_primary_menu('about'); ?>		
 		 		</div>
 		 		
 		 		
@@ -64,6 +145,7 @@
 							   <?php wp_reset_postdata(); ?>		
 							
 							
+							
 							<!--------------GLOBAL SERVICES----------->
 							
 							<?php // QUERY FOCUS MINISTRIES IN GLOBAL SERVICES ?>
@@ -92,86 +174,8 @@
 		 		
 		 		
 		 		<div class="col-lg-7 menu-related-posts">
-			 			
-			 			<!--LATEST POSTS--->
-						   <?php $about_blogroll = array(
-								'posts_per_page' 	=> 6,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-						   <?php $i = 1; ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'menu-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x200" />
-													<?php } ?>
-													<?php $obj = new PostRibbon($post->ID); ?>
-													<?php $obj->build_ribbon('horizontal', 3); ?>
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
-													
-												</div>
-							   <?php $i = ++$i; ?>
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-						   
-						   
-						
-						
-						
-						
-						<div class="related-posts-menu-container">
-	   			<ul class="related-posts-menu">
-	   				<li id="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
-	   					<!--LATEST POSTS MENU--->
-						   
-						   <?php $my_query = new WP_Query( $about_blogroll ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-						   <?php $i = 1; ?>
-						   
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   		<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="about-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
-								   			<?php echo $i; ?>
-								   		</li>
-								   <?php $i = ++$i; ?>
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-	   				<li class="related-posts-menu-archive-link">View All Posts</li>
-	   			</ul>
-   			</div>
-		 		
-						
-						
-						   
-						   
-						   
+			 		<?php main_menu_latest_posts('about')	; ?>	   
 		 		</div>
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-		 		
-
-		 		
-		 		
 		 	</ul>
 		 </li>
 		 
@@ -196,266 +200,108 @@
 			
 			<!--TRAINING DROPDOWN-->
 			<ul class="dropdown-container stretch-fullscreen clearfix">
-		 		<div class="col-lg-2 primary-menu">
-		 			<div>
-			 			<!----------TRAINING MENU PRIMARY SECTION------------>
-							
-		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE TRAINING SECTION ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	array('page', 'focus_ministries'),
-							'page_menu_location' 	=>  'training',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <ul>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 			</div>
+		 		<div class="col-lg-3 primary-menu">
+		 			<?php disp_primary_menu('training'); ?>
 		 		</div>
 		 		
 		 		
-		 		
-		 		
-		 		<!-------- RESOURCES RELATED POSTS --------->
-		 		<div class="col-lg-3 menu-related-posts training-related-posts">
-			 			
-			 			<!--LATEST POSTS--->
-						   <?php $args = array(
-						   		'p'					=> 711,
-								'posts_per_page' 	=> 2,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div class="related-post">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'xs-mobile-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x400" />
-													<?php } ?>	
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo substr( get_the_content(), 0, 200 ); ?></p>
-													<h6 class="related-post-author">Written By <?php coauthors_posts_links() ?></h6>
-												</div>
-												
+		 		<div class="col-lg-9 center-highlight">
+		 				<div class="row sub-main-menu">
+							
+							
+							<?php
+							/*
+							 * Builds Each Section of the Programs Menu According to Classification
+							 *
+							 *	@param array $class
+							 *	@outputs HTML
+							 */
+							?>
+							<?php function build_program_class_menu($class, $programs_in_class) { ?>
+								<label><?php echo $class->name; ?></label>
+							   <ul style="border-left: 2px solid #<?php echo get_classification_color($class->slug); ?>; padding-left: 5px;">
+							   <?php while ( $programs_in_class->have_posts() ) { ?>
+								   <?php $programs_in_class->the_post(); ?>
+								   
+									<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
+									<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
+								   
 							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-			 			
-			 			
-		 		</div>
-
-		 		
-		 		<div class="col-lg-7 center-highlight center-highlight-programs-menu">
-		 			<div>
-		 				<div class="sub-main-menu sub-main-menu-two-up">
+							   </ul>
+							<?php } ?>
+						
+							<?php // LARGE SCREEN FORMAT DISPLAY ?>
+							<?php $i = 1; ?>
+							
+							<?php // DETERMINE ORDER OF PROGRAM CLASSIFICATIONS
+								$program_classifications_order = array(
+									'discipleship-training-schools',
+									'biblical-studies',
+									'career-discipleship',
+									'secondary-schools',
+									'seminars',
+									'summer-programs',
+								); 
+							?>
+							
+							<?php // POPULATE PROGRAM CLASSIFICATION OBJECT
+								$order = 1;
+								foreach($program_classifications_order as $classification){
+									$program_classifications[$order] = get_term_by('slug', $classification, 'program_classification');
+									$order = ++$order;
+								}
+							?>
+								
+								<div class="row xl-programs-menu-row">
+									<?php foreach ($program_classifications as $class) { ?>				
+										<div class="col-lg-4">							
+											<?php 
+											$args = array(
+												'nopaging'					=>  true ,
+												'post_type' 	 			=>	'program',
+												'program_classification' 	=>  $class->slug,
+											); 
+											?>
+											   
+										   <?php $programs_in_class = new WP_Query( $args ); ?>
+										   <?php if ( $programs_in_class->have_posts() ) { ?>
+											   <?php build_program_class_menu($class, $programs_in_class); ?>
+										   <?php } ?>
+										   <?php wp_reset_postdata(); ?>
+										</div>
+									<?php if ($i == 3){echo '</div><div class="row xl-programs-menu-row">';}?>
+									<?php $i = ++$i; ?>
+									<?php } ?>
+								</div>
+						
+						
+							<?php // NORMAL SCREEN FORMAT DISPLAY ?>
+								<?php $i = 1; ?>
+								
+								<div class="row programs-menu-row">
+									<?php foreach ($program_classifications as $class) { ?>				
+										<div class="col-lg-6">							
+											<?php 
+											$args = array(
+												'nopaging'					=>  true ,
+												'post_type' 	 			=>	'program',
+												'program_classification' 	=>  $class->slug,
+											); 
+											?>
+											   
+										   <?php $programs_in_class = new WP_Query( $args ); ?>
+										   <?php if ( $programs_in_class->have_posts() ) { ?>
+											   <?php build_program_class_menu($class, $programs_in_class); ?>
+										   <?php } ?>
+										   <?php wp_reset_postdata(); ?>
+										</div>
+									<?php if ($i == 2 || $i == 4){echo '</div><div class="row programs-menu-row">';}?>
+									<?php $i = ++$i; ?>
+									<?php } ?>
+								</div>
 						
 						
 							
-							<!------------DISCIPLESHIP TRAINING SCHOOLS---------->
-						   
-							<?php // QUERY SCHOOLS IN DISCIPLESHIP TRAINING CLASS ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'discipleship-training-schools',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <label>Discipleship Training Schools</label>
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('discipleship-training-schools'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-
-							   
-							   
-			 				<!-------------BIBLICAL STUDIES------------>
-							
-							<?php // QUERY SCHOOLS IN BIBLICAL STUDIES CLASS ?>
-			 				<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'biblical-studies',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <label>Biblical Studies</label>
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('biblical-studies'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-			 				
-							
-							
-							<!---------------SEMINARS-------------->
-							
-							<?php // QUERY SCHOOLS IN SEMINARS CLASS ?>
-		 					<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'seminars',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-							       <label>Seminars</label>
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('seminars'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>	
-		 				</div>
-						
-						
-						<!-----------LEFT SUBMENU----------->
-		 				<div class="sub-main-menu sub-main-menu-two-up">
-						
-							<!--------------SECONDARY SCHOOLS----------->
-							
-							<?php // QUERY SCHOOLS IN SECONDARY SCHOOLS CLASS ?>
-		 					<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'secondary-schools',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <label>Secondary Schools</label>	
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('secondary-schools'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-							   
-							   
-							   
-			 				<!------------SUMMER PROGRAMS----------->
-							
-							<?php // QUERY SCHOOLS IN SUMMER PROGRAMS CLASS ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'summer-programs',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <label>Summer Programs</label>
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('summer-programs'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-			 				
-							
-							
-							<!----------CAREER DISCIPLESHIP------------>
-							
-		 					<?php // QUERY SCHOOLS IN DISCIPLESHIP TRAINING CLASS ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'program',
-							'program_classification' 	=>  'career-discipleship',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <label>Career Discipleship</label>
-								   <ul style="border-left: 2px solid #<?php echo get_classification_color('career-discipleship'); ?>; padding-left: 5px;">
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-									   
-										<?php // CHECK IF SCHOOL IS RUNNING, AND ECHO LINK IF IT IS ?>
-										<?php $status = rwmb_meta( 'running', $post->ID ); ?>
-										<?php if ( $status != 0 ) { ?>
-										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
-										<?php if (rwmb_meta( 'acronym' ) != '') {?> - ( <?php echo rwmb_meta( 'acronym' ); ?> )<?php } ?></a></li>
-										<?php } ?>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 				</div>
 		 			</div>
 		 		</div>
 		 		
@@ -469,92 +315,11 @@
 		 
 		 <!--OUTREACH DROPDOWN-->
 		 	<ul id="outreach-dropdown" class="dropdown-container  stretch-fullscreen clearfix">
-		 		<div class="col-lg-2 primary-menu">
-		 			<div>
-			 			<!----------OUTREACH MENU PRIMARY SECTION------------>
-							
-		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE OUTREACH SECTION ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	array('page', 'focus_ministries'),
-							'page_menu_location' 	=>  'outreach',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <ul>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 			</div>
+		 		
+		 		<div class="col-lg-3 primary-menu">
+		 			<?php disp_primary_menu('outreach'); ?>
 		 		</div>
-			 			
-				<div class="col-lg-8 menu-related-posts">
-					
-					<!--LATEST POSTS--->
-					   <?php $outreach_blogroll = array(
-							'posts_per_page' 	=> 6,
-							'post_type' 		=> 'post',
-							'orderby'			=> 'date',
-					   ); ?>
-					   
-					   <?php $my_query = new WP_Query( $outreach_blogroll ); ?>
-					   <?php if ( $my_query->have_posts() ) { ?>
-					   <?php $i = 1; ?>
-						   <?php while ( $my_query->have_posts() ) { ?>
-							   <?php $my_query->the_post(); ?>
-											<div id="related-post-<?php echo $post->ID; ?>" class="related-post <?php if($i==1) {echo 'active-related-post';} ?>">
-												<?php // check if the post has a Post Thumbnail assigned to it.
-													if ( has_post_thumbnail() ) {
-														the_post_thumbnail( 'menu-banner' );
-													} else { ?>
-														<img src="http://placehold.it/1200x200" />
-												<?php } ?>
-												<?php $obj = new PostRibbon($post->ID); ?>
-												<?php $obj->build_ribbon('horizontal', 3); ?>
-												
-												
-												<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-												<p class="related-post-excerpt"><?php echo get_the_excerpt(); ?></p>
-												
-											</div>
-						   <?php $i = ++$i; ?>
-						   <?php } ?>
-					   <?php } ?>
-					   <?php wp_reset_postdata(); ?>
-				</div> 
 
-		 		
-		 		
-				<div class="related-posts-menu-container">
-					<ul class="related-posts-menu">
-						<li class="related-posts-menu-title">Blogroll <i class="icon-mail-forward"></i></li>
-							<!--LATEST POSTS MENU--->
-							   
-							   <?php $my_query = new WP_Query( $outreach_blogroll ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php $i = 1; ?>
-							   
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-											<li id="related-post-menu-item-<?php echo $post->ID; ?>" data-section="outreach-dropdown" data-id="<?php echo $post->ID; ?>" <?php if($i==1) { ?>class="active-related-post-menu-item"<?php } ?> >
-												<?php echo $i; ?>
-											</li>
-									   <?php $i = ++$i; ?>
-								   <?php } ?>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-						<li class="related-posts-menu-archive-link">View All Posts</li>
-					</ul>
-				</div>		
-		 		
 		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 			
@@ -605,6 +370,10 @@
 		 			</div>
 		 		</div>
 		 		
+		 		<div class="col-lg-7 menu-related-posts">
+					<?php main_menu_latest_posts('outreach', 'outreach-updates')	; ?>
+				</div>	
+		 		
 		 	</ul>
 		 </li>
 		 
@@ -613,72 +382,12 @@
 		 <li class="span"><span class="link-wrapper"><a href="#">Resources</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--RESOURCES DROPDOWN-->
-		 	<ul class="dropdown-container stretch-fullscreen clearfix">
-		 		<div class="col-lg-2 primary-menu">
-		 			<div>
-			 			<!----------RESOURCES MENU PRIMARY SECTION------------>
-							
-		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE RESOURCES SECTION ?>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	array('page', 'focus_ministries'),
-							'page_menu_location' 	=>  'resources',
-							'orderby'					=> 	'meta_value',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <ul>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 			</div>
-		 		</div>
+		 	<ul id="resources-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		
-		 		
-		 		
-		 		<!-------- RESOURCES RELATED POSTS --------->
-		 		<div class="col-lg-8 menu-related-posts">
-			 			
-			 			<!--LATEST POSTS--->
-						   <?php $args = array(
-								'posts_per_page' 	=> 2,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-								'category_name'		=> 'staff-articles',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div class="sub-main-menu-two-up related-post">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'xs-mobile-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x400" />
-													<?php } ?>	
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo substr( get_the_content(), 0, 200 ); ?></p>
-													<h6 class="related-post-author">Written By <?php coauthors_posts_links() ?></h6>
-												</div>
-												
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-			 			
-			 			
-		 		</div>
-		 		
+		 		<div class="col-lg-3 primary-menu">
+		 			<?php disp_primary_menu('resources'); ?>
+		 		</div>			
+							 		
 		 		<div class="col-lg-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 				<label>Post Categories</label>
@@ -694,72 +403,25 @@
 		 			</div>
 		 		</div>
 		 		
+		 		<div class="col-lg-7 menu-related-posts">
+					<?php main_menu_latest_posts('resources', 'staff-articles')	; ?>
+				</div>
+		 		
 		 	</ul>
 		 </li>
+		 
+		 
+		 
 		 
 		 
 		 <!--GET INVOLVED LINK-->
 		 <li class="span"><span class="link-wrapper"><a href="#">Get Involved</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--GET INVOLVED DROPDOWN-->
-		 	<ul class="dropdown-container stretch-fullscreen clearfix">
-		 		<div class="col-lg-2 primary-menu">
-		 			<div>
-			 			
-			 				<!----------GET INVOLVED MENU PRIMARY SECTION------------>
-							<?php $args = array(
-							'nopaging'					=>  true ,
-							'post_type' 	 			=>	'page',
-							'page_menu_location' 	=>  'get-involved',
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <ul>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><li><?php the_title(); ?></li></a>
-									   
-								   <?php } ?>
-								   </ul>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-		 			</div>
-		 		</div>
+		 	<ul id="get-involved-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		
-		 		<div class="col-lg-8 menu-related-posts">
-			 			
-			 			<!--LATEST POSTS--->
-						   <?php $args = array(
-								'posts_per_page' 	=> 2,
-								'post_type' 		=> 'post',
-								'orderby'			=> 'date',
-						   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   				<div class="sub-main-menu-two-up related-post">
-													<?php // check if the post has a Post Thumbnail assigned to it.
-														if ( has_post_thumbnail() ) {
-															the_post_thumbnail( 'xs-mobile-banner' );
-														} else { ?>
-															<img src="http://placehold.it/1200x400" />
-													<?php } ?>	
-													
-													
-													<h5 class="related-post-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p class="related-post-excerpt"><?php echo substr( get_the_content(), 0, 200 ); ?></p>
-													<h6 class="related-post-author">Written By <?php coauthors_posts_links() ?></h6>
-												</div>
-												
-							   <?php } ?>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
-			 			
-			 			
+		 		<div class="col-lg-3 primary-menu">
+		 			<?php disp_primary_menu('get-involved'); ?>
 		 		</div>
 		 		
 		 		<div class="col-lg-2 center-highlight">
@@ -809,6 +471,10 @@
 							   
 		 			</div>
 		 		</div>
+		 		
+		 		<div class="col-lg-7 menu-related-posts">
+					<?php main_menu_latest_posts('get-involved', 'project-updates')	; ?>
+				</div>
 		 		
 		 	</ul>
 		 </li>

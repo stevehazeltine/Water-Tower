@@ -34,7 +34,7 @@
 		<?php //----- PROGRAM ARCHIVE MENU HIGHLIGHT COLORS -----//
 			$classifications = get_terms('program_classification');
 			foreach ($classifications as $classification) {
-				$format = '#%s.active {background: #%s !important;}';
+				$format = '.%s.active {border-left: 5px solid #%s !important;}';
 				$slug = $classification->slug;
 				$color = get_classification_color($slug);
 				

@@ -16,8 +16,6 @@
 		
 		
 		
-		
-		
 		<!--------------------------->
 		<!----- BIBLICAL STUDIES ----->
 		<!--------------------------->
@@ -213,7 +211,7 @@
 	          <?php //----- PROGRAM ARCHIVE MENU -----//
 	            $classifications = get_terms('program_classification');
 	            foreach ($classifications as $classification) {
-	              $format = '<li id="%1$s"><i class="icon-caret-right"></i><a href="#%1$s">%2$s</a></li>';
+	              $format = '<li class="%1$s"><i class="icon-caret-right"></i><a href="#%1$s">%2$s</a></li>';
 	              $slug = $classification->slug;
 	              $title = $classification->name;
 	              

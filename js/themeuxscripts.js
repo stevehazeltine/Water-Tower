@@ -14,14 +14,50 @@
 			
 			
 			
+			//ENABLE SMOOTHSCROLL ON SCROLLSPY OBJECTS
+			$("#scrollspy-nav ul li a[href^='#']").on('click', function(e) {
+			   e.preventDefault();
+			   $('html, body').animate({ scrollTop: $(this.hash).offset().top }, 300);
 			
-			//ENABLE COMPARE SCHOOLS DESCRIPTION POPOVER
-			$(function () {  
-				$('[id^=compare-program-desc-btn]').popover({
-					placement: 'left',
-				});
+			   // edit: Opera and IE requires the "html" elm. animated
 			});
 			
+			
+			//PROGRAM ARCHIVE MORE INFO BUTTONS
+			
+			
+			$('.program-archive-school-footer-button').click(function() {
+	
+				var contentBox = $(this).attr('data-target-container');
+	
+				if (!$(this).hasClass('active')){
+					
+					if ($('.program-archive-school-footer-button').hasClass('active')) {
+						$('.program-archive-school-footer-button').removeClass('active');
+						$(this).toggleClass('active');
+						$('.program-archive-school-footer-content .slidedown').animate({height: 0}, 200, function() {
+							$('.program-archive-school-footer-content .slidedown').removeClass('slidedown');
+							var containerHeight = $('#' + contentBox + ' .program-archive-footer-dropdown-content-container').height();
+							$('#' + contentBox).animate({height: containerHeight}, 200);
+							$('#' + contentBox).addClass('slidedown');
+						});
+					} else {
+						$(this).toggleClass('active');
+						var containerHeight = $('#' + contentBox + ' .program-archive-footer-dropdown-content-container').height();
+						$('#' + contentBox).animate({height: containerHeight}, 200);
+						$('#' + contentBox).addClass('slidedown');
+					}
+				
+				
+					
+					
+				} else {
+					$('.program-archive-school-footer-content .slidedown').animate({height: 0}, 200);
+					$('.program-archive-school-footer-content .slidedown').removeClass('slidedown');
+					$(this).toggleClass('active');
+				}
+			
+			});
 			
 			
 			//COMPARE SCHOOLS ENGINE 
@@ -299,6 +335,7 @@
 			  
 		    });
 		});
+		
 
 		
 		//ACTIVATE SEARCH FORM ON HEADER
@@ -306,15 +343,14 @@
 		    $("#header-search-form").click(function () {
 				if (!$("#header-search-form").hasClass("search-active")) {
 					$("#header-search-form").toggleClass("search-active");
+					$("#header-search").focus();
 				}
 			});
-			
 			
 			$("#header-search").focusout(function() {
 				var searchString = $("#header-search").val();
 
 				if (jQuery.trim(searchString).length > 0) {
-						
 				} else {
 					$("#header-search-form").toggleClass("search-active");
 				}

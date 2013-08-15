@@ -16,12 +16,12 @@
 		    wp_enqueue_script('jquery');
 		    
 		    //TAKE CARE OF BOOTSTRAP
-		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery',), '2.3.2', true);
+		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery'), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
-		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery', 'bootstrap'), '1.0', true);
-		    wp_register_script('royalslider', get_template_directory_uri().'/royalslider/jquery.royalslider.min.js', array('jquery', 'bootstrap'), '9.4.0', true);
-		    wp_register_script('charts', get_template_directory_uri().'/js/Chart.min.js', array('jquery', 'bootstrap'), '0.2', true);
+		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery'), '1.0', true);
+		    wp_register_script('royalslider', get_template_directory_uri().'/royalslider/jquery.royalslider.min.js', array('jquery'), '9.4.0', true);
+		    wp_register_script('charts', get_template_directory_uri().'/js/Chart.min.js', array('jquery'), '0.2', true);
 		    
 		    
 		    //QUEUE UP YOUR SCRIPTS
@@ -988,15 +988,25 @@
 			}
 			
 			//----- DISPLAY POST RIBBON -----//
-			public function build_ribbon($orientation, $height) {
+			public function build_ribbon($orientation, $thickness) {
 				
 				//----- DEFINE STYLES -----//
-				$styles = 'height:' . $height . 'px;';
-			
+				if ($orientation == 'vertical') {
+					$styles = 'width:' . $thickness . 'px;';
+					$container_class = 'vertical';
+				} else {
+					$styles = 'height:' . $thickness . 'px;';
+					$container_class = 'horizontal';
+				}
+				
 				//----- BUILD THE RIBBON -----//
-				echo '<div style="' . $styles . '" class="post-ribbon-container">';
+				echo '<div style="' . $styles . '" class="post-ribbon-container ' . $container_class . '">';
 					foreach ($this->post_color_info as $ribbon) {
-						echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						if ($orientation == 'vertical') {
+							echo '<div style="height: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						} else {
+							echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						}
 					}
 				echo '</div>';
 			}
@@ -1130,8 +1140,105 @@
 				return $programs;
 			}
 		
+
+/**
+ * Get Quarter of Program
+ *
+ * @param string date_string
+ * @return string quarter_string
+ */
+
+ function define_quarter($date_string) {
+ 
+	$program_year = substr($date_string, 0, 4);
+ 
+	if (preg_match('^[0-9]{4}[0]{1}[1-2]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Winter ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0]{1}[3-5]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Spring ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0]{1}[6-8]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Summer ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0-1][0-2,9][0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Fall ' . $program_year;
+		return $quarter_string;
+	} else {
+		return 0;
+	}
+ }
+
+
+
+/**
+ * Get Program Information Class
+ *
+ * @param string program_id
+ * @return object program_info
+ */		
+
+	class programInfo {
+		var $cur_date;
+		var $program_id;
+		var $schedule;
+		var $academic_info;
 		
+		public function populate_schedule() {
+			
+			$i = 1;
+			$start_date = 'start_date' . $i;
+			$end_date = 'end_date' . $i;
+			$total_cost = 'total_cost' . $i;
+			$app_open_date = 'app_open_date' . $i;
+			$app_deadline = 'app_deadline' . $i;
+			$this->cur_date = date('Ymd');
+			
+			while (rwmb_meta($start_date) != '') {
+				
+				//----- ONLY DISPLAY FUTURE SCHOOLS -----//
+				if (rwmb_meta($start_date) >= $this->cur_date) {
+					$this->schedule[$i] = array(
+						'start_date' => rwmb_meta($start_date),
+						'end_date'	 => rwmb_meta($end_date),
+						'total_cost' => rwmb_meta($total_cost),
+						'app_open_date'	=> rwmb_meta($app_open_date),
+						'app_deadline'	=> rwmb_meta($app_deadline),
+					);
+					
+					$this->schedule[$i]['quarter'] = define_quarter(rwmb_meta($start_date)); 
+					
+					//----- DEFINE APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date) && $this->cur_date < rwmb_meta($app_deadline)) {
+						$this->schedule[$i]['app_status'] = 'open';
+					} else {
+						$this->schedule[$i]['app_status'] = 'closed';
+					}
+				}
+				
+				$i = ++$i;
+				$start_date = 'start_date' . $i;
+				$end_date = 'end_date' . $i;
+				$total_cost = 'total_cost' . $i;
+				$app_open_date = 'app_open_date' . $i;
+				$app_deadline = 'app_deadline' . $i;
+			}
 		
+			usort($this->schedule, array($this, 'sort_by_date'));
+			
+		}
+		
+		//----- SORT DATES -----//
+		public function sort_by_date($a, $b) {
+			return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+		}
+		
+		function __construct($program_id) {
+			$this->program_id = $program_id;
+			$this->populate_schedule();
+		}
+		
+	}	
 		
 		
 		
@@ -1219,7 +1326,7 @@
 					   <?php while ( $my_query->have_posts() ) { ?>
 						   <?php $my_query->the_post(); ?>
 						   
-							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><?php $obj = new PostRibbon(get_the_ID()); ?><?php $obj->build_ribbon('vertical', 3); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
+							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><?php $obj = new PostRibbon(get_the_ID()); ?><?php $obj->build_ribbon('horizontal', 3); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
 						   
 					   <?php } ?>
 				   <?php } ?>
@@ -1422,9 +1529,13 @@
 							}
 							?>
 
-							<?php $objw = new PostRibbon(get_the_ID()); ?>
-							<?php $objw->build_ribbon('vertical', 3); ?>
-							
+							<?php if (is_single()) { ?>
+								<?php $ribbon = new PostRibbon(get_the_ID()); ?>
+								<?php $ribbon->build_ribbon('vertical', 2); ?>
+							<?php } else { ?>
+								<?php $ribbon = new PostRibbon(get_the_ID()); ?>
+								<?php $ribbon->build_ribbon('horizontal', 3); ?>
+							<?php } ?>
 							
 							
 							
@@ -1733,14 +1844,9 @@
 						
 						<div class="col-lg-8 program-archive-content">
 						
-							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-lg">
-									<span>Compare 
-										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
-										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
-									</span>
-								</div>
-							<?php } ?>
+						<?php //----- POPULATE PROGRAM INFO OBJECT -----// ?>
+						<?php $program_info = new programInfo($program_id); ?>
+							
 						
 							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
 							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
@@ -1762,10 +1868,111 @@
 							<div style="clear: both"> </div>
 							
 							<div class="program-archive-tagline">
-								<?php echo substr(get_the_excerpt(), 0, 150); ?>
+								<?php the_excerpt(); ?>
 							</div>
 							
 						</div>
+					</div>
+					
+					<div class="row program-archive-school-footer">
+						<div class="program-archive-school-footer-menu clearfix">
+							
+							
+							
+							<?php if ($in_main_archive == true) { ?>
+								<div class="program-archive-school-compare-link visible-lg">
+									<span>Compare 
+										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+									</span>
+								</div>
+							<?php } ?>
+							
+							<div class="program-archive-school-footer-button" data-target-container="dates-<?php echo $program_info->program_id; ?>"><i class="icon-calendar"></i><span class="hidden-sm"> All Dates</span></div>
+							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>"><i class="icon-info"></i><span class="hidden-sm"> Program Info</span></div>
+							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>" style="float: left;">Applications: 
+								<?php 
+								if ($program_info->schedule[0]['app_status'] == 'open') {
+									echo '<span class="application-status app-open">Open <i class="icon-circle-blank"></i></span>';
+								} else {
+									echo '<span class="application-status app-closed">Closed <i class="icon-circle-blank"></i></span>';
+								}
+								?>
+								
+							</div>
+							
+						</div>
+						
+						<div class="program-archive-school-footer-content">
+								<div class="row" id="dates-<?php echo $program_info->program_id; ?>">
+									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+										
+										<?php //----- PROGRAM SCHEDULE TABLE HEADER -----//?>
+										<div class="program-archive-footer-dropdown-content program-archive-footer-dropdown-header row">
+											<div class="col-lg-2 col-12">Quarter<i class="icon-angle-down"></i></div>
+											<div class="col-lg-4 col-12">Dates<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Nationality<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Apply Deadline<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Applications<i class="icon-angle-down"></i></div>
+										</div>
+										
+										<?php //----- PROGRAM SCHEDULE INFO LOOP -----// ?>
+										<?php foreach($program_info->schedule as $program_instance) { ?>
+										
+											<div class="program-archive-footer-dropdown-content row">
+												<div class="col-lg-2 col-12"><?php echo $program_instance['quarter']; ?></div>
+												<div class="col-lg-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
+												
+												
+												<div class="col-lg-2 col-12">
+													<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
+												</div>
+												
+												<div class="col-lg-2 col-12">
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?>
+												</div>
+												
+												
+												
+												<div class="col-lg-2 col-12">
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+												</div>
+											</div>
+										
+										<?php } ?>
+									</div>
+								</div>
+								<div class="row" id="info-<?php echo $program_info->program_id; ?>">
+									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+										<div class="row">
+											<div class="col-lg-2 col-12">Quarter 2013</div>
+											<div class="col-lg-2 col-12">Start Date</div>
+											<div class="col-lg-2 col-12">End Date</div>
+											<div class="col-lg-2 col-12">Application Open</div>
+											<div class="col-lg-2 col-12">Application Deadline</div>
+											<div class="col-lg-2 col-12">Application Status</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-2 col-12">Quarter 2013</div>
+											<div class="col-lg-2 col-12">Start Date</div>
+											<div class="col-lg-2 col-12">End Date</div>
+											<div class="col-lg-2 col-12">Application Open</div>
+											<div class="col-lg-2 col-12">Application Deadline</div>
+											<div class="col-lg-2 col-12">Application Status</div>
+										</div>
+									</div>
+								
+								
+								</div>
+							</div>
 					</div>
 					
 			<?php }
@@ -2016,13 +2223,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 		//----------------------------------------//
 		//----- ADD WATER TOWER OPTIONS PAGE -----//
 		//----------------------------------------//
-			?>
-			<style>
-			#icon-water-tower-settings {
-				background: #444;;
-			}
-			</style>
-			<?php
+		
 		
 			//----- ADD THEME OPTIONS LINK UNDER APPEARANCE TAB -----//
 			function theme_options_page() {
@@ -2087,16 +2288,9 @@ class ywammontana_walker_comment extends Walker_Comment {
 				
 					//----- FRONT PAGE BANNER SETTINGS -----//
 					add_settings_section('front_page_banner_settings', 'Banner Settings', 'banner_settings_text', 'front_page_options');
-						add_settings_field('alert_status', 'Enable Alert Status', 'get_alert_status', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('alert_status_message', 'Alert Status Message', 'get_alert_status_message', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('alert_ribbon_color', 'Alert Ribbon Color', 'get_alert_ribbon_color', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('program_override_status', 'Program Override', 'get_program_override_status', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('program_override_id', 'Program Override ID', 'get_program_override_id', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('video_override_status', 'Video Override', 'get_video_override_status', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('video_override_id', 'Video Override ID', 'get_video_override_id', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('post_override_status', 'Post Override', 'get_post_override_status', 'front_page_options', 'front_page_banner_settings');
-						add_settings_field('post_override_id', 'Post Override ID', 'get_post_override_id', 'front_page_options', 'front_page_banner_settings');
-							
+							add_settings_field('alert_status', 'Alert Status', 'get_alert_status', 'front_page_options', 'front_page_banner_settings');
+							add_settings_field('alert_status_message', 'Alert Status Message', 'get_alert_status_message', 'front_page_options', 'front_page_banner_settings');
+					
 					//----- FRONT PAGE MODULES -----//
 			
 			
@@ -2158,41 +2352,6 @@ class ywammontana_walker_comment extends Walker_Comment {
 					echo "<textarea id='alert_status_message' name='front_page_options[alert_status_message]' rows='5' cols='50'>";
 					echo $options['alert_status_message'];
 					echo '</textarea>';
-				}
-				
-				function get_alert_ribbon_color() {
-					$options = get_option('front_page_options');
-					echo "<input id='alert_ribbon_color' style='color: white; font-weight: bold; background: #{$options['alert_ribbon_color']};' name='front_page_options[alert_ribbon_color]' type='text' value='{$options['alert_ribbon_color']}'";
-				}
-				
-				function get_program_override_status() {
-					$options = get_option('front_page_options');
-					echo "<input id='program_override_status' name='front_page_options[program_override_status]' type='checkbox' value='0' " . checked(0, $options['program_override_status'], false) . "/>";
-				}
-				
-				function get_program_override_id() {
-					$options = get_option('front_page_options');
-					echo "<input id='program_override_id' name='front_page_options[program_override_id]' type='text' value='{$options['program_override_id']}' ";
-				}
-				
-				function get_video_override_status() {
-					$options = get_option('front_page_options');
-					echo "<input id='video_override_status' name='front_page_options[video_override_status]' type='checkbox' value='0' " . checked(0, $options['video_override_status'], false) . "/>";
-				}
-				
-				function get_video_override_id() {
-					$options = get_option('front_page_options');
-					echo "<input id='video_override_id' name='front_page_options[video_override_id]' type='text' value='{$options['video_override_id']}' ";
-				}
-				
-				function get_post_override_status() {
-					$options = get_option('front_page_options');
-					echo "<input id='post_override_status' name='front_page_options[post_override_status]' type='checkbox' value='0' " . checked(0, $options['post_override_status'], false) . "/>";
-				}
-				
-				function get_post_override_id() {
-					$options = get_option('front_page_options');
-					echo "<input id='post_override_id' name='front_page_options[post_override_id]' type='text' value='{$options['post_override_id']}' ";
 				}
 		
 					

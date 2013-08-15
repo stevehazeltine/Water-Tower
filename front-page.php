@@ -94,7 +94,7 @@ Template Name: Front Page
 					<div class="row">
 					
 								<?php foreach($upcomingschools as $school) { ?>					
-									<div class="blogroll-upcoming-school col-lg-3">
+									<div class="blogroll-upcoming-school col-6 col-lg-3">
 										
 										<div class="blogroll-upcoming-school-image">
 											<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
@@ -211,7 +211,7 @@ Template Name: Front Page
 											
 											
 											<?php $obj = new PostRibbon($post->ID); ?>
-											<?php $obj->build_ribbon('vertical', 3); ?>
+											<?php $obj->build_ribbon('horizontal', 3); ?>
 											
 											
 											
