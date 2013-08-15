@@ -24,7 +24,7 @@
 		 
 				
 					
-					<div class="span8 school-main-content-container">
+					<div class="col-lg-8 school-main-content-container">
 							<div class="school-title-container">
 								<h2 class="school-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
 									<span class="school-long-title"><?php the_title(); ?></span>
@@ -33,8 +33,8 @@
 					
 				 		
 				 		 <!--MAIN CONTENT FOR PROGRAM PAGE-->
-				 		 		<div class="row">
-								 <div class="span post school-main-content">
+				 		 		
+								 <div class="post school-main-content">
 														
 										 <!--OVERVIEW OF THE SCHOOL-->
 										 <div class="entry">
@@ -49,6 +49,205 @@
 											
 											
 											
+											
+											
+											
+											
+											
+											
+											
+											<?php // LECTURE SECTION V2 ?>
+												<h4><?php echo rwmb_meta('lecture_phase_title'); ?></h4>
+												<p><?php echo rwmb_meta('lecture_phase_desc'); ?></p>
+												<?php // LECTURE PHASE OVERVIEW ?>
+												
+												<div class="lecture-phase-overview-container row">
+												
+												
+												
+													<div class="col-5 col-lg-4 col-sm-4">
+														<div class="chart-container">
+															<canvas id="lecture-overview" class="chart" width="800" height="800"></canvas>
+														
+															<script>
+																jQuery(document).ready(function($) {
+																
+																var lectureOverview = [
+																
+																
+																//LOOP THROUGH CHART DATA
+																<?php $i = 1; ?>
+																
+																<?php $activity_title = 'activity_title' . $i; ?>
+																<?php $activity_hours = 'hours_per_week' . $i; ?>
+																<?php $colors_10 = array( 
+																	'1' => 'FDB813',
+																	'2' => 'F37021', 
+																	'3' => 'ED1C24', 
+																	'4' => '00AABC', 
+																	'5' => '00A99D', 
+																	'6' => '35BBAD',
+																	'7' => '8DC73F', 
+																	'8' => '5C2E90', 
+																	'9' => 'F1729D', 
+																	'10'=> 'ED0080',
+																); ?>
+																
+																
+																<?php $total_hours = rwmb_meta($activity_hours); ?>
+																<?php while (rwmb_meta($activity_title) !== '') { ?>
+																		{value : <?php echo rwmb_meta($activity_hours); ?>, color : "#<?php echo $colors_10[$i]; ?>" },	
+																		
+																	<?php $i = $i + 1; ?>
+																	<?php $activity_title = 'activity_title' . $i; ?>
+																	<?php $activity_hours = 'hours_per_week' . $i; ?>
+																	<?php $total_hours = $total_hours + rwmb_meta($activity_hours); ?>
+																<?php } ?>
+																
+																	]
+																var options = {
+																	segmentStrokeWidth : 10,
+																	percentageInnerCutout : 65,
+																	animation: false,
+																}
+																var ctx = document.getElementById("lecture-overview").getContext("2d");
+																var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
+																	
+																		
+																});			
+															</script>
+															<div class="lecture-overview-chart-hours hidden-sm">
+																<?php echo $total_hours; ?>
+																<div class="lecture-overview-hours-title">Hours/Week</div>
+															</div>
+														</div>
+													</div>
+												
+												
+													<div class="col-7 col-lg-8 col-sm-8">
+														<ul class="lecture-phase-overview-key">
+														<?php $i = 1 ?>
+														
+														<?php $activity_title = 'activity_title' . $i; ?>
+														<?php $activity_hours = 'hours_per_week' . $i; ?>
+														<?php while (rwmb_meta($activity_title) !== '') { ?>
+																<li>
+																
+																	<div class="key-item">
+																		<i class="icon-circle-blank" style="color: #<?php echo $colors_10[$i]; ?>;"></i><?php echo rwmb_meta($activity_title); ?>
+																	</div>
+																</li>	
+																
+															<?php $i = $i + 1; ?>
+															<?php $activity_title = 'activity_title' . $i; ?>
+															<?php $activity_hours = 'hours_per_week' . $i; ?>
+														<?php } ?>
+														</ul>
+													</div>
+												</div>
+												
+												
+												
+												
+												
+												
+												<?php // LECTURE PHASE DETAILS ?>
+												<div class="lecture-phase-detail-container">
+																								
+													<div class="lectture-phase-details">
+														<?php $n = 1; ?>
+														<?php $activity_title = 'activity_title' . $n; ?>
+														<?php $activity_hours = 'hours_per_week' . $n; ?>
+														<?php $activity_desc = 'activity_description' . $n; ?>
+													
+														<?php while (rwmb_meta($activity_title) !== '') { ?>
+														<div class="lecture-phase-activity-details-container row">
+															<div class="col-9 col-lg-10">
+																<h6><?php echo rwmb_meta($activity_title); ?></h6>
+																<?php echo rwmb_meta($activity_desc); ?>
+															</div>
+														
+														
+															<div class="col-3 col-lg-2">
+															<div class="lecture-phase-activity-detail-chart">
+																<div class="chart-container">
+																	<div class="lecture-phase-activity-detail-chart-hours"><?php echo rwmb_meta($activity_hours); ?></div>
+																	<canvas id="activity-detail-<?php echo $n; ?>" class="chart" width="150" height="150"></canvas>
+																	
+																	<script>
+																		jQuery(document).ready(function($) {
+																		
+																		var lectureOverview = [
+																		
+																		
+																		//LOOP THROUGH TOTAL CHART DATA
+																		<?php $i = 1; ?>
+																		<?php $activity_title = 'activity_title' . $i; ?>
+																		<?php $activity_hours = 'hours_per_week' . $i; ?>
+																		<?php $activity_desc = 'activity_description' . $i; ?>
+																		<?php $hours_before = 0; ?>
+																		<?php $hours_after = $total_hours - rwmb_meta($activity_hours); ?>
+		
+																		<?php while (rwmb_meta($activity_title) !== '') { ?>
+	
+																				<?php if ($n == $i) { ?>
+																					{value : <?php echo $hours_before; ?>, color : "#EFEFEF"},
+																					{value : <?php echo rwmb_meta($activity_hours); ?>, color : "#<?php echo $colors_10[$i]; ?>" },
+																					{value : <?php echo $hours_after; ?>, color : "#EFEFEF"},
+																				<?php } ?>
+																				
+																			<?php $hours_before = $hours_before + rwmb_meta($activity_hours); ?>
+																			
+																				
+																			<?php $i = $i + 1; ?>
+																			<?php $activity_title = 'activity_title' . $i; ?>
+																			<?php $activity_hours = 'hours_per_week' . $i; ?>
+																			<?php $activity_desc = 'activity_description' . $i; ?>
+																			<?php $hours_after = $total_hours - (rwmb_meta($activity_hours)+$hours_before); ?>
+																			
+																		<?php } ?>
+																		
+																			]
+																		var options = {
+																			segmentStrokeWidth : 3,
+																			percentageInnerCutout : 65,
+																			animation: false,
+																		}
+																		var ctx = document.getElementById("activity-detail-<?php echo $n; ?>").getContext("2d");
+																		var myNewChart = new Chart(ctx).Doughnut(lectureOverview, options);
+																			
+																				
+																		});			
+																	</script>
+																	
+																</div>
+															</div>
+															</div>
+														
+														</div><!--/.lecture-phase-detail-container-->
+														
+														<?php $n = $n + 1; ?>
+														<?php $activity_title = 'activity_title' . $n; ?>
+														<?php $activity_hours = 'hours_per_week' . $n; ?>
+														<?php $activity_desc = 'activity_description' . $n; ?>
+														<?php } ?>
+														
+													</div>
+												</div>
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
+											
 						   
 									   										   
 										   
@@ -56,7 +255,7 @@
 										   
 										   
 										   
-										   
+										   <!--
 										    
 												 <?php// LECTURE SECTION ?>										 
 													 <h4><?php echo rwmb_meta( 'lecture_phase_title' ); ?></h4>
@@ -70,8 +269,8 @@
 														 
 														 <?php while (rwmb_meta($title) != '') :?>
 														   
-														   		<div class="row-fluid lecture-phase-info">
-																	<div class="span12 lecture-phase-info-title">
+														   		<div class="row lecture-phase-info">
+																	<div class="col-lg-12 lecture-phase-info-title">
 																		<h6><?php echo rwmb_meta($title); ?> <i class="icon-long-arrow-right" style="margin: 0px 10px;"></i><?php echo rwmb_meta($hours); ?> Hours/Week</h6>
 																		
 																		<p>
@@ -132,15 +331,22 @@
 																					
 																				<?php } ?>
 																		</p>
-																	</div><!-------/.lecture-phase-info-desc------>
-																</div><!-------/.lecture-phase-info----->
+																	</div>
+																</div>
 														   
 														   <?php $i = $i+1; ?>
 														   <?php $title = 'activity_title'.$i; ?>
 														   <?php $desc = 'activity_description'.$i; ?>
 														   <?php $hours = 'hours_per_week'.$i; ?>
 														 <?php endwhile ?>
-													 </div><!--------/.lecture-phase-info-container------->
+													 </div>
+										   
+										   -->
+										   
+										   
+										   
+										   
+										   
 										   
 											<?php if (rwmb_meta( 'outreach_phase_desc' ) != '') { ?>
 												 <?php// OUTREACH SECTION ?>										 
@@ -183,32 +389,40 @@
 															if (rwmb_meta('has_spouse', '', $post_id=$leader_id) == 1) {
 																$terms =  rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$leader_id );
 																
-																//-----GET SPOUSE ID-----//
-																foreach ($terms as $term) {
-																	$spouse_raw_slug = $term->slug;
-																	$spouse_slug = 'cap-' . $term->slug;
-																	$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
-																	$spouse_id = $spouse->ID;
+																
+																//-----SPOUSE ACTIVATED BUT NO SPOUSE SELECTED FAILSAFE-----//
+																if (!empty($terms)) {
+																
+																	//-----GET SPOUSE ID-----//
+																	foreach ($terms as $term) {
+																		$spouse_raw_slug = $term->slug;
+																		$spouse_slug = 'cap-' . $term->slug;
+																		$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
+																		$spouse_id = $spouse->ID;
+																		}
+																		
+																	//-----CHECK IF SPOUSE IS PRESENT-----//
+																	foreach ($leaders as $i_spouse) {
+																		$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
+																		$i_spouse_id = $leader_object->ID;
+																		
+																		if ($i_spouse_id == $spouse_id) {
+																			$spouse_present = true;
+																		}  else {
+																			$spouse_present = false;
+																		}
 																	}
 																	
-																//-----CHECK IF SPOUSE IS PRESENT-----//
-																foreach ($leaders as $i_spouse) {
-																	$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
-																	$i_spouse_id = $leader_object->ID;
+																	//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
+																	if ($spouse_present = true) {
+																		$married_couples .= $leader_id . '-' . $spouse_id . ',';
+																		$skip_leaders[] = $spouse_raw_slug;
 																	
-																	if ($i_spouse_id == $spouse_id) {
-																		$spouse_present = true;
-																	}  else {
-																		$spouse_present = false;
+																	//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
+																	} else {
+																		$singles .= $leader_id . ',';
 																	}
-																}
 																
-																//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
-																if ($spouse_present = true) {
-																	$married_couples .= $leader_id . '-' . $spouse_id . ',';
-																	$skip_leaders[] = $spouse_raw_slug;
-																
-																//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
 																} else {
 																	$singles .= $leader_id . ',';
 																}
@@ -219,62 +433,68 @@
 															}
 														}											
 													}
-													$married_couples = explode(',', rtrim($married_couples, ','));
+													
+													if (!empty($married_couples)) {
+														$married_couples = explode(',', rtrim($married_couples, ','));
+													}
+													
 													$singles = explode(',', rtrim($singles, ','));?>
 													
 													
 													<?php //-----DISPLAY MARRIED COUPLES-----//?>
-													<?php foreach($married_couples as $married_couple) { ?>
-														<?php $spouses = explode('-', $married_couple) ?>
-														<div class="school-leader-container">
-														
-														
-															<div class="row-fluid">
-																<div class="span3">
-																	
+													<?php if (isset($married_couples)) { ?>
+														<?php foreach($married_couples as $married_couple) { ?>
+															<?php $spouses = explode('-', $married_couple) ?>
+															<div class="school-leader-container">
+															
+															
+																<div class="row">
+																	<div class="col-lg-3">
+																		
+																			<?php foreach ($spouses as $spouse) { ?>
+																			<div class="row married-avatar-container">
+																				<?php $spouse_object = get_coauthors($spouse); ?>
+																				<div class="col-lg-12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
+																			</div>
+																			<?php } ?>
+																		
+																	</div>
+																															
+																
+																	<div class="col-lg-9">
+																		<?php //-----DISPLAY NAMES-----//?>
+																		<h5>
+																		<?php $n = 1; ?>
 																		<?php foreach ($spouses as $spouse) { ?>
-																		<div class="row-fluid married-avatar-container">
 																			<?php $spouse_object = get_coauthors($spouse); ?>
-																			<div class="span12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
-																		</div>
+																			<?php if ($n==1) { 
+																					echo $spouse_object[0]->first_name . ' & ';
+																					$coutner = ++$n;
+																				} else {
+																					echo $spouse_object[0]->display_name;
+																				} ?>
 																		<?php } ?>
-																	
+																		</h5>
+																		
+																		<p>
+																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
+																		</p>
+																	</div>
+																
 																</div>
-																														
-															
-																<div class="span9">
-																	<?php //-----DISPLAY NAMES-----//?>
-																	<h5>
-																	<?php $n = 1; ?>
-																	<?php foreach ($spouses as $spouse) { ?>
-																		<?php $spouse_object = get_coauthors($spouse); ?>
-																		<?php if ($n==1) { 
-																				echo $spouse_object[0]->first_name . ' & ';
-																				$coutner = ++$n;
-																			} else {
-																				echo $spouse_object[0]->display_name;
-																			} ?>
-																	<?php } ?>
-																	</h5>
-																	
-																	<p>
-																		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
-																	</p>
-																</div>
-															
+																
 															</div>
-															
-														</div>
+														<?php } ?>
 													<?php } ?>
 													
 													
-													<?php //-----DISPLAY MARRIED COUPLES-----//?>
+													<?php //-----DISPLAY SINGLES-----//?>
 													<?php foreach($singles as $single) { ?>
 														<div class="school-leader-container">
 														
 														
-															<div class="row-fluid">
-																<div class="span3 avatar-container">
+															<div class="row">
+																<div class="col-lg-3 avatar-container">
 
 																	<?php $single_object = get_coauthors($single); ?>
 																	<?php echo get_the_post_thumbnail($single_object[0]->ID, 'thumbnail'); ?>
@@ -282,7 +502,7 @@
 																</div>
 																														
 															
-																<div class="span9">
+																<div class="col-lg-9">
 																	<?php //-----DISPLAY NAMES-----//?>
 																	<h5><?php echo $single_object[0]->display_name; ?></h5>
 																	<p><?php echo $single_object[0]->description; ?></p>
@@ -300,7 +520,7 @@
 											
 											
 											
-											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo' );
+											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$program_id );
 												foreach ( $terms as $term ) {
 												   $leader_string .= $term->slug . ',';
 												}
@@ -377,8 +597,7 @@
 
 										 </div><!-- .entry -->
 								 </div> <!-- .post -->
-							</div>
-					</div><!--span9 content container-->
+					</div><!--col-lg-8 content container-->
 							 
 					
 					
@@ -386,11 +605,11 @@
 					
 					
 					<!--PROGRAM SIDEBAR-->							 
-					 <div class="span4 sidebar">
+					 <div class="col-lg-4 sidebar">
 					 
 					 
-						<div  class="row-fluid">
-						 	<div class="span12">
+						<div  class="row">
+						 	<div class="col-lg-12">
 						 		<div class="apply-button-window">
 						 			
 						 			
@@ -482,7 +701,7 @@
 							<li><h2>Resources</h2>
 								<ul>									
 									<?php foreach ( $files as $info ){						
-											echo "<li><a href='{$info['url']}' target='_blank' title='{$info['title']}'>{$info['title']}</a></li>";
+											echo "<li><a href='{$info['url']}' target='_blank' title='{$info['title']}'><i class='icon-file-text'></i> {$info['title']}</a></li>";
 										} ?>
 								</ul>
 							</li>

@@ -14,21 +14,22 @@
 			wp_deregister_script('jquery');
 		    wp_register_script('jquery', "http" . ($_SERVER['SERVER_PORT'] == 443 ? "s" : "") . "://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", false, null);
 		    wp_enqueue_script('jquery');
-			
+		    
+		    //TAKE CARE OF BOOTSTRAP
+		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery'), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
 		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery'), '1.0', true);
-		    wp_register_script('smoothscroll', get_template_directory_uri().'/js/smoothscroll.js', array('jquery'), '1.0', true);
 		    wp_register_script('royalslider', get_template_directory_uri().'/royalslider/jquery.royalslider.min.js', array('jquery'), '9.4.0', true);
 		    wp_register_script('charts', get_template_directory_uri().'/js/Chart.min.js', array('jquery'), '0.2', true);
 		    
 		    
 		    //QUEUE UP YOUR SCRIPTS
 		    wp_enqueue_script('jquery');
-		    wp_enqueue_script('themeuxscripts');
-		    wp_enqueue_script('smoothscroll');
+		    wp_enqueue_script('bootstrap');
 		    wp_enqueue_script('royalslider');
 		    wp_enqueue_script('charts');
+			wp_enqueue_script('themeuxscripts');
 		}
 
 
@@ -60,7 +61,7 @@
 				'description'   => 'Holds our programs and program specific data',
 				'public'        => true,
 				'menu_position' => 6,
-				'supports'      => array( 'title', 'editor', 'thumbnail', 'comments', 'revisions' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
 				'has_archive'   => true,
 				'taxonomies' 	=> array('post_tag'),
 				'rewrite' => array('slug' => 'programs'), 
@@ -115,7 +116,9 @@
 						$args = array(
 							'labels' => $labels,
 							'hierarchical' => true,
-							'rewrite' => array('hierarchical' => true ),
+							'rewrite' => array(
+								'hierarchical' => true,
+							),
 							'show_admin_column' => true,
 						);
 						register_taxonomy( 'program_taxo', array( 'post', 'videos', 'teachings', 'user' ), $args );
@@ -472,98 +475,7 @@
 		
 		
 		
-		//PROJECTS
-	    function my_custom_post_projects() {
-			$labels = array(
-				'name'               => _x( 'Projects', 'post type general name' ),
-				'singular_name'      => _x( 'Project', 'post type singular name' ),
-				'add_new'            => _x( 'Add New', 'book' ),
-				'add_new_item'       => __( 'Add New Project' ),
-				'edit_item'          => __( 'Edit Project' ),
-				'new_item'           => __( 'New Project' ),
-				'all_items'          => __( 'All Projects' ),
-				'view_item'          => __( 'View Project' ),
-				'search_items'       => __( 'Search Projects' ),
-				'not_found'          => __( 'No Projects found' ),
-				'not_found_in_trash' => __( 'No Projects found in the Trash' ), 
-				'parent_item_colon'  => '',
-				'menu_name'          => 'Projects',
-			);
-			$args = array(
-				'labels'        => $labels,
-				'description'   => 'Holds our Project specific data',
-				'public'        => true,
-				'menu_position' => 23,
-				'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
-				'has_archive'   => true,
-				'taxonomies' 	=> array('post_tag'),
-			);
-			register_post_type( 'projects', $args );	
-		}
-		add_action( 'init', 'my_custom_post_projects' );
-		
-		
-		//ADD PROJECTS TO POSTS, VIDEOS, STORIES, & TEACHINGS
-					function my_taxonomies_project_taxo() {
-						$labels = array(
-							'name'              => _x( 'Projects', 'taxonomy general name' ),
-							'singular_name'     => _x( 'Projects', 'taxonomy singular name' ),
-							'search_items'      => __( 'Search Projects' ),
-							'all_items'         => __( 'All Projects' ),
-							'parent_item'       => __( 'Parent Project' ),
-							'parent_item_colon' => __( 'Parent Project:' ),
-							'edit_item'         => __( 'Edit Project' ), 
-							'update_item'       => __( 'Update Project' ),
-							'add_new_item'      => __( 'Add New Project' ),
-							'new_item_name'     => __( 'New Project' ),
-							'menu_name'         => __( 'Projects' ),
-						);
-						$args = array(
-							'labels' => $labels,
-							'hierarchical' => true,
-							'rewrite' 		=> array('slug' => 'project-posts'), 
-							'show_admin_column' => true,
-						);
-						register_taxonomy( 'project_taxo', array( 'post', 'videos' ), $args );
-					}
-					add_action( 'init', 'my_taxonomies_project_taxo', 0 );
-					
-					
-					
-					//AUTOMATICALLY SAVE AND UPDATE PROGRAM INFORMATION TO LINK TO SCHOOLS IN BLOG
-					function post_project_update($post_id){
-					  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
-						  return $post_id;
-					  }
-			
-					  $post_obj = get_post($post_id);
-					  $raw_title = $post_obj->post_title;
-					  $post_type = $post_obj->post_type;
-					  $slug_title = sanitize_title($raw_title);
-			
-					  if (($post_type == 'projects') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
-						 // get the terms associated with this custom post type
-						 $terms = get_the_terms($post_id, 'project_taxo');
-						 $term_id = $terms[0]->term_id;
-						 // if term exists then update term
-						 if ($term_id > 0) {
-							 wp_update_term($term_id,
-											'project_taxo',
-											array(
-											  'description' => $raw_title,
-											  'slug' => $raw_title,
-											  'name' => $raw_title)
-											);
-						 } else {
-							// creates a new term in the program_taxo taxonomy
-							wp_set_object_terms($post_id, $raw_title, 'project_taxo', false);
-						 }
-					  }
-					}
-			
-					add_action('save_post', 'post_project_update');
-		
-		
+				
 		
 		
 		
@@ -783,6 +695,555 @@
 		
 		
 		
+		//-----------------------------------------------//
+		//----- PROJECT POST TYPE/CLASSES/FUNCTIONS -----//
+		//-----------------------------------------------//
+		
+		
+			//----- DECLARE POST TYPE AND TAXONOMY -----//
+		    function my_custom_post_projects() {
+				$labels = array(
+					'name'               => _x( 'Projects', 'post type general name' ),
+					'singular_name'      => _x( 'Project', 'post type singular name' ),
+					'add_new'            => _x( 'Add New', 'book' ),
+					'add_new_item'       => __( 'Add New Project' ),
+					'edit_item'          => __( 'Edit Project' ),
+					'new_item'           => __( 'New Project' ),
+					'all_items'          => __( 'All Projects' ),
+					'view_item'          => __( 'View Project' ),
+					'search_items'       => __( 'Search Projects' ),
+					'not_found'          => __( 'No Projects found' ),
+					'not_found_in_trash' => __( 'No Projects found in the Trash' ), 
+					'parent_item_colon'  => '',
+					'menu_name'          => 'Projects',
+				);
+				$args = array(
+					'labels'        => $labels,
+					'description'   => 'Holds our Project specific data',
+					'public'        => true,
+					'menu_position' => 23,
+					'supports'      => array( 'title', 'editor', 'thumbnail', 'revisions' ),
+					'has_archive'   => true,
+					'taxonomies' 	=> array('post_tag'),
+				);
+				register_post_type( 'projects', $args );	
+			}
+			add_action( 'init', 'my_custom_post_projects' );
+			
+			
+			
+			function my_taxonomies_project_taxo() {
+				$labels = array(
+					'name'              => _x( 'Projects', 'taxonomy general name' ),
+					'singular_name'     => _x( 'Projects', 'taxonomy singular name' ),
+					'search_items'      => __( 'Search Projects' ),
+					'all_items'         => __( 'All Projects' ),
+					'parent_item'       => __( 'Parent Project' ),
+					'parent_item_colon' => __( 'Parent Project:' ),
+					'edit_item'         => __( 'Edit Project' ), 
+					'update_item'       => __( 'Update Project' ),
+					'add_new_item'      => __( 'Add New Project' ),
+					'new_item_name'     => __( 'New Project' ),
+					'menu_name'         => __( 'Projects' ),
+				);
+				$args = array(
+					'labels' => $labels,
+					'hierarchical' => true,
+					'rewrite' 		=> array('slug' => 'project-posts'), 
+					'show_admin_column' => true,
+				);
+				register_taxonomy( 'project_taxo', array( 'post', 'videos' ), $args );
+			}
+			add_action( 'init', 'my_taxonomies_project_taxo', 0 );
+						
+						
+						
+			//----- AUTOMATICALLY UPDATE PROJECT TAXONOMY BASED ON POSTS IN POST TYPE -----//
+			function post_project_update($post_id){
+			  if(wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+				  return $post_id;
+			  }
+	
+			  $post_obj = get_post($post_id);
+			  $raw_title = $post_obj->post_title;
+			  $post_type = $post_obj->post_type;
+			  $slug_title = sanitize_title($raw_title);
+	
+			  if (($post_type == 'projects') && ($slug_title != 'auto-draft') && (!empty($raw_title))) {
+				 // get the terms associated with this custom post type
+				 $terms = get_the_terms($post_id, 'project_taxo');
+				 $term_id = $terms[0]->term_id;
+				 // if term exists then update term
+				 if ($term_id > 0) {
+					 wp_update_term($term_id,
+									'project_taxo',
+									array(
+									  'description' => $raw_title,
+									  'slug' => $raw_title,
+									  'name' => $raw_title)
+									);
+				 } else {
+					// creates a new term in the program_taxo taxonomy
+					wp_set_object_terms($post_id, $raw_title, 'project_taxo', false);
+				 }
+			  }
+			}
+	
+			add_action('save_post', 'post_project_update');
+			
+			//----- PROJECT STATUS CLASS -----//
+			class projectStatus {
+				var $project_phases;
+				var $project_completion;
+				var $project_finances;
+				var $project_updates;
+								
+				
+				function __construct($post_id) {
+				
+						//----- POPULATE PHASE COLORS VARIABLE -----//
+						$phase_colors = array ('C1D9EC', '92BDDD', '609FCE', '3A83BB', '2B628C');
+
+						//----- DECLARE PROJECT PHASES -----//
+						$i = 1;
+						$phase_title = 'phase' . $i . '_title';
+						$phase_total = 'phase' . $i . '_total_comp';
+						$phase_actual = 'phase' . $i . '_actual_comp';
+						$phase_tbc = rwmb_meta($phase_total, '', $post_id) - rwmb_meta($phase_actual, '', $post_id);
+						$phase_color = 'phase' . $i . '_color';
+						while (rwmb_meta($phase_title, '', $post_id) !== '') {
+						
+								$this->project_phases[rwmb_meta($phase_title, '', $post_id)] = array(
+									'phase_total'	=>	rwmb_meta($phase_total, '', $post_id),
+									'phase_actual'	=>	rwmb_meta($phase_actual, '', $post_id),
+									'phase_tbc'		=>	$phase_tbc,
+									'phase_color'	=>	$phase_colors[$i-1],
+								);
+								
+								$global_completeness = $global_completeness + rwmb_meta($phase_actual, '', $post_id);
+								
+							$i = $i + 1;
+							$phase_title = 'phase' . $i . '_title';
+							$phase_total = 'phase' . $i . '_total_comp';
+							$phase_actual = 'phase' . $i . '_actual_comp';
+							$phase_tbc = rwmb_meta($phase_total, '', $post_id) - rwmb_meta($phase_actual, '', $post_id);
+							$phase_color = 'phase' . $i . '_color';
+						}
+						
+						$this->project_completion = $global_completeness;
+						
+						
+						//----- DECLARE PROJECT FINANCES -----//
+						$this->project_finances = array(
+							'project_budget' 	=> rwmb_meta('project_total_funds_needed', '', $post_id),
+							'funds_acquired'	=> rwmb_meta('project_total_funds_acquired', '', $post_id),
+							'percent_raised'	=> 100*(rwmb_meta('project_total_funds_acquired', '', $post_id)/rwmb_meta('project_total_funds_needed', '', $post_id)),
+							'funds_needed'		=> rwmb_meta('project_total_funds_needed', '', $post_id)-rwmb_meta('project_total_funds_acquired', '', $post_id),
+						);
+						
+						//----- DELCARE PROJECT UPDATES -----//
+						$this->project_updates = array (
+						
+						);
+						
+						
+				}
+			}
+			
+			//----- GET PROJECT STATUS FUNCTION -----//
+			function get_project_status($post_id) {
+				$project_status = new projectStatus($post_id);
+				
+				return $project_status;
+			}
+			
+			
+			//----- GET ACTIVE PROJECT INDEX -----//
+			function get_active_project_index() { ?>
+				<div class="project-index">
+					<?php $args = array (
+							'post_type' => 'projects',
+					); ?>
+					
+					<?php $projects = new WP_Query( $args ); ?>
+					<?php while ( $projects->have_posts() ) { ?>
+					<?php $projects->the_post(); ?>
+					
+					<?php //----- RETRIEVE PROJECT STATUS -----// ?>
+					<?php $project_status = get_project_status($post->ID); ?>
+
+					<?php //----- DISPLAY CONTENT -----// ?>
+					<div class="row project-container">
+						<div class="col-lg-12">
+							<div class="row">
+								<div class="col-lg-3 project-thumbnail">
+									<?php the_post_thumbnail( '16:9-media' ); ?>
+								</div>
+								
+								<div class="hidden-lg project-mobile-thumbnail">
+										<?php the_post_thumbnail('full-banner'); ?>
+								</div>
+								
+								<div class="col-lg-9 project-content-container">
+									<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+																				
+									<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>
+									
+									<?php the_excerpt(); ?>
+									
+									
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-lg-12 project-status-meter">
+									<div class="project-finances-title">
+										<h6><?php echo $project_status->project_completion; ?>% Complete</h6>
+									</div>
+									<div class="project-status-outer-meter">
+										
+										<?php foreach ($project_status->project_phases as $phase) {
+											echo '<div class="project-status-inner-actual" style="width: ' . $phase['phase_actual'] . '%; background: #' . $phase['phase_color'] . '"></div>';
+											echo '<div class="project-status-inner-tbc" style="width: ' . $phase['phase_tbc'] . '%;"></div>';
+										} ?>
+										
+									
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+					<?php } ?>
+			</div>
+		
+		<?php }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//----- FUNCTION TO RETRIEVE AND DISPLAY POST OR PAGE SLUG -----//
+		function the_slug() {
+		    $post_data = get_post($post->ID, ARRAY_A);
+		    $slug = $post_data['post_name'];
+		    return $slug; 
+		}
+		
+		
+		//----- FUNCTION TO GET THE PROGRAMS CLASS AND RETURN OBJECT -----//
+		function get_program_class($program_id) {
+			$program_class = wp_get_post_terms($program_id, 'program_classification');
+			return $program_class;
+		}
+		
+		
+		
+		//-----------------------------//
+		//----- POST RIBBON CLASS -----//
+		//-----------------------------//
+		
+		class PostRibbon {
+			var $post_id;						
+			var $post_color_info;
+			var $total_terms;
+			
+			//----- GENERATE AND DECLARE POST COLOR INFORMAITON -----//
+			public function post_color_info() {
+				$this->post_color_info = array();
+				$this->total_terms = 0;
+				
+				//----- LOOP THROUGH RELATED PROGRAMS -----//
+				$related_programs = wp_get_post_terms($this->post_id, 'program_taxo');
+				foreach ($related_programs as $program) {
+					$program = get_page_by_path($program->slug, OBJECT, 'program');
+					
+					//----- GET COLOR DATA BASED ON PROGRAMS CLASSIFICATION -----//
+					$program_class = get_program_class($program->ID);
+					foreach ($program_class as $classification) {
+						$class_slug = $classification->slug;
+
+						if (array_key_exists($classification->slug, $this->post_color_info)) {
+							$this->post_color_info[$class_slug][count] = ++$this->post_color_info[$class_slug][count]; 
+						} else {
+							$this->post_color_info[$class_slug] = array('slug' => $class_slug, 'count' => 1, 'color' => get_program_color($program->ID));
+						}
+						
+						//----- UPDATE TOTAL TERMS EVERYTIME TERM IN FOUND -----//
+						$this->total_terms = ++$this->total_terms;
+					}
+				}
+				
+				usort($this->post_color_info, array($this, 'sort_by_count'));
+			}
+			
+			//----- SORT CLASSIFICATIONS BASED ON COUNT -----//
+			public function sort_by_count($a, $b) {
+				return ($a['count'] > $b['count']) ? -1 : 1;
+			}
+			
+			//----- DISPLAY POST RIBBON -----//
+			public function build_ribbon($orientation, $thickness) {
+				
+				//----- DEFINE STYLES -----//
+				if ($orientation == 'vertical') {
+					$styles = 'width:' . $thickness . 'px;';
+					$container_class = 'vertical';
+				} else {
+					$styles = 'height:' . $thickness . 'px;';
+					$container_class = 'horizontal';
+				}
+				
+				//----- BUILD THE RIBBON -----//
+				echo '<div style="' . $styles . '" class="post-ribbon-container ' . $container_class . '">';
+					foreach ($this->post_color_info as $ribbon) {
+						if ($orientation == 'vertical') {
+							echo '<div style="height: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						} else {
+							echo '<div style="width: ' . (($ribbon['count']/$this->total_terms)*100) . '%; background: #' . $ribbon['color'] . ';" class="post-ribbon"></div>';
+						}
+					}
+				echo '</div>';
+			}
+	
+			function __construct($post_id) {
+				$this->post_id = $post_id;
+				$this->post_color_info();
+			}
+			
+		}
+
+		
+		
+		//-----------------------------------------------------------------//
+		//----- FUNCTIONS TO GET PROGRAM COLOR BASED ON CLASSIFICATION -----//
+		//-----------------------------------------------------------------//
+		
+		function get_program_color($post_id) {
+
+			$terms = get_program_class($post_id); 
+			$program_slug = str_replace('-', '_', $terms[0]->slug) . '_color';
+	
+			$program_colors = get_option('display_options');
+			
+			$program_color = $program_colors[$program_slug];
+			return $program_color;	
+		}
+		
+		function get_classification_color ($classification) {
+			$classification = str_replace('-', '_', $classification) . '_color';			
+		
+			$program_colors = get_option('display_options');
+			$program_color = $program_colors[$classification];
+			return $program_color;
+		}
+		
+		
+		
+		//---------------------------------------------------------------//
+		//----- CLASS TO RETIRVE AND RETURN UPCOMING SCHOOLS OBJECT -----//
+		//---------------------------------------------------------------//
+		
+		class ProgramDates {
+			var $cur_date;
+			var $schools;
+			var $featured;
+			
+			//---- BUILD UPCOMING SCHOOLS OBJECT -----//
+			public function get_schools() {
+				
+				//----- STORE ALL INSTANCES OF SCHOOLS IN ARRAY BASED ON SCHOOL ID -----//
+				$raw_programs = new WP_Query( 'post_type=program&nopaging=true' );
+				
+				if ( $raw_programs->have_posts() ) {
+					while ( $raw_programs->have_posts() ) {
+						$raw_programs->the_post();
+						
+						$i = 1;
+						$start_date = 'start_date' . $i;
+						while (rwmb_meta($start_date) != '') {
+							
+							if (rwmb_meta($start_date) >= $this->cur_date) {
+								$raw_program_dates[] = array(
+									'slug'			=>	$raw_programs->post->post_name,
+									'program_id'	=>	$raw_programs->post->ID,
+									'start_date'	=>	rwmb_meta($start_date),
+								);
+								print_r($post);
+							}
+							$i = ++$i;
+							$start_date = 'start_date' . $i;
+						}
+					}
+				$this->schools = $raw_program_dates;
+				usort($this->schools, array($this, 'sort_by_date'));
+
+				}
+			}
+			
+			
+			//----- SORT UPCOMING SCHOOLS BY DATE -----//
+			public function sort_by_date($a, $b) {
+				return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+			}
+				
+			
+			
+			function __construct() {
+				$this->cur_date = date('Ymd');
+				$this->get_schools();
+			}
+		}
+		
+		//------------------------------------------------//
+		//----- PROGRAM DATES CLASS HELPER FUNCTIONS -----//
+		//------------------------------------------------//
+		
+			//----- GET UPCOMING SCHOOLS -----//
+			function get_upcoming_schools($num_requested) {
+				$programs = new ProgramDates();
+				
+				//----- RANDOMIZE SCHOOLS WITH SAME DATE FOR FEATURED PROGRAM -----//
+				if ($programs->schools[0]['start_date'] == $programs->schools[1]['start_date']) {
+					
+					//----- FIND OUT HOW MANY SCHOOLS HAVE THE SAME DATE -----//
+					$cur_key = 0;
+					$cmp_key = 1;
+					$num_same_date = 1;
+					
+						//----- START BY COMPARING KEY 1 to KEY 2 -----//
+							while ($programs->schools[$cur_key]['start_date'] == $programs->schools[$cmp_key]['start_date']) {
+								$num_same_date = ++$num_same_date;
+								$cur_key = ++$cur_key;
+								$cmp_key = ++$cmp_key;
+							}
+							
+						
+					//----- ONCE NUMBER OF SAME DATES IS FOUND, SHUFFLE THE RANGE -----/
+					$programs_with_same_date = array_slice($programs->schools, 0, $num_same_date);
+					shuffle($programs_with_same_date);
+					
+					//----- REASSIGN ITEMS TO ARRAY -----//
+					$key = 0;
+					foreach ($programs_with_same_date as $shuffled_program) {
+						$programs->schools[$key] = $shuffled_program;
+						$key = ++$key;
+					}
+				}
+				
+				$programs->schools = array_slice($programs->schools, 0, $num_requested);
+				return $programs;
+			}
+		
+
+/**
+ * Get Quarter of Program
+ *
+ * @param string date_string
+ * @return string quarter_string
+ */
+
+ function define_quarter($date_string) {
+ 
+	$program_year = substr($date_string, 0, 4);
+ 
+	if (preg_match('^[0-9]{4}[0]{1}[1-2]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Winter ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0]{1}[3-5]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Spring ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0]{1}[6-8]{1}[0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Summer ' . $program_year;
+		return $quarter_string;
+	} elseif (preg_match('^[0-9]{4}[0-1][0-2,9][0-9]{2}$^', $date_string)) {
+		$quarter_string = 'Fall ' . $program_year;
+		return $quarter_string;
+	} else {
+		return 0;
+	}
+ }
+
+
+
+/**
+ * Get Program Information Class
+ *
+ * @param string program_id
+ * @return object program_info
+ */		
+
+	class programInfo {
+		var $cur_date;
+		var $program_id;
+		var $schedule;
+		var $academic_info;
+		
+		public function populate_schedule() {
+			
+			$i = 1;
+			$start_date = 'start_date' . $i;
+			$end_date = 'end_date' . $i;
+			$total_cost = 'total_cost' . $i;
+			$app_open_date = 'app_open_date' . $i;
+			$app_deadline = 'app_deadline' . $i;
+			$this->cur_date = date('Ymd');
+			
+			while (rwmb_meta($start_date) != '') {
+				
+				//----- ONLY DISPLAY FUTURE SCHOOLS -----//
+				if (rwmb_meta($start_date) >= $this->cur_date) {
+					$this->schedule[$i] = array(
+						'start_date' => rwmb_meta($start_date),
+						'end_date'	 => rwmb_meta($end_date),
+						'total_cost' => rwmb_meta($total_cost),
+						'app_open_date'	=> rwmb_meta($app_open_date),
+						'app_deadline'	=> rwmb_meta($app_deadline),
+					);
+					
+					$this->schedule[$i]['quarter'] = define_quarter(rwmb_meta($start_date)); 
+					
+					//----- DEFINE APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date) && $this->cur_date < rwmb_meta($app_deadline)) {
+						$this->schedule[$i]['app_status'] = 'open';
+					} else {
+						$this->schedule[$i]['app_status'] = 'closed';
+					}
+				}
+				
+				$i = ++$i;
+				$start_date = 'start_date' . $i;
+				$end_date = 'end_date' . $i;
+				$total_cost = 'total_cost' . $i;
+				$app_open_date = 'app_open_date' . $i;
+				$app_deadline = 'app_deadline' . $i;
+			}
+		
+			usort($this->schedule, array($this, 'sort_by_date'));
+			
+		}
+		
+		//----- SORT DATES -----//
+		public function sort_by_date($a, $b) {
+			return ($a['start_date'] < $b['start_date']) ? -1 : 1;
+		}
+		
+		function __construct($program_id) {
+			$this->program_id = $program_id;
+			$this->populate_schedule();
+		}
+		
+	}	
+		
+		
+		
+		
+		
 			
 		// GET GALLERY AND MAP FUNCTION
 		
@@ -804,14 +1265,31 @@
 		
 			<?php // CHECK AND DISPLAY GALLERY ?>
 			<?php if ($banner_args["include-gallery"] == true) { ?>
-				<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner">
-				    <img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
-				    <?php // check if the post has a Post Thumbnail assigned to it.
-						$images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] );
-						foreach ( $images as $image ) { ?>
-						    <img class="rsImg" src="<?php echo str_replace( '.jpg', '-1350x450.jpg', $image[full_url]); ?>" />
-					<?php } ?> 
-				</div>
+				
+				<?php //----- CHECK FOR ALTERNATE IMAGES -----// ?>
+				<?php $alt_images = rwmb_meta( 'slide_imgs', 'type=image', $post_id = $banner_args["post-id"] ); ?>
+				<?php if ($alt_images != '') { ?>
+				
+					<?php //----- GET PROGRAM COLOR IF NECESSARY -----//?>
+					<?php if ($banner_args['program-taxo'] != null) {
+						$color = get_program_color($banner_args['post-id']);
+						$color = 'style="border-bottom: 3px solid #' . $color . ';"';
+					} ?>
+				
+					<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>" />
+						<?php // check if the post has a Post Thumbnail assigned to it.
+							foreach ( $alt_images as $image ) { ?>
+								<img class="rsImg" src="<?php $img = wp_get_attachment_image_src( $image[ID] , '16:9-media'); echo $img[0];?>" />
+						<?php } ?> 
+					</div>
+				
+				<?php //----- IF NO ALTERNATE IMAGES EXIST, DISPLAY SINGLE IMAGE -----// ?>
+				<?php } else { ?>
+					<div class="royal-slider-banner">
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>" />
+					</div>
+				<?php } ?>
 			<?php } ?>
 		
 		
@@ -848,7 +1326,7 @@
 					   <?php while ( $my_query->have_posts() ) { ?>
 						   <?php $my_query->the_post(); ?>
 						   
-							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
+							['<?php echo rwmb_meta('address'); ?>', <?php echo rwmb_meta('longlat'); ?>, '<?php the_post_thumbnail( 'mobile-banner' ); ?><?php $obj = new PostRibbon(get_the_ID()); ?><?php $obj->build_ribbon('horizontal', 3); ?><h2><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h2><p><?php echo str_replace('"', '', str_replace( "'", '', substr( get_the_excerpt(), 0, 200 ))); ?>   ...</p><div class="infoBox-footer"><i class="icon-map-marker"></i> <?php echo rwmb_meta('address'); ?> <i class="icon-time"></i> <?php the_time('F j, Y'); ?></div>'],
 						   
 					   <?php } ?>
 				   <?php } ?>
@@ -986,54 +1464,28 @@
 	
 		
 		
-		<div id="map_canvas" class="visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
+		<div id="map_canvas" class="hidden-sm <?php if ($banner_args["include-gallery"] == false) { ?>show-map<?php } ?>" style="width: 100%; height: 100%;"></div>
 		
 		<?php if ($banner_args["include-gallery"] == true) { ?>
 			
 			
 			
-			<div class="map-reveal-button-container visible-desktop">
-			<div class="map-reveal-button">
-				
-				<div class="map-reveal-button-hover">
-					<a href="#_"><i class="icon-globe"><span class="reveal-button-label">Map</span></i></a>
-				</div>
-				
-				<div class="map-reveal-button-extension">
-					<div class="map-reveal-button-extension-text">
-						<a href="#_"><span class="show-map-text">Show Outreach Map</span></a>
-						<a href="#_"><span class="hide-map-text">Hide Outreach Map</span></a>
-					</div>
+			<div class="map-reveal-button-container hidden-sm">
+				<div class="map-reveal-button">
+						<a href="#_"><span class="show-map-text"><i class="icon-globe"></i> Show Map</span></a>
+						<a href="#_"><span class="hide-map-text"><i class="icon-remove-circle"></i> Hide Map</span></a>
 				</div>
 				
 			</div>
-			</div>
+
 			
 			
 			
 			
 		<?php } ?>
 		
-		<div class="map-key-container visible-desktop <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
-			<div class="map-key">
-				<div class="key-outreach-updates">Outreach Story<div class="key-marker"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/map_poi.png"></div></div>
-				<div class="key-countries-visited">Countries Visited<div class="key-visited"></div></div>
-			</div>
-			
-			<div class="map-key-button-container">
-				
-				<div class="map-key-button-hover">
-					<a href="#_"><i class="icon-key"><span class="key-button-label">Key</span></i></a>
-				</div>
-				
-				<div class="map-key-button-extension">
-					<div class="map-key-button-extension-text">
-						<a href="#_"><span class="map-key-show-text">Show Map Legend</span></a>
-						<a href="#_"><span class="map-key-hide-text">Hide Map Legend</span></a>
-					</div>
-				</div>
-				
-			</div>
+		<div class="map-key-container <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
+			<p>some stuff</p>
 		</div>
 		<?php } //ENDIF FOR INCLUDE MAP CHECK ?>
 		
@@ -1066,8 +1518,8 @@
 			function insert_loop($post_length='full') { ?>
 			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-				<div class="row-fluid post-container">
-						<div class="span3 visible-desktop post-meta-container">
+				<div class="row post-container">
+						<div class="col-lg-3 visible-lg post-meta-container">
 							
 							<?php
 							if ($post_length == 'excerpt') {
@@ -1076,7 +1528,14 @@
 								} 
 							}
 							?>
-							
+
+							<?php if (is_single()) { ?>
+								<?php $ribbon = new PostRibbon(get_the_ID()); ?>
+								<?php $ribbon->build_ribbon('vertical', 2); ?>
+							<?php } else { ?>
+								<?php $ribbon = new PostRibbon(get_the_ID()); ?>
+								<?php $ribbon->build_ribbon('horizontal', 3); ?>
+							<?php } ?>
 							
 							
 							
@@ -1155,7 +1614,7 @@
 						</div>
 					 
 					 
-					 <div class="span9 post loop-content">
+					 <div class="col-lg-9 post loop-content">
 						
 						
 						<h2><a <?php if ($post_length == 'excerpt') { echo 'style="font-size: 24px;"';} ?> href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
@@ -1184,22 +1643,6 @@
 								
 								
 								
-								
-								<?php //----- CHECK IF THE POST IS A SERIES -----// ?>
-								<?php //Variables -current_part_num -previous_part_ID -next_part_ID ?>
-								
-								
-								
-									<?php //check if post is in a series ?>
-									
-									<?php //if in a series check for previous post ?>
-										<?php //if not, it's the first post, do something cool Part1 ?>
-									
-									<?php //if in a series check for next post ?>
-										<?php //if not, it's the last post, do something cool Partx ?>
-								
-								
-								
 								<!------------COMMENT SECTION----------->
 								 <?php comments_template(); ?>
 									
@@ -1207,10 +1650,10 @@
 							 
 							 
 							 </div><!-- /.entry -->
-							 
 					 </div> <!-- /.post -->
-					 
 				</div>
+				
+				
 	 
 			 
 				<?php endwhile; else: ?>
@@ -1253,15 +1696,15 @@
 												   if ( $my_query->have_posts() ) { ?>
 													   
 													   <h4>Videos</h4>
-													   <div class="row-fluid school-video-section">
+													   <div class="row school-video-section">
 													   
 													   <?php while ( $my_query->have_posts() ) { ?>
 														   <?php $my_query->the_post(); ?>									   
 														   
 																<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-																<div class="<?php if($num == 0) { echo 'span10'; } else { echo 'span9'; } ?> featured-video">
+																<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																		<div id="video1" class="royalSlider videoGallery rsDefault">
-																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																		</div>
 																</div><!--Video Section Featured Video-->
 														   
@@ -1295,7 +1738,7 @@
 											   <?php if ( $my_query->have_posts() ) { ?>
 
 												<h4>Videos</h4>
-												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-desktop">
+												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-lg">
 															<!--DISPLAY FEATURED VIDEO-->
 														   <?php $args = array (
 														   	'post_type' => 'videos',
@@ -1336,7 +1779,7 @@
 											   
 											   
 											   <!-- VIDEO MODULE FOR MOBILE DEVICES -->
-											   <div class="row-fluid school-video-section hidden-desktop">
+											   <div class="row school-video-section hidden-lg">
 											
 											
 											   <?php $args = array (
@@ -1351,9 +1794,9 @@
 												   <?php $my_query->the_post(); ?>									   
 												   
 														<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-														<div class="<?php if($num == 0) { echo 'span10'; } else { echo 'span9'; } ?> featured-video">
+														<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
 																<div id="video1" class="royalSlider videoGallery rsDefault">
-																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																</div>
 														</div><!--Video Section Featured Video-->
 												   
@@ -1370,13 +1813,6 @@
 										<?php } ?>	
 									<?php } ?>
 								<?php }
-			
-			
-			
-			//----------------------------------------------//
-			//----- FUNCTION TO DISPLAY SCHOOL LEADERS -----//
-			//----------------------------------------------//
-			
 			
 			
 			//----------------------------------------------------//
@@ -1396,9 +1832,9 @@
 	while ( $program_query->have_posts() ) {
 		$program_query->the_post(); ?>
 			
-			<div class=" row-fluid program-archive-school-container" id="<?php echo $program_id; ?>">
+			<div class=" row program-archive-school-container" id="<?php echo $program_id; ?>">
 						
-						<div class="span4 program-archive-featured-media hidden-phone">
+						<div class="col-lg-4 program-archive-featured-media hidden-sm">
 							
 							<div class="program-archive-featured-image">
 								<?php echo the_post_thumbnail('thumbnail-card');  ?>
@@ -1406,16 +1842,11 @@
 							
 						</div>
 						
-						<div class="span8 program-archive-content">
+						<div class="col-lg-8 program-archive-content">
 						
-							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-desktop">
-									<span>Compare 
-										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
-										<a href="#_" id="compare-program-desc-btn-<?php echo $program_id; ?>" data-content="Use our simple compare tool to see all of the basic and relavant information about each school in a clean and easy format.  Just check the schools you want to compare, and click the Compare Schools button in the menu to the right to start comparing. You can compare a maximum of 5 schools at once." data-original-title="Compare <?php echo rwmb_meta( 'acronym', $post_id=$program_id  ); ?> To Other Schools"><i class="icon-question"></i></a>
-									</span>
-								</div>
-							<?php } ?>
+						<?php //----- POPULATE PROGRAM INFO OBJECT -----// ?>
+						<?php $program_info = new programInfo($program_id); ?>
+							
 						
 							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
 							<span class="program-archive-acronym"><?php if (rwmb_meta( 'acronym', $post_id=$program_id ) != '') {?> - ( <?php echo rwmb_meta( 'acronym', $post_id=$program_id ); ?> )<?php } ?></span></a>
@@ -1437,10 +1868,111 @@
 							<div style="clear: both"> </div>
 							
 							<div class="program-archive-tagline">
-								<?php echo substr(get_the_excerpt(), 0, 150); ?>
+								<?php the_excerpt(); ?>
 							</div>
 							
 						</div>
+					</div>
+					
+					<div class="row program-archive-school-footer">
+						<div class="program-archive-school-footer-menu clearfix">
+							
+							
+							
+							<?php if ($in_main_archive == true) { ?>
+								<div class="program-archive-school-compare-link visible-lg">
+									<span>Compare 
+										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
+									</span>
+								</div>
+							<?php } ?>
+							
+							<div class="program-archive-school-footer-button" data-target-container="dates-<?php echo $program_info->program_id; ?>"><i class="icon-calendar"></i><span class="hidden-sm"> All Dates</span></div>
+							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>"><i class="icon-info"></i><span class="hidden-sm"> Program Info</span></div>
+							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>" style="float: left;">Applications: 
+								<?php 
+								if ($program_info->schedule[0]['app_status'] == 'open') {
+									echo '<span class="application-status app-open">Open <i class="icon-circle-blank"></i></span>';
+								} else {
+									echo '<span class="application-status app-closed">Closed <i class="icon-circle-blank"></i></span>';
+								}
+								?>
+								
+							</div>
+							
+						</div>
+						
+						<div class="program-archive-school-footer-content">
+								<div class="row" id="dates-<?php echo $program_info->program_id; ?>">
+									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+										
+										<?php //----- PROGRAM SCHEDULE TABLE HEADER -----//?>
+										<div class="program-archive-footer-dropdown-content program-archive-footer-dropdown-header row">
+											<div class="col-lg-2 col-12">Quarter<i class="icon-angle-down"></i></div>
+											<div class="col-lg-4 col-12">Dates<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Nationality<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Apply Deadline<i class="icon-angle-down"></i></div>
+											<div class="col-lg-2 col-12">Applications<i class="icon-angle-down"></i></div>
+										</div>
+										
+										<?php //----- PROGRAM SCHEDULE INFO LOOP -----// ?>
+										<?php foreach($program_info->schedule as $program_instance) { ?>
+										
+											<div class="program-archive-footer-dropdown-content row">
+												<div class="col-lg-2 col-12"><?php echo $program_instance['quarter']; ?></div>
+												<div class="col-lg-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
+												
+												
+												<div class="col-lg-2 col-12">
+													<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
+													<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
+												</div>
+												
+												<div class="col-lg-2 col-12">
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
+													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?>
+												</div>
+												
+												
+												
+												<div class="col-lg-2 col-12">
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+													<div><?php echo $program_instance['app_status']; ?></div>
+												</div>
+											</div>
+										
+										<?php } ?>
+									</div>
+								</div>
+								<div class="row" id="info-<?php echo $program_info->program_id; ?>">
+									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+										<div class="row">
+											<div class="col-lg-2 col-12">Quarter 2013</div>
+											<div class="col-lg-2 col-12">Start Date</div>
+											<div class="col-lg-2 col-12">End Date</div>
+											<div class="col-lg-2 col-12">Application Open</div>
+											<div class="col-lg-2 col-12">Application Deadline</div>
+											<div class="col-lg-2 col-12">Application Status</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-2 col-12">Quarter 2013</div>
+											<div class="col-lg-2 col-12">Start Date</div>
+											<div class="col-lg-2 col-12">End Date</div>
+											<div class="col-lg-2 col-12">Application Open</div>
+											<div class="col-lg-2 col-12">Application Deadline</div>
+											<div class="col-lg-2 col-12">Application Status</div>
+										</div>
+									</div>
+								
+								
+								</div>
+							</div>
 					</div>
 					
 			<?php }
@@ -1485,12 +2017,12 @@
 								   <?php $my_query->the_post(); ?>
 								   
 										<li>
-											<div class="row-fluid sidebar-related-post">
-												<div class="sidebar-thumbnail-container visible-desktop span4">
+											<div class="row sidebar-related-post">
+												<div class="sidebar-thumbnail-container visible-lg col-lg-4">
 													<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
 												</div>
 												
-												<div class="sidebar-related-post-content span8">
+												<div class="sidebar-related-post-content col-lg-8">
 													<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
 													<p><?php the_time( 'F j, Y' ); ?></p>
 												</div>
@@ -1508,7 +2040,7 @@
 								
 									<!--RELATED POST MORE BUTTONS-->
 									<li>
-										<div class="row-fluid sidebar-related-posts-more">
+										<div class="sidebar-related-posts-more">
 											<div class="sidebar-related-posts-view-all">
 												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
 											</div>
@@ -1610,20 +2142,20 @@ class ywammontana_walker_comment extends Walker_Comment {
 		$parent_class = ( empty( $args['has_children'] ) ? '' : 'parent' ); ?>
 		
 		<li <?php comment_class( $parent_class ); ?> id="comment-<?php comment_ID() ?>">
-			<div id="comment-body-<?php comment_ID() ?>" class="comment-body row-fluid">
+			<div id="comment-body-<?php comment_ID() ?>" class="comment-body row">
 			
-				<div class="span2 comment-author vcard author">
+				<div class="col-lg-2 comment-author vcard author">
 					<?php echo ( $args['avatar_size'] != 0 ? get_avatar( $comment, $args['avatar_size'] ) :'' ); ?>
 				</div><!-- /.comment-author -->
 
-				<div id="comment-content-<?php comment_ID(); ?>" class="span10 comment-content">
+				<div id="comment-content-<?php comment_ID(); ?>" class="col-lg-10 comment-content">
 					
 					
 						
 						<!-------- COMMENTS BODY---------->
-						<div class="row-fluid">
+						<div class="row">
 						
-							<div class="span12">
+							<div class="col-lg-12">
 							
 								<?php if( !$comment->comment_approved ) : ?>
 									<em class="comment-awaiting-moderation">Your comment is awaiting moderation.</em>	
@@ -1636,9 +2168,9 @@ class ywammontana_walker_comment extends Walker_Comment {
 						
 						
 						<!---------- COMMENTS META --------->
-						<div class="row-fluid">						
+						<div class="row">						
 							
-							<div class="span12 comment-footer">
+							<div class="col-lg-12 comment-footer">
 								<div class="comment-meta comment-meta-data">
 									<?php comment_date(); ?> at <?php comment_time(); ?> 					
 									
@@ -1688,59 +2220,139 @@ class ywammontana_walker_comment extends Walker_Comment {
 
 
 		
+		//----------------------------------------//
+		//----- ADD WATER TOWER OPTIONS PAGE -----//
+		//----------------------------------------//
 		
-		//ADD DASHBOARD WIDGET FOR YWAM MONTANA THEME
 		
-			// add the admin options page
-			add_action('admin_menu', 'theme_options_page');
-			
+			//----- ADD THEME OPTIONS LINK UNDER APPEARANCE TAB -----//
 			function theme_options_page() {
-			add_utility_page('YWAM Montana, Lakeside Theme Options', 'Theme Options', 'manage_options', 'theme_options', 'theme_options_page_display');
+			add_theme_page('Water Tower Options', 'Water Tower', 'manage_options', 'theme_options', 'theme_options_page_display');
 			}
+			add_action('admin_menu', 'theme_options_page');
 
 			// display the admin options page
 			function theme_options_page_display() {
 			?>
 			<div class="wrap">
 			<?php screen_icon(); ?>
-			<h2>My custom plugin</h2>
+			<h2>Water Tower Settings</h2>
+			
+			<?php $active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'display_options'; ?> 
+			
+			<h2 class="nav-tab-wrapper">  
+	            <a href="?page=theme_options&tab=display_options" class="nav-tab <?php echo $active_tab == 'display_options' ? 'nav-tab-active' : ''; ?>">Display</a>
+	            <a href="?page=theme_options&tab=front_page_options" class="nav-tab <?php echo $active_tab == 'front_page_options' ? 'nav-tab-active' : ''; ?>">Front Page</a>  
+	            <a href="#" class="nav-tab">Programs</a>
+	            <a href="#" class="nav-tab">Authors</a>  
+	        </h2>
+			
 			<p>Options relating to the Custom Plugin.</p>
 				<form action="options.php" method="post">
-				<?php settings_fields('theme_options'); ?>
-				<?php do_settings_sections('theme_options'); ?>
-				 
-				<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" class="button button-primary" />
+					
+					<?php if ( $active_tab == 'display_options' ) { ?>
+						<?php settings_fields('display_options'); ?>
+						<?php do_settings_sections('display_options'); ?>
+					<?php } elseif ( $active_tab == 'front_page_options' ) { ?>
+						<?php settings_fields('front_page_options'); ?>
+						<?php do_settings_sections('front_page_options'); ?>
+					<?php } else { ?>
+					<?php } ?>
+					 
+					<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" class="button button-primary" />
 				</form>
 			</div>
 			 
 			<?php }
 			
-			// add the admin settings and such
-			add_action('admin_init', 'plugin_admin_init');
-			function plugin_admin_init(){
-				register_setting( 'theme_options', 'theme_options' );
-				add_settings_section('theme_options_main', 'Main Settings', 'theme_options_section_text', 'theme_options');
-				add_settings_field('asdfsad', 'Plugin Text Input', 'theme_options_setting_string', 'theme_options', 'theme_options_main');
-				add_settings_field('second_one', 'A Text Area', 'theme_options_setting_string2', 'theme_options', 'theme_options_main');
+			
+			//----- REGISTER ALL SETTINGS -----//			
+			function water_tower_admin_init(){
+				
+			
+				//----- REGISTER DISPLAY OPTIONS SETTINGS -----//
+				register_setting( 'display_options', 'display_options' );
+				
+					//----- CLASSIFICATION COLOR SETTINGS -----//	
+					add_settings_section('classification_colors', 'Color Settings', 'classification_colors_text', 'display_options');
+						add_settings_field('discipleship_training_schools_color', 'Discipleship Training School Color', 'display_options_dts_color', 'display_options', 'classification_colors');
+						add_settings_field('biblical_studies_color', 'Biblical Studies Color', 'display_options_biblical_studies_color', 'display_options', 'classification_colors');
+						add_settings_field('secondary_schools_color', 'Secondary Schools Color', 'display_options_secondary_schools_color', 'display_options', 'classification_colors');
+						add_settings_field('seminars_color', 'Seminars Color', 'display_options_seminars_color', 'display_options', 'classification_colors');
+						add_settings_field('summer_programs_color', 'Summer Programs Color', 'display_options_summer_programs_color', 'display_options', 'classification_colors');
+						add_settings_field('career_discipleship_color', 'Career Discipleship Color', 'display_options_career_discipleship_color', 'display_options', 'classification_colors');
+			
+			
+				//----- REGISTER FRONT PAGE SETTINGS -----//
+				register_setting( 'front_page_options', 'front_page_options');
+				
+					//----- FRONT PAGE BANNER SETTINGS -----//
+					add_settings_section('front_page_banner_settings', 'Banner Settings', 'banner_settings_text', 'front_page_options');
+							add_settings_field('alert_status', 'Alert Status', 'get_alert_status', 'front_page_options', 'front_page_banner_settings');
+							add_settings_field('alert_status_message', 'Alert Status Message', 'get_alert_status_message', 'front_page_options', 'front_page_banner_settings');
+					
+					//----- FRONT PAGE MODULES -----//
+			
+			
+			}
+			add_action('admin_init', 'water_tower_admin_init');
+			
+			
+			
+			
+			//----- PROGRAM CLASSIFICATION COLOR SETTINGS MARKUP -----//
+			function classification_colors_text() {
+				echo '<p>Select the colors for each program classification.  These will be displayed in various places on the site and should only be changed after careful consideration.  These colors tie into the design, layout, and overall look and feel of the website.</p>';
 			}
 			
-			function theme_options_section_text() {
-				echo '<p>Main description of this section here.</p>';
-			}
+				function display_options_dts_color() {
+					$options = get_option('display_options');
+					echo "<input id='display_options_text_string' style='color: white; font-weight: bold; background: #{$options['discipleship_training_schools_color']};' name='display_options[discipleship_training_schools_color]' name='display_options[discipleship_training_schools_color]' size='40' type='text' value='{$options['discipleship_training_schools_color']}' />";
+				}
+				
+				function display_options_biblical_studies_color() {
+					$options = get_option('display_options');
+					echo "<input id='biblical_studies_color' style='color: white; font-weight: bold; background: #{$options['biblical_studies_color']};' name='display_options[biblical_studies_color]' name='display_options[biblical_studies_color]' size='40' type='text' value='{$options['biblical_studies_color']}' />";
+				}
+				
+				function display_options_secondary_schools_color() {
+					$options = get_option('display_options');
+					echo "<input id='secondary_schools_color' style='color: white; font-weight: bold; background: #{$options['secondary_schools_color']};' name='display_options[secondary_schools_color]' size='40' type='text' value='{$options['secondary_schools_color']}' />";
+				}
+				
+				function display_options_seminars_color() {
+					$options = get_option('display_options');
+					echo "<input id='seminars_color' style='color: white; font-weight: bold; background: #{$options['seminars_color']};' name='display_options[seminars_color]' name='display_options[seminars_color]' size='40' type='text' value='{$options['seminars_color']}' />";
+				}
+				
+				function display_options_summer_programs_color() {
+					$options = get_option('display_options');
+					echo "<input id='summer_programs_color' style='color: white; font-weight: bold; background: #{$options['summer_programs_color']};' name='display_options[summer_programs_color]' name='display_options[summer_programs_color]' size='40' type='text' value='{$options['summer_programs_color']}' />";
+				}
+				
+				function display_options_career_discipleship_color() {
+					$options = get_option('display_options');
+					echo "<input id='career_discipleship_color' style='color: white; font-weight: bold; background: #{$options['career_discipleship_color']};' name='display_options[career_discipleship_color]' name='display_options[career_discipleship_color]' size='40' type='text' value='{$options['career_discipleship_color']}' />";
+				}
 			
-			function theme_options_setting_string() {
-				$options = get_option('theme_options');
-				echo "<input id='theme_options_text_string' name='theme_options[asdfsad]' size='40' type='text' value='{$options['asdfsad']}' />";
-			}
 			
-			function theme_options_setting_string2() {
-				$options = get_option('theme_options');
-				echo "<input id='theme_options_text_string' name='theme_options[second_one]' size='40' type='text' value='{$options['second_one']}' />";
+			
+			
+			//----- FRONT PAGE SETTINGS MARKUP -----//
+			function banner_settings_text() {
+				echo '<p>Use this section to alter how the banner on the front page functions.  Through this section you can do things like activate the alert status that allows you to relay a message through our front page banner, or you can simply override slides by activating the override and selecting the ID of the post you would like to display in its place.</p>';
 			}
-		
-
-		
-		
+				function get_alert_status() {
+					$options = get_option('front_page_options');
+					echo "<input id='alert_status' name='front_page_options[alert_status]' type='checkbox' value='0' " . checked(0, $options['alert_status'], false) . "/>";
+				}
+				
+				function get_alert_status_message() {
+					$options = get_option('front_page_options');
+					echo "<textarea id='alert_status_message' name='front_page_options[alert_status_message]' rows='5' cols='50'>";
+					echo $options['alert_status_message'];
+					echo '</textarea>';
+				}
 		
 					
 		
@@ -1931,7 +2543,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="span<?php echo $span; ?> instagram-container">
+		  		<div class="col-lg-<?php echo $span; ?> col-6 instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
@@ -1947,7 +2559,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  
 			  <?php if (!empty($result->data)) { ?>
 			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
-			  <div class="row-fluid instarow">
+			  <div class="row instarow">
 				  <?php foreach ($result->data as $post) { ?>
 					  <?php if ($row_i <= $rows) { ?> 
 							  	<?php if ($col_i <= $cols) { ?>
@@ -1956,7 +2568,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 								<?php } else { ?>
 								  </div>
 								  <?php $row_i = ++$row_i; ?>
-								  <div class="row-fluid instarow">
+								  <div class="row instarow">
 						  
 						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
 									<?php $col_i = 2; ?>
@@ -1967,19 +2579,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 								  <?php } ?>
 		<?php } 
 			
-			
-
-		
-
-
-
-
-		//FUNCTION TO RETRIEVE AND DISPLAY POST OR PAGE SLUG
-		function the_slug() {
-		    $post_data = get_post($post->ID, ARRAY_A);
-		    $slug = $post_data['post_name'];
-		    return $slug; 
-		}
+	
 
 
 		//PAGINATION FOR BLOG
@@ -2026,12 +2626,12 @@ class ywammontana_walker_comment extends Walker_Comment {
 	function no_posts_found ($post_type) { ?>
 		<div class="row no_posts_found">
 			
-			<div class="span3">
+			<div class="col-lg-3">
 				<h1>Ooops,</h1>
 				<p>We searched our whole database and couldn't find any <?php echo $post_type; ?> like that, or by that name.  But we did manage to find these guy's in there. <a href="http://www.youtube.com/watch?v=6qsH_LFRr6k">No wonder it's been slow lately...</a></p>
 			</div>
 			
-			<div class="span7">
+			<div class="col-lg-7">
 				<img src="<?php echo get_bloginfo ('template_directory'); ?>/images/no-posts.jpg" />
 			</div>
 			

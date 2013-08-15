@@ -1,34 +1,184 @@
-<div class="navbar navbar-inverse navbar-fixed-top hidden-desktop">
-	<div class="navbar-inner">
+<div class="navbar navbar-inverse navbar-fixed-top hidden-lg">
 		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<a class="btn btn-default btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-align-justify"></i>
 			</a>
-			<a class="brand" href="#"><img style="height: 40px; opacity: .85;" src="<?php echo get_bloginfo ('template_directory'); ?>/images/Logo_try2-03.png" /></a>
+			<a class="navbar-brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
 			<div class="nav-collapse collapse">
-				<ul class="nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+				<ul class="navbar-nav hidden-lg nav">
+					
+					
+					<li class="dropdown clearfix">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">About</a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li class="divider"></li>
-							<li class="nav-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
+							
+							<?php //-----ABOUT PRIMARY MENU -----// ?>
+
+		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
+							<?php $args = array(
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	'page',
+							'page_menu_location' 	=>  'about',
+							'order' 				=> 'ASC',
+							'orderby'				=> 	'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+
+										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+									   
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
 						</ul>
 					</li>
+					
+					
+					
+					<li class="dropdown clearfix">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Training</a>
+						<ul class="dropdown-menu">
+							
+							<?php //-----TRAINING PRIMARY MENU -----// ?>
+
+		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
+							<?php $args = array(
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	array('page', 'focus_ministries'),
+							'page_menu_location' 	=>  'training',
+							'order' 				=> 'ASC',
+							'orderby'				=> 'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+
+										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+									   
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						</ul>
+					</li>
+					
+					
+					<li class="dropdown clearfix">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Outreach</a>
+						<ul class="dropdown-menu">
+							
+							<?php //-----TRAINING PRIMARY MENU -----// ?>
+
+		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
+							<?php $args = array(
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	array('page', 'focus_ministries'),
+							'page_menu_location' 	=>  'outreach',
+							'order' 				=> 'ASC',
+							'orderby'				=> 'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+
+										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+									   
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						</ul>
+					</li>
+					
+					
+					<li class="dropdown clearfix">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Resources</a>
+						<ul class="dropdown-menu">
+							
+							<?php //-----TRAINING PRIMARY MENU -----// ?>
+
+		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
+							<?php $args = array(
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	array('page', 'focus_ministries'),
+							'page_menu_location' 	=>  'resources',
+							'order' 				=> 'ASC',
+							'orderby'				=> 'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+
+										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+									   
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						</ul>
+					</li>
+					
+					
+					
+					<li class="dropdown clearfix">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Get Involved</a>
+						<ul class="dropdown-menu">
+							
+							<?php //-----TRAINING PRIMARY MENU -----// ?>
+
+		 					<?php // QUERY PAGES SELECTED TO DISPLAY IN THE ABOUT SECTION ?>
+							<?php $args = array(
+							'nopaging'				=>  true ,
+							'post_type' 	 		=>	array('page', 'focus_ministries'),
+							'page_menu_location' 	=>  'get-involved',
+							'order' 				=> 'ASC',
+							'orderby'				=> 'meta_value_num',
+							'meta_key' 				=> 'menu_priority',
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+
+										<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
+									   
+								   <?php } ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						</ul>
+					</li>
+					
+					
+					
 				</ul>
-				<form class="navbar-form pull-right">
-					<input class="span2" type="text" placeholder="Email">
-					<input class="span2" type="password" placeholder="Password">
-					<button type="submit" class="btn">Sign in</button>
-				</form>
 			</div><!--/.nav-collapse -->
-		</div>
 	</div>
+	
+	<div class="mobile-menu-ribbon">
+		
+		<?php //----- MENU HIGHLIGHT COLORS -----//
+			$classifications = get_terms('program_classification');
+			$width = 100*(1/count($classifications));
+			foreach ($classifications as $classification) {
+				$format = '<div class="%s" style="background: #%s; width:' . $width . '%%;"></div>';
+				$slug = $classification->slug;
+				$color = get_classification_color($slug);
+				
+				echo sprintf($format, $slug, $color);
+			}
+			
+		?>
+	</div>
+	
 </div>

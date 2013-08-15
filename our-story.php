@@ -9,7 +9,7 @@ Template Name: Our Story
 <div class="row" style="margin-bottom: 45px;">
 	
 		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-			 <div class="span9 post">
+			 <div class="col-lg-9 post">
 	
 					 <h2><?php the_title(); ?></h2>		
 			
@@ -23,7 +23,7 @@ Template Name: Our Story
 				<p>Oh man, we seriously need to work on this.  It appears that we have lead you astray somehow, you may want to try back later.  Sorry about that.</p>
 			<?php endif; ?>
  
-	<div class="span3">
+	<div class="col-lg-3">
 		<p>How do you want to view our story</p>
 		<p>Surprise Me</p>
 		<p>Start from the beginning</p>
@@ -38,7 +38,7 @@ Template Name: Our Story
 
 	
 	
-	<div class="span9 timeline-content-container">
+	<div class="col-lg-9 timeline-content-container">
 	
 			<!--QUERY POSTS FOR ANY WITH CATEGORY 'TIMELINE', AND DISABLE PAGING-->
 			<?php query_posts( 'cat=16&nopaging=1' ); ?>
@@ -58,12 +58,12 @@ Template Name: Our Story
 						  <div id="<?php echo $this_year; ?>">
 						  <div class="row year-label-container">
 						  
-							<div class="span2">
+							<div class="col-lg-2">
 								<h3 class="year-label"><?php echo $this_year; ?></h3>
 							</div>
 						  
 						  <!-- POPULATE YEAR HORIZONTAL RULE WITH POSTS REPRESENTING TIMELINE-->
-							<div class="span7" style="margin-left: 0px;">
+							<div class="col-lg-7" style="margin-left: 0px;">
 							<ul class="year-timeline-bullets">
 							<i class="icon-caret-right timeline-arrow"></i>
 							<?php
@@ -106,7 +106,7 @@ Template Name: Our Story
 					  
 					  <div class="row timeline-post" id="<?php echo $post->ID; ?>">
 						
-							<div class="span2 timeline-date entry-left">
+							<div class="col-lg-2 timeline-date entry-left">
 								<div class="date-container">
 									<div class="year"><?php the_time('Y') ?></div>
 									<div class="day"><?php the_time('j') ?></div>
@@ -118,7 +118,7 @@ Template Name: Our Story
 								</div>
 							</div><!--.timeline-date-->
 
-						<div class="span7 timeline-content">
+						<div class="col-lg-7 timeline-content">
 								
 								<?php // check if the post has a Post Thumbnail assigned to it.
 								if ( has_post_thumbnail() ) {
@@ -142,7 +142,7 @@ Template Name: Our Story
 	
 	
 	
-	<div class="span3 timeline-menu-container">
+	<div class="col-lg-3 timeline-menu-container">
 	
 		<ul class="timeline-nav">
 			<li>By Year

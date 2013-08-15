@@ -21,7 +21,7 @@
 	</div>
 	
 	<div class="row">
-		<div class="span8">
+		<div class="col-lg-8">
 			<h2><?php the_title(); ?></h2>
 			<?php the_content(); ?>
 			<?php get_videos( null ,$project_slug); ?>
@@ -38,8 +38,8 @@
 			<h4>Project Status</h4>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac ullamcorper dui, a vulputate diam. Morbi a metus vulputate, lobortis lacus lacinia, faucibus nisi. Duis at diam sagittis, fermentum felis at, vulputate mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat lorem, ultrices et justo in, ullamcorper tincidunt neque. Ut pharetra massa justo, a dignissim odio egestas ac. Nunc tincidunt auctor velit sed malesuada. Aenean ac rhoncus eros, tempus condimentum dolor. Donec tristique viverra leo. Duis mauris turpis, vehicula et odio eget, posuere commodo mauris. Nulla quis lacus ligula.</p>
 			
-			<div class="row-fluid">
-				<div class="span5">
+			<div class="row">
+				<div class="col-lg-5">
 					<div class="project-status-chart">
 						<canvas id="project-status-all" width="800" height="800"></canvas>
 						<canvas id="project-status-actual" width="800" height="800"></canvas>
@@ -110,7 +110,7 @@
 						</script>
 					</div>
 				</div>
-				<div class="span7 project-status-chart-key">
+				<div class="col-lg-7 project-status-chart-key">
 				
 					<?php //LOOP THROUGH PHASE TITLES, COLORS & DESCRIPTIONS ?>
 					<?php $i = 1; ?>
@@ -139,13 +139,13 @@
 							<h5>To Be Completed</h5>
 					</div>
 				</div>
-			</div><!--/.row-fluid-->
+			</div><!--/.row-->
 			
 			
-			<div class="row-fluid project-funds">
-				<div class="span12">
-					<div class="row-fluid" style="position: relative;">
-						<div class="span10 project-funds-meter-container">
+			<div class="row project-funds">
+				<div class="col-lg-12">
+					<div class="row" style="position: relative;">
+						<div class="col-lg-10 project-funds-meter-container">
 						
 						<h4>Project Funds Raised</h4>
 						
@@ -153,12 +153,12 @@
 								<div class="project-funds-meter-inner" style="width: 45%;"></div>
 							</div>
 						</div><!--/.project-funds-raised-container-->
-						<div class="span2 project-funds-percentage">
+						<div class="col-lg-2 project-funds-percentage">
 							<h5>45%</h5>
 						</div>
 					</div>
 				</div>
-			</div><!--/.row-fluid-->
+			</div><!--/.row-->
 			
 			
 			<!----- END PROJECT STATUS CHART ----->
@@ -170,7 +170,7 @@
 		<!----- SIDEBAR ----->
 		<!------------------->
 		
-		<div class="span4 sidebar">
+		<div class="col-lg-4 sidebar">
 			<ul>
 				<?php $related_args = array (
 						'posts_per_page' 	=> 3,

@@ -7,9 +7,6 @@ global $meta_boxes;
 $meta_boxes = array();
 
 
-
-
-
 $meta_boxes[] = array(
 	'title'  => 'Additional Information',
 	'pages' => array( 'guest-author'),
@@ -22,7 +19,6 @@ $meta_boxes[] = array(
 			'name' => 'Married',
 			'id'   => "{$prefix}has_spouse",
 			'type' => 'checkbox',
-			// Value can be 0 or 1
 			'std'  => 0,
 		),
 		
@@ -83,7 +79,7 @@ $meta_boxes[] = array(
 
 $meta_boxes[] = array(
 	'title'  => 'Slider Options',
-	'pages' => array( 'target_nations', 'program'),
+	'pages' => array( 'target_nations', 'program', 'page'),
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
@@ -557,15 +553,29 @@ $meta_boxes[] = array(
 	'fields' => array(
 	
 	
-		//SPRING QUARTER
 		array(
-			'name'  => 'Season of School',
-			'id'    => "{$prefix}season1",
-			'desc'  => 'Insert the season of the school, such as Summer 2014.',
-			'type'  => 'text',
-			'std'   => 'Spring Quarter',
-			'clone' => false,
-		),
+				'name' => 'Ongoing Status',
+				'id'   => $prefix . 'ongoing_status',
+				'type' => 'checkbox',
+				'desc' => 'If the school or program has an ongoing status, meaning that the school does not have specific dates or times, but is always open for students willing to come, check this box',
+			),
+			
+		array(
+				'name' => 'Ongoing Total Cost',
+				'id'   => $prefix . 'ongoing_total_cost',
+				'type' => 'text',
+				'desc' => 'Enter the cost of program',
+				'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+			),
+		
+	
+	
+
+
+
 	
 		array(
 				'name' => 'Program Start Date',
@@ -599,7 +609,7 @@ $meta_boxes[] = array(
 					'numberOfMonths'  => 2,
 					'showButtonPanel' => true,
 				),
-			),	
+			),
 			
 		array(
 			'name'  => 'Total Cost',
@@ -608,23 +618,104 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-			'after'=> '				<hr style="margin: 30px -12px;
+		),
+		
+		array(
+				'name' => 'Application Open Date',
+				'id'   => $prefix . 'app_open_date1',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		
+			
+		array(
+				'name' => 'Application Deadline',
+				'id'   => $prefix . 'app_deadline1',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (International)',
+				'id'   => $prefix . 'international_app_deadline1',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (Canadian)',
+				'id'   => $prefix . 'canadian_app_deadline1',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+		
+			
+		array(
+				'name' => 'Application Deadline (African)',
+				'id'   => $prefix . 'african_app_deadline1',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+				'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-		),
+			),		
+
 		
 				
 		
-		// SUMMER QUARTER
-		array(
-			'name'  => 'Season of School',
-			'id'    => "{$prefix}season2",
-			'desc'  => 'Insert the season of the school, such as Summer 2014.',
-			'type'  => 'text',
-			'std'   => 'Summer Quarter',
-			'clone' => false,
-		),
+	
+	
+	
+	
+	
+	
 		
 		array(
 				'name' => 'Program Start Date',
@@ -667,24 +758,103 @@ $meta_boxes[] = array(
 			'type'  => 'text',
 			'std'   => '',
 			'clone' => false,
-			'after'=> '				<hr style="margin: 30px -12px;
+		),
+		
+		array(
+				'name' => 'Application Open Date',
+				'id'   => $prefix . 'app_open_date2',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		
+			
+		array(
+				'name' => 'Application Deadline',
+				'id'   => $prefix . 'app_deadline2',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (International)',
+				'id'   => $prefix . 'international_app_deadline2',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (Canadian)',
+				'id'   => $prefix . 'canadian_app_deadline2',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+		
+			
+		array(
+				'name' => 'Application Deadline (African)',
+				'id'   => $prefix . 'african_app_deadline2',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+				'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-		),
+			),		
+
 		
 		
 		
-		// FALL QUARTER
 		
-		array(
-			'name'  => 'Season of School',
-			'id'    => "{$prefix}season3",
-			'desc'  => 'Insert the season of the school, such as Summer 2014.',
-			'type'  => 'text',
-			'std'   => 'Fall Quarter',
-			'clone' => false,
-		),
+		
+		
+		
+		
 		
 		array(
 				'name' => 'Program Start Date',
@@ -730,29 +900,100 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-			'name'  => 'Total Cost',
-			'id'    => "{$prefix}total_cost3",
-			'desc'  => 'Insert the program cost.  It will automatically be formatted when brought into the front end of the site, so there is no need to add commas or dollar signs.',
-			'type'  => 'text',
-			'std'   => '',
-			'clone' => false,
-			'after'=> '				<hr style="margin: 30px -12px;
+				'name' => 'Application Open Date',
+				'id'   => $prefix . 'app_open_date3',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+		
+		
+		array(
+				'name' => 'Application Deadline',
+				'id'   => $prefix . 'app_deadline3',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (International)',
+				'id'   => $prefix . 'international_app_deadline3',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (Canadian)',
+				'id'   => $prefix . 'canadian_app_deadline3',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+		
+			
+		array(
+				'name' => 'Application Deadline (African)',
+				'id'   => $prefix . 'african_app_deadline3',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+				'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-		),
+			),		
 		
 		
-		// WINTER QUARTER
 		
-		array(
-			'name'  => 'Season of School',
-			'id'    => "{$prefix}season4",
-			'desc'  => 'Insert the season of the school, such as Summer 2014.',
-			'type'  => 'text',
-			'std'   => 'Winter Quarter',
-			'clone' => false,
-		),
+		
+		
+		
+		
+		
+		
+		
 		
 		array(
 				'name' => 'Program Start Date',
@@ -798,17 +1039,92 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-			'name'  => 'Total Cost',
-			'id'    => "{$prefix}total_cost4",
-			'desc'  => 'Insert the program cost.  It will automatically be formatted when brought into the front end of the site, so there is no need to add commas or dollar signs.',
-			'type'  => 'text',
-			'std'   => '',
-			'clone' => false,
-			'after'=> '				<hr style="margin: 30px -12px;
+				'name' => 'Application Open Date',
+				'id'   => $prefix . 'app_open_date4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		
+			
+		array(
+				'name' => 'Application Deadline',
+				'id'   => $prefix . 'app_deadline4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (International)',
+				'id'   => $prefix . 'international_app_deadline4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+			
+		array(
+				'name' => 'Application Deadline (Canadian)',
+				'id'   => $prefix . 'canadian_app_deadline4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+			),
+		
+			
+		array(
+				'name' => 'Application Deadline (African)',
+				'id'   => $prefix . 'african_app_deadline4',
+				'type' => 'date',
+
+				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
+				'js_options' => array(
+					'appendText'      => '(Month Day, Year)',
+					'autoSize'        => true,
+					'buttonText'      => 'Select Date',
+					'dateFormat'      => 'yymmdd',
+					'numberOfMonths'  => 2,
+					'showButtonPanel' => true,
+				),
+				'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
-		),
+			),		
+
 		
 	),
 
@@ -1201,7 +1517,6 @@ $meta_boxes[] = array(
 			'options'  => array (
 					'international' 	=> 'International',
 					'domestic'			=> 'Domestic',
-					'local community'	=> 'Local Community',
 			)
 			,
 		),
@@ -1291,7 +1606,7 @@ $meta_boxes[] = array(
 //PAGE MAIN DISPLAY CONTROLS
 $meta_boxes[] = array(
 	'title'  => 'Display Controls',
-	'pages' => array( 'page' ),
+	'pages' => array( 'page', 'focus_ministries' ),
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
@@ -1319,6 +1634,25 @@ $meta_boxes[] = array(
 	'context' => 'normal',
 	'priority' => 'high',
 	'fields' => array(
+	
+		array(
+			'before' => '<h4 style="font-size: 16px; color: #666; text-shadow: 1px 1px 1px #FFF;">Project Financial Information</h4>',
+			'name'  => 'Phase Title',
+			'id'    => "{$prefix}project_total_funds_needed",
+			'desc'  => 'Enter the estimated total cost of the project',
+			'type'  => 'number',
+		),
+		
+		array (
+			'name'  => 'Phase Title',
+			'id'    => "{$prefix}project_total_funds_acquired",
+			'desc'  => 'Enter the acquired funds',
+			'type'  => 'number',
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+		),
 	
 		array(
 			'before' => '<h4 style="font-size: 16px; color: #666; text-shadow: 1px 1px 1px #FFF;">Project Phase 1</h4>',

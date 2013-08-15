@@ -3,34 +3,68 @@
 			$(document).ready(function() {
 				$('[id^=related-post-menu-item]').hover(function() {
 					var postID = $(this).attr('data-id');
-					var postClass 
-					$('.active-related-post-menu-item').removeClass('active-related-post-menu-item');
-					$('.active-related-post').removeClass('active-related-post');
+					var postSection = $(this).attr('data-section');
+					$('#' + postSection + ' .active-related-post-menu-item').removeClass('active-related-post-menu-item');
+					$('#' + postSection + ' .active-related-post').removeClass('active-related-post');
 					
-					$('#related-post-' + postID).addClass('active-related-post');
+					$('#' + postSection + ' #related-post-' + postID).addClass('active-related-post');
 					$(this).addClass('active-related-post-menu-item');
 				})
 			});
 			
 			
 			
+			//ENABLE SMOOTHSCROLL ON SCROLLSPY OBJECTS
+			$("#scrollspy-nav ul li a[href^='#']").on('click', function(e) {
+			   e.preventDefault();
+			   $('html, body').animate({ scrollTop: $(this.hash).offset().top }, 300);
 			
-			//ENABLE COMPARE SCHOOLS DESCRIPTION POPOVER
-			$(function () {  
-				$('[id^=compare-program-desc-btn]').popover({
-					placement: 'left',
-				});
+			   // edit: Opera and IE requires the "html" elm. animated
 			});
 			
+			
+			//PROGRAM ARCHIVE MORE INFO BUTTONS
+			
+			
+			$('.program-archive-school-footer-button').click(function() {
+	
+				var contentBox = $(this).attr('data-target-container');
+	
+				if (!$(this).hasClass('active')){
+					
+					if ($('.program-archive-school-footer-button').hasClass('active')) {
+						$('.program-archive-school-footer-button').removeClass('active');
+						$(this).toggleClass('active');
+						$('.program-archive-school-footer-content .slidedown').animate({height: 0}, 200, function() {
+							$('.program-archive-school-footer-content .slidedown').removeClass('slidedown');
+							var containerHeight = $('#' + contentBox + ' .program-archive-footer-dropdown-content-container').height();
+							$('#' + contentBox).animate({height: containerHeight}, 200);
+							$('#' + contentBox).addClass('slidedown');
+						});
+					} else {
+						$(this).toggleClass('active');
+						var containerHeight = $('#' + contentBox + ' .program-archive-footer-dropdown-content-container').height();
+						$('#' + contentBox).animate({height: containerHeight}, 200);
+						$('#' + contentBox).addClass('slidedown');
+					}
+				
+				
+					
+					
+				} else {
+					$('.program-archive-school-footer-content .slidedown').animate({height: 0}, 200);
+					$('.program-archive-school-footer-content .slidedown').removeClass('slidedown');
+					$(this).toggleClass('active');
+				}
+			
+			});
 			
 			
 			//COMPARE SCHOOLS ENGINE 
 			$(document).ready(function() {
 			
 			var programCompareCounter = 0;
-			
-			
-			
+
 				$('[id^=compare-programs-checkbox]').click(function() {
 					var programID = $(this).attr("data-programId");
 					var programTitle = $(this).attr("data-programTitle");
@@ -98,41 +132,38 @@
 			
 		
 
+			//BANNER GALLERY FOR ROYAL SLIDER
+			jQuery(document).ready(function($) {		   
+				$('#homepage-banner-gallery').royalSlider({
+					autoScaleSliderWidth: 1350,     
+					autoScaleSliderHeight: 450,
+					imageScaleMode: 'fill',
+					
+					controlNavigation: 'bullets',
+					arrowsNav: true,
+					arrowsNavAutoHide: false,
+					
+					slidesSpacing: 0,
+					
+					imgWidth: 1350,
+					imgHeight: 450,
+					
+					loopRewind: true,
+					autoPlay: {
+			    		enabled: true,
+			    		delay: 4000,
+			    		pauseOnHover: true,
+			    	},
+			    	
+			    	video: {
+				    	vimeoCode: '<iframe src="http://player.vimeo.com/video/%id%?title=0&amp;byline=0&amp;portrait=0&amp;autoplay=1" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>',
+				    	autoHidArrows: false,
+				    	autoHideControlNav: false,
+			    	},
+				})
+			});
 
-
-
-
-
-		   //CALL ORBIT TO COME IN FOR HOME PAGE
-		   $(window).load(function() {
-		       $("#front-page-slider").orbit({
-				   animation: 'fade',
-				   animationSpeed: 400,
-			       bullets: true,
-			       bulletThumbs: true,
-					advanceSpeed: 8000,
-					resetTimerOnClick: false,
-					pauseOnHover: true,
-		       });
-		   });
-
-		   //CALL ORBIT TO COME IN FOR PAGES WITH SIMPLE GALLERIES
-		   $(window).load(function() {
-		       $(".bullet-slider").orbit({
-			       animation: 'fade',
-				   animationSpeed: 400,
-			       bullets: true,
-					advanceSpeed: 8000,
-					resetTimerOnClick: false,
-					pauseOnHover: true,
-		       });
-		   });
-		   
-		   
-		   
-
-		   
-		   //BANNER GALLERY FOR ROYAL SLIDER
+			//BANNER GALLERY FOR ROYAL SLIDER
 			jQuery(document).ready(function($) {		   
 				$('#banner-gallery').royalSlider({
 					autoScaleSliderWidth: 1350,     
@@ -281,68 +312,52 @@
 		$(document).ready(function() {
 		    $(".map-reveal-button").click(function () {
 		      $("#map_canvas").toggleClass("show-map");
-		      $(".map-key-container").toggleClass("map-key-map-active");
+		      $(".map-reveal-button-container").toggleClass("mobile-map-active");
+		      $("body").toggleClass("lock-body");
 			  
-			if($('#map_canvas').hasClass('show-map')) {
-			  $(".hide-map-text").css("display", "block");
-			  $(".reveal-map-text").css("display", "none");
-			} else {
-			  $(".hide-map-text").css("display", "none");
-			  $(".reveal-map-text").css("display", "block");
-			}
 			  
-		    });
-		});
-		
-		
-		
-		//REVEAL MAP KEY FOR GOOGLE MAPS
-		$(document).ready(function() {
-		    $(".map-key-button-container").click(function () {
-		      $(".map-key").toggleClass("map-extend-key");
-			  $(".map-key-button-extension").toggleClass("map-hover-extend");
-			  $(".map-key-button-container").toggleClass("map-key-extend-mobile");
+			  	if ($("body").hasClass('touch')) {
+			  		if($('#map_canvas').hasClass('show-map')) {
+				  		document.ontouchmove = function(e){ e.preventDefault(); }
+				  	} else {
+					  	document.ontouchmove = function(e){ return true; }
+				  	}
+			  	}
 			  
-			  if($('.map-key').hasClass('map-extend-key')) {
-				  $(".map-key-hide-text").css("display", "block");
-				  $(".map-key-show-text").css("display", "none");
+			  
+				if($('#map_canvas').hasClass('show-map')) {
+				  $(".hide-map-text").css("display", "block");
+				  $(".show-map-text").css("display", "none");
 				} else {
-				  $(".map-key-hide-text").css("display", "none");
-				  $(".map-key-show-text").css("display", "block");
+				  $(".hide-map-text").css("display", "none");
+				  $(".show-map-text").css("display", "block");
 				}
+			  
 		    });
 		});
-
+		
 
 		
-		//REVEAL SEARCH FORM ON HEADER
+		//ACTIVATE SEARCH FORM ON HEADER
 		$(document).ready(function() {
-		    $(".header-functions-buttons .icon-search").click(function () {
-				$(".search-bar").toggleClass("show-search");
-			
-		      	if($('.search-bar').hasClass('show-search')) {
-					$(".header-functions-display .established").css("width", 0);
-				} else {
-					$(".header-functions-display .established").css("width", 114);
+		    $("#header-search-form").click(function () {
+				if (!$("#header-search-form").hasClass("search-active")) {
+					$("#header-search-form").toggleClass("search-active");
+					$("#header-search").focus();
 				}
 			});
+			
+			$("#header-search").focusout(function() {
+				var searchString = $("#header-search").val();
+
+				if (jQuery.trim(searchString).length > 0) {
+				} else {
+					$("#header-search-form").toggleClass("search-active");
+				}
+			});
+			
 		});
 		
-		
-		
-		//FUNCTION TO SWAP TO VIDEO ON PROGRAM ARCHIVE PAGE
-			function swap_media(programid) {
-				$('#' + programid + ' .program-archive-featured-image').toggleClass( 'media-swap-show-video' ).promise().done(function(){
-				
-					if ($('#' + programid + ' .program-archive-featured-image').hasClass( 'media-swap-show-video' )) {
-						$('#' + programid + ' a.swap_to_video').css('display', 'none');
-						$('#' + programid + ' a.swap_to_image').css('display', 'block');
-					} else {
-						$('#' + programid + ' a.swap_to_video').css('display', 'block');
-						$('#' + programid + ' a.swap_to_image').css('display', 'none');
-					}
-				});
-			};
 			
 			
 		//REVEAL PHASE DESCRIPTIONS ON PROJECT PAGE
