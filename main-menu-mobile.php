@@ -1,11 +1,11 @@
-<div class="navbar navbar-inverse navbar-fixed-top hidden-lg">
+<div class="navbar navbar-inverse navbar-fixed-top hidden-md hidden-lg hidden-md">
 		<div class="container">
 			<a class="btn btn-default btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<i class="icon-align-justify"></i>
 			</a>
 			<a class="navbar-brand" href="#"><img src="<?php echo get_bloginfo ('template_directory'); ?>/images/mobile-menu-logo.png" /></a>
-			<div class="nav-collapse collapse">
-				<ul class="navbar-nav hidden-lg nav">
+			<div class="nav-collapse collapse clearfix">
+				<ul class="navbar-nav hidden-md hidden-lg nav">
 					
 					
 					<li class="dropdown clearfix">

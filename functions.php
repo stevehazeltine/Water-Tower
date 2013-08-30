@@ -16,7 +16,7 @@
 		    wp_enqueue_script('jquery');
 		    
 		    //TAKE CARE OF BOOTSTRAP
-		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js', array('jquery'), '2.3.2', true);
+		    wp_register_script('bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js', array('jquery'), '2.3.2', true);
 			
 			//BEGIN REGISTERING SCRIPTS
 		    wp_register_script('themeuxscripts', get_template_directory_uri().'/js/themeuxscripts.js', array('jquery'), '1.0', true);
@@ -118,6 +118,7 @@
 							'hierarchical' => true,
 							'rewrite' => array(
 								'hierarchical' => true,
+								'slug'	=> 'program-blogs'
 							),
 							'show_admin_column' => true,
 						);
@@ -874,17 +875,17 @@
 
 					<?php //----- DISPLAY CONTENT -----// ?>
 					<div class="row project-container">
-						<div class="col-lg-12">
+						<div class="col-md-12">
 							<div class="row">
-								<div class="col-lg-3 project-thumbnail">
+								<div class="col-md-3 project-thumbnail">
 									<?php the_post_thumbnail( '16:9-media' ); ?>
 								</div>
 								
-								<div class="hidden-lg project-mobile-thumbnail">
+								<div class="hidden-md hidden-lg project-mobile-thumbnail">
 										<?php the_post_thumbnail('full-banner'); ?>
 								</div>
 								
-								<div class="col-lg-9 project-content-container">
+								<div class="col-md-9 project-content-container">
 									<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 																				
 									<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>
@@ -896,7 +897,7 @@
 							</div>
 							
 							<div class="row">
-								<div class="col-lg-12 project-status-meter">
+								<div class="col-md-12 project-status-meter">
 									<div class="project-finances-title">
 										<h6><?php echo $project_status->project_completion; ?>% Complete</h6>
 									</div>
@@ -1044,6 +1045,26 @@
 		}
 		
 		
+		//-----------------------------------------------------------------//
+		//----- FUNCTION TO GET COLOR RIBBON WITH ALL CLASSIFICATIONS -----//
+		//-----------------------------------------------------------------//
+		
+		function all_class_ribbon($height) {
+		
+			echo '<div class="all-class-ribbon" style="height: ' . $height . 'px";>';
+			$classifications = get_terms('program_classification');
+			$width = 100*(1/count($classifications));
+			foreach ($classifications as $classification) {
+				$format = '<div class="%s" style="background: #%s; width:' . $width . '%%; float: left; height: 100%%"></div>';
+				$slug = $classification->slug;
+				$color = get_classification_color($slug);
+				
+				echo sprintf($format, $slug, $color);
+			}
+			echo '</div>';
+		}
+		
+		
 		
 		//---------------------------------------------------------------//
 		//----- CLASS TO RETIRVE AND RETURN UPCOMING SCHOOLS OBJECT -----//
@@ -1067,14 +1088,19 @@
 						$i = 1;
 						$start_date = 'start_date' . $i;
 						while (rwmb_meta($start_date) != '') {
+						
+							//GET PROGRAM CLASSIFICATION
+							$program_class = get_the_terms($raw_programs->post->ID, 'program_classification');
+							reset($program_class);
+							$program_class_key = key($program_class);
 							
 							if (rwmb_meta($start_date) >= $this->cur_date) {
 								$raw_program_dates[] = array(
 									'slug'			=>	$raw_programs->post->post_name,
 									'program_id'	=>	$raw_programs->post->ID,
+									'program_class' =>	$program_class[$program_class_key]->name,
 									'start_date'	=>	rwmb_meta($start_date),
 								);
-								print_r($post);
 							}
 							$i = ++$i;
 							$start_date = 'start_date' . $i;
@@ -1175,13 +1201,16 @@
  * Get Program Information Class
  *
  * @param string program_id
- * @return object program_info
+ * @return object programInfo
  */		
 
 	class programInfo {
 		var $cur_date;
 		var $program_id;
+		var $program_slug;
+		var $program_short_name;
 		var $schedule;
+		var $ongoing_status;
 		var $academic_info;
 		
 		public function populate_schedule() {
@@ -1192,27 +1221,67 @@
 			$total_cost = 'total_cost' . $i;
 			$app_open_date = 'app_open_date' . $i;
 			$app_deadline = 'app_deadline' . $i;
+			$canadian_app_deadline = 'canadian_app_deadline' . $i;
+			$african_app_deadline = 'african_app_deadline' . $i;
+			$international_app_deadline = 'international_app_deadline' . $i;
 			$this->cur_date = date('Ymd');
 			
-			while (rwmb_meta($start_date) != '') {
+			
+			$app_color_settings = get_option('program_options');
+			$open_app_color = $app_color_settings['program_open_app_color'];
+			$closed_app_color = $app_color_settings['program_closed_app_color'];
+			
+			while (rwmb_meta($start_date, '', $program_id=$this->program_id) != '') {
 				
 				//----- ONLY DISPLAY FUTURE SCHOOLS -----//
-				if (rwmb_meta($start_date) >= $this->cur_date) {
+				if (rwmb_meta($start_date, '', $program_id=$this->program_id) >= $this->cur_date) {
 					$this->schedule[$i] = array(
-						'start_date' => rwmb_meta($start_date),
-						'end_date'	 => rwmb_meta($end_date),
-						'total_cost' => rwmb_meta($total_cost),
-						'app_open_date'	=> rwmb_meta($app_open_date),
-						'app_deadline'	=> rwmb_meta($app_deadline),
+						'start_date' => rwmb_meta($start_date, '', $program_id=$this->program_id),
+						'end_date'	 => rwmb_meta($end_date, '', $program_id=$this->program_id),
+						'total_cost' => rwmb_meta($total_cost, '', $program_id=$this->program_id) == '' ? null : money_format( '%i', rwmb_meta($total_cost, '', $program_id=$this->program_id)),
+						'app_open_date'	=> rwmb_meta($app_open_date, '', $program_id=$this->program_id),
+						'app_deadline'	=> rwmb_meta($app_deadline, '', $program_id=$this->program_id),
+						'canadian_app_deadline'	=> rwmb_meta($canadian_app_deadline, '', $program_id=$this->program_id),
+						'african_app_deadline'	=> rwmb_meta($african_app_deadline, '', $program_id=$this->program_id),
+						'international_app_deadline'	=> rwmb_meta($international_app_deadline, '', $program_id=$this->program_id),
 					);
 					
-					$this->schedule[$i]['quarter'] = define_quarter(rwmb_meta($start_date)); 
+					$this->schedule[$i]['quarter'] = define_quarter(rwmb_meta($start_date, '', $program_id=$this->program_id)); 
 					
-					//----- DEFINE APP STATUS -----//
-					if ($this->cur_date > rwmb_meta($app_open_date) && $this->cur_date < rwmb_meta($app_deadline)) {
+					//----- DEFINE AMERICAN APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date, '', $program_id=$this->program_id) && $this->cur_date < rwmb_meta($app_deadline, '', $program_id=$this->program_id)) {
 						$this->schedule[$i]['app_status'] = 'open';
+						$this->schedule[$i]['app_status_color'] = $open_app_color;
 					} else {
 						$this->schedule[$i]['app_status'] = 'closed';
+						$this->schedule[$i]['app_status_color'] = $closed_app_color;
+					}
+					
+					//----- DEFINE CANADIAN APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date, '', $program_id=$this->program_id) && $this->cur_date < rwmb_meta($canadian_app_deadline, '', $program_id=$this->program_id)) {
+						$this->schedule[$i]['canadian_app_status'] = 'open';
+						$this->schedule[$i]['canadian_app_status_color'] = $open_app_color;
+					} else {
+						$this->schedule[$i]['canadian_app_status'] = 'closed';
+						$this->schedule[$i]['canadian_app_status_color'] = $closed_app_color;
+					}
+					
+					//----- DEFINE AFRICAN APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date, '', $program_id=$this->program_id) && $this->cur_date < rwmb_meta($african_app_deadline, '', $program_id=$this->program_id)) {
+						$this->schedule[$i]['african_app_status'] = 'open';
+						$this->schedule[$i]['african_app_status_color'] = $open_app_color;
+					} else {
+						$this->schedule[$i]['african_app_status'] = 'closed';
+						$this->schedule[$i]['african_app_status_color'] = $closed_app_color;
+					}
+					
+					//----- DEFINE AMERICAN APP STATUS -----//
+					if ($this->cur_date > rwmb_meta($app_open_date, '', $program_id=$this->program_id) && $this->cur_date < rwmb_meta($international_app_deadline, '', $program_id=$this->program_id)) {
+						$this->schedule[$i]['international_app_status'] = 'open';
+						$this->schedule[$i]['international_app_status_color'] = $open_app_color;
+					} else {
+						$this->schedule[$i]['international_app_status'] = 'closed';
+						$this->schedule[$i]['international_app_status_color'] = $closed_app_color;
 					}
 				}
 				
@@ -1222,23 +1291,175 @@
 				$total_cost = 'total_cost' . $i;
 				$app_open_date = 'app_open_date' . $i;
 				$app_deadline = 'app_deadline' . $i;
+				$canadian_app_deadline = 'canadian_app_deadline' . $i;
+				$african_app_deadline = 'african_app_deadline' . $i;
+				$international_app_deadline = 'international_app_deadline' . $i;
 			}
 		
-			usort($this->schedule, array($this, 'sort_by_date'));
+			if (isset($this->schedule)) {
+				usort($this->schedule, array($this, 'sort_by_date'));
+			}
 			
 		}
 		
-		//----- SORT DATES -----//
+		
+		public function populate_academic_info() {
+		
+			$raw_prereqs = get_the_terms( $this->program_id, 'prereqs_taxo', '', $program_id=$this->program_id);
+			foreach ($raw_prereqs as $prereq) {
+				if ($prereq->slug != $this->program_slug) {
+					$filtered_prereqs[] = array(
+						'slug' => $prereq->slug,
+						'name' => $prereq->name,
+					);
+				}
+			}
+			
+			$this->academic_info = array(
+				'short_name' => rwmb_meta('short_name', '', $program_id=$this->program_id),
+				'program_acronym' => rwmb_meta('acronym', '', $program_id=$this->program_id),
+				'program_duration' => rwmb_meta('program_duration', '', $program_id=$this->program_id),
+				'min_age_wo_ged' => rwmb_meta('min_age_woged_prereqs', '', $program_id=$this->program_id),
+				'program_prereqs' => $filtered_prereqs != '' ? $filtered_prereqs : null,
+				'recommended_prereqs' => rwmb_meta('custom_prereqs', '', $program_id=$this->program_id),
+				'accreditation' => rwmb_meta('accreditation', '', $program_id=$this->program_id),
+				'has_outreach' => rwmb_meta('has_outreach_phase', '', $program_id=$this->program_id),
+				'outreach_duration' => rwmb_meta('outreach_phase_duration', '', $program_id=$this->program_id),
+				'outreach_locale' => rwmb_meta('outreach_locale', 'type=checkbox_list', $program_id=$this->program_id),
+			);
+			
+		}
+		
+		
+		//----- SORT DATES IN SCHEDULE -----//
 		public function sort_by_date($a, $b) {
 			return ($a['start_date'] < $b['start_date']) ? -1 : 1;
 		}
 		
+		
 		function __construct($program_id) {
 			$this->program_id = $program_id;
-			$this->populate_schedule();
+			$post_object = get_post($this->program_id);
+			$this->program_slug = $post_object->post_name;
+			$this->program_short_name = rwmb_meta( 'short_name', '', $post_id=$this->program_id);
+			setlocale(LC_MONETARY,"en_US");
+		
+			// Populate Schedule if Ongoing Status is False
+			// Set App Status to Open if True
+			$this->ongoing_status = rwmb_meta('ongoing_status', '', $program_id=$this->program_id);
+			if ($this->ongoing_status == 0) {
+				$this->populate_schedule();
+			} else {
+			
+				//Get ongoing program description
+				$program_settings = get_option('program_options');
+				$ongoing_desc = $program_settings['ongoing_program_message'];
+				$ongoing_support_desc = $program_settings['ongoing_support_desc'];
+				
+				$app_color_settings = get_option('program_options');
+				$open_app_color = $app_color_settings['program_open_app_color'];
+				$closed_app_color = $app_color_settings['program_closed_app_color'];
+				$app_status_color = rwmb_meta('ongoing_app_status', '', $program_id=$this->program_id) == 'open' ? $open_app_color : $closed_app_color;
+			
+				$this->schedule[] = array(
+					'app_status' => 'open',
+					'app_status_color' => $app_status_color,
+					'ongoing_desc' => $ongoing_desc,
+					'ongoing_support_desc' => $ongoing_support_desc,
+					'ongoing_app_status' => rwmb_meta('ongoing_app_status', '', $program_id=$this->program_id),
+					'ongoing_startup_cost' => rwmb_meta('ongoing_startup_cost', '', $program_id=$this->program_id) != '' ? money_format( '%i', rwmb_meta('ongoing_startup_cost', '', $program_id=$this->program_id)) : null,
+					'ongoing_monthly_cost' => rwmb_meta('ongoing_monthly_cost', '', $program_id=$this->program_id) != '' ? money_format( '%i', rwmb_meta('ongoing_monthly_cost', '', $program_id=$this->program_id)) : null,
+					'ongoing_min_support_single' => rwmb_meta('ongoing_min_support_single', '', $program_id=$this->program_id) != '' ? money_format( '%i', rwmb_meta('ongoing_min_support_single', '', $program_id=$this->program_id)) : null,
+					'ongoing_min_support_married' => rwmb_meta('ongoing_min_support_married', '', $program_id=$this->program_id) != '' ? money_format( '%i', rwmb_meta('ongoing_min_support_married', '', $program_id=$this->program_id)) : null,
+				);
+			}
+			
+			// Populate Academic Info
+			$this->populate_academic_info();
 		}
 		
 	}	
+	
+	
+	
+//---------------------------------------//
+//----- GET TEACHING FEATURED IMAGE -----//
+//---------------------------------------//
+/*
+ *	Function to get and echo the featured image attached to a teaching.
+ *	Featured images used for teachings are referenced from the first related school of the teaching.
+ *	We do this to add a sense of dynamicness to our teachings, and also to make adding them low maintenance.
+ *
+ *	@param string $teaching_id
+ */
+	function get_teaching_featured_image($teaching_id) {
+		$related_programs = get_the_terms($teaching_id, 'program_taxo');
+		
+		// Get the first related program's slug
+		reset($related_programs);
+		$first_program_key = key($related_programs);
+		$program_slug = $related_programs[$first_program_key]->slug;
+		
+		$program_object = get_page_by_path($program_slug, OBJECT, 'program');
+		echo get_the_post_thumbnail($program_object->ID, '16:9-media-thumbnail'); 
+	}
+	
+	
+	
+	
+//--------------------------------------//
+//----- SOCIAL MEDIA URL FUNCTIONS -----//
+//--------------------------------------//
+
+	function get_social_media_link($network) {
+		$social_media_urls = get_option('social_options');
+		
+		return $social_media_urls[$network];
+	}
+	
+	
+	
+	
+	
+//--------------------------------//
+//----- DISPLAY LOOP CONTENT -----//
+//--------------------------------//
+/*
+ *	Function that displays the content in a loop.
+ *	This function must be performed from within the loop to work properly.
+ *
+ *	@returns HTML
+ */
+	
+	function display_loop_excerpt($post_id) { ?>
+	
+		<div class="row loop-excerpt">
+			<div class="col-md-3 hidden-xs hidden-sm loop-thumbnail">
+				
+				<?php // GET FEATURED IMAGE OF POST 
+				if (get_post_type() == 'teachings') {
+					echo get_teaching_featured_image($post_id);
+				} else {
+					echo the_post_thumbnail('thumbnail-card');
+				}
+				
+				$teaching_ribbon = new PostRibbon($post_id);
+				$teaching_ribbon->build_ribbon('horizontal', 3);
+				
+				
+				?>
+				
+			</div>
+			
+			
+			<div class="col-md-9 loop-content">
+				<h4><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h4>
+				<?php the_excerpt(); ?>
+			</div>
+		</div>
+		
+	<?php }
+	
 		
 		
 		
@@ -1250,7 +1471,7 @@
 		
 		function get_banner($banner_args) { 
 			
-			if (!isset($banner_args["post-id"])){$banner_args["post-id"] = null;}
+			if (!isset($banner_args["post-id"])){$banner_args["post-id"] = $post->ID;}
 			if (!isset($banner_args["include-gallery"])){$banner_args["include-gallery"] = true;}
 			if (!isset($banner_args["include-map"])){$banner_args["include-map"] = false;}
 			if (!isset($banner_args["post-type"])){$banner_args["post-type"] = 'post';}
@@ -1277,7 +1498,7 @@
 					} ?>
 				
 					<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner" <?php echo $color; ?>>
-						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>" />
+						<img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($banner_args['post-id']), '16:9-media'); echo $image[0];?>" />
 						<?php // check if the post has a Post Thumbnail assigned to it.
 							foreach ( $alt_images as $image ) { ?>
 								<img class="rsImg" src="<?php $img = wp_get_attachment_image_src( $image[ID] , '16:9-media'); echo $img[0];?>" />
@@ -1470,7 +1691,7 @@
 			
 			
 			
-			<div class="map-reveal-button-container hidden-sm">
+			<div class="map-reveal-button-container hidden-xs hidden-sm">
 				<div class="map-reveal-button">
 						<a href="#_"><span class="show-map-text"><i class="icon-globe"></i> Show Map</span></a>
 						<a href="#_"><span class="hide-map-text"><i class="icon-remove-circle"></i> Hide Map</span></a>
@@ -1483,10 +1704,6 @@
 			
 			
 		<?php } ?>
-		
-		<div class="map-key-container <?php if ($banner_args["include-gallery"] == false) { ?>map-key-map-active<?php } ?>" <?php if ($banner_args["include-gallery"] == false) { ?>style="bottom: 30px !important;"<?php } ?>>
-			<p>some stuff</p>
-		</div>
 		<?php } //ENDIF FOR INCLUDE MAP CHECK ?>
 		
 	</div>
@@ -1516,10 +1733,10 @@
 
 		//THE LOOP FUNCTION
 			function insert_loop($post_length='full') { ?>
-			
 			<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+				
 				<div class="row post-container">
-						<div class="col-lg-3 visible-lg post-meta-container">
+						<div class="col-sm-3 visible-sm visible-md visible-lg post-meta-container">
 							
 							<?php
 							if ($post_length == 'excerpt') {
@@ -1556,7 +1773,7 @@
 								
 								<h4 class="meta-title">Author<?php if ( 1 !== count( get_coauthors( get_the_id() ) ) ) { echo 's'; } ?></h4>
 								<ul class="meta-list">
-									<?php coauthors_posts_links( ' ', '</li><li><i class="icon-user"></i>', '<li><i class="icon-user"></i>', '</li>', true ); ?>
+									<?php coauthors_posts_links( '</li><li><i class="icon-user"></i>', '</li><li><i class="icon-user"></i>', '<li><i class="icon-user"></i>', '</li>', true ); ?>
 								</ul>
 								
 									
@@ -1614,7 +1831,7 @@
 						</div>
 					 
 					 
-					 <div class="col-lg-9 post loop-content">
+					 <div class="col-sm-9 post loop-content">
 						
 						
 						<h2><a <?php if ($post_length == 'excerpt') { echo 'style="font-size: 24px;"';} ?> href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
@@ -1641,7 +1858,11 @@
 									 </div>
 							   <?php } ?>
 								
-								
+								<?php if ($post_length != 'excerpt') { ?>
+								<?php //-----DISPLAY AUTHOR SECTION -----// ?>
+									<?php $post_id = get_the_ID(); ?>
+									<?php display_authors($post_id, null); ?>
+								<?php } ?>
 								
 								<!------------COMMENT SECTION----------->
 								 <?php comments_template(); ?>
@@ -1702,7 +1923,7 @@
 														   <?php $my_query->the_post(); ?>									   
 														   
 																<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-																<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
+																<div class="<?php if($num == 0) { echo 'col-md-10'; } else { echo 'col-md-9'; } ?> featured-video">
 																		<div id="video1" class="royalSlider videoGallery rsDefault">
 																		  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																		</div>
@@ -1738,7 +1959,7 @@
 											   <?php if ( $my_query->have_posts() ) { ?>
 
 												<h4>Videos</h4>
-												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-lg">
+												<div id="video-gallery" class="royalSlider videoGallery rsDefault visible-md visible-lg">
 															<!--DISPLAY FEATURED VIDEO-->
 														   <?php $args = array (
 														   	'post_type' => 'videos',
@@ -1750,7 +1971,8 @@
 																	<a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>">
 																      <div class="rsTmb">
 																        <h5><?php the_title(); ?></h5>
-																        <span>By <?php echo rwmb_meta('production_source'); ?> </span>
+																		<span><?php the_date(); ?></span>
+																		<div class="is-now-playing">Currently<br />Playing</div>
 																      </div>
 																    </a>
 														    	<?php endwhile; ?>
@@ -1764,7 +1986,8 @@
 														<a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php echo wp_get_attachment_url(get_post_thumbnail_id()); ?>">
 													      <div class="rsTmb">
 													        <h5><?php the_title(); ?></h5>
-													        <span>by <?php echo rwmb_meta('production_source'); ?></span>
+															<span><?php the_date(); ?></span>
+															<div class="is-now-playing">Currently<br />Playing</div>
 													      </div>
 													    </a>
 													   
@@ -1779,7 +2002,7 @@
 											   
 											   
 											   <!-- VIDEO MODULE FOR MOBILE DEVICES -->
-											   <div class="row school-video-section hidden-lg">
+											   <div class="row school-video-section hidden-md hidden-lg">
 											
 											
 											   <?php $args = array (
@@ -1794,7 +2017,7 @@
 												   <?php $my_query->the_post(); ?>									   
 												   
 														<!--POST FEATURED VIDEO TO SMALL SIZE IF ADDITIONAL VIDEOS EXIST, AND USE LARGE SIZE IF ALONE-->
-														<div class="<?php if($num == 0) { echo 'col-lg-10'; } else { echo 'col-lg-9'; } ?> featured-video">
+														<div class="<?php if($num == 0) { echo 'col-md-10'; } else { echo 'col-md-9'; } ?> featured-video">
 																<div id="video1" class="royalSlider videoGallery rsDefault">
 																  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media'); echo $image[0];?>"></a>
 																</div>
@@ -1834,7 +2057,7 @@
 			
 			<div class=" row program-archive-school-container" id="<?php echo $program_id; ?>">
 						
-						<div class="col-lg-4 program-archive-featured-media hidden-sm">
+						<div class="col-sm-4 col-md-4 program-archive-featured-media hidden-xs">
 							
 							<div class="program-archive-featured-image">
 								<?php echo the_post_thumbnail('thumbnail-card');  ?>
@@ -1842,10 +2065,14 @@
 							
 						</div>
 						
-						<div class="col-lg-8 program-archive-content">
+						<div class="col-sm-8 col-md-8 program-archive-content">
 						
 						<?php //----- POPULATE PROGRAM INFO OBJECT -----// ?>
-						<?php $program_info = new programInfo($program_id); ?>
+							
+							<?php // Check for ongoing status before initializing $program_info Object
+								$ongoing_status = rwmb_meta('ongoing_status');
+								$program_info = new programInfo($program_id, $ongoing_status); 
+							?>
 							
 						
 							<a class="program-archive-school-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?>
@@ -1853,9 +2080,16 @@
 							
 							<div class="program-archive-school-meta">
 								<div class="program-archive-school-date">
-									<?php $start_date = rwmb_meta( 'start_date', $post_id=$program_id ); ?>
-									<?php echo date("F d, Y", strtotime($start_date));?>
-									<?php $custom_value = rwmb_meta( 'end_date', $post_id=$program_id ); if ($custom_value != '') { ?> - <?php echo $custom_value; } ?>
+									
+									<?php // Check Ongoing Status and Dispaly Correct Date Information For Next Upcoming School
+										if (rwmb_meta('ongoing_status') == '1') {
+											echo 'Ongoing Schedule';
+										} else {
+											echo date("F d, Y", strtotime($program_info->schedule[0]['start_date'])) . ' - ';
+											echo date("F d, Y", strtotime($program_info->schedule[0]['end_date']));
+										}
+									?>
+									
 								</div>
 								
 								<div class="program-archive-school-cost">
@@ -1880,7 +2114,7 @@
 							
 							
 							<?php if ($in_main_archive == true) { ?>
-								<div class="program-archive-school-compare-link visible-lg">
+								<div class="program-archive-school-compare-link visible-md visible-lg">
 									<span>Compare 
 										<i id="compare-programs-checkbox" data-programId="<?php echo $program_id; ?>" data-programTitle="<?php the_title(); ?>" class="icon-check-empty"></i>
 									</span>
@@ -1889,7 +2123,7 @@
 							
 							<div class="program-archive-school-footer-button" data-target-container="dates-<?php echo $program_info->program_id; ?>"><i class="icon-calendar"></i><span class="hidden-sm"> All Dates</span></div>
 							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>"><i class="icon-info"></i><span class="hidden-sm"> Program Info</span></div>
-							<div class="program-archive-school-footer-button" data-target-container="info-<?php echo $program_info->program_id; ?>" style="float: left;">Applications: 
+							<div class="program-archive-app-status-container" style="float: left;">Applications: 
 								<?php 
 								if ($program_info->schedule[0]['app_status'] == 'open') {
 									echo '<span class="application-status app-open">Open <i class="icon-circle-blank"></i></span>';
@@ -1904,69 +2138,202 @@
 						
 						<div class="program-archive-school-footer-content">
 								<div class="row" id="dates-<?php echo $program_info->program_id; ?>">
-									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+									<div class="program-archive-footer-dropdown-content-container col-md-12">
 										
-										<?php //----- PROGRAM SCHEDULE TABLE HEADER -----//?>
-										<div class="program-archive-footer-dropdown-content program-archive-footer-dropdown-header row">
-											<div class="col-lg-2 col-12">Quarter<i class="icon-angle-down"></i></div>
-											<div class="col-lg-4 col-12">Dates<i class="icon-angle-down"></i></div>
-											<div class="col-lg-2 col-12">Nationality<i class="icon-angle-down"></i></div>
-											<div class="col-lg-2 col-12">Apply Deadline<i class="icon-angle-down"></i></div>
-											<div class="col-lg-2 col-12">Applications<i class="icon-angle-down"></i></div>
-										</div>
+										<?php //----- CHECK FOR ONGOING STATUS BEFORE ANYTHING ELSE ----- ?>
+										<?php if (rwmb_meta('ongoing_status') == 1) { ?>
+											<p class="program-archive-disclaimer"><?php echo $program_info->schedule[0]['ongoing_desc']; ?></p>
+											
+											<?php if ($program_info->schedule[0]['ongoing_startup_cost'] != '') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Startup Costs
+													<span><?php echo $program_info->schedule[0]['ongoing_startup_cost']; ?></span>
+												</h6>
+												</div>
+											<?php } ?>
+											
+											<?php if ($program_info->schedule[0]['ongoing_monthly_cost'] != '') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Cost of Living
+													<span><?php echo $program_info->schedule[0]['ongoing_monthly_cost']; ?></span>
+												</h6>
+												</div>
+											<?php } ?>
+											
+											<?php if ($program_info->schedule[0]['ongoing_min_support_single'] != '') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Support (Single)
+													<span><?php echo $program_info->schedule[0]['ongoing_min_support_single']; ?>/Month</span>
+												</h6>
+												</div>
+											<?php } ?>
+											
+											<?php if ($program_info->schedule[0]['ongoing_min_support_married'] != '') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Support (Married)
+													<span><?php echo $program_info->schedule[0]['ongoing_min_support_married']; ?>/Month</span>
+												</h6>
+												</div>
+											<?php } ?>
+											
+											
 										
-										<?php //----- PROGRAM SCHEDULE INFO LOOP -----// ?>
-										<?php foreach($program_info->schedule as $program_instance) { ?>
+										<?php // Begin schedule for programs that are NOT ongoing ?>
+										<?php } else { ?>
 										
-											<div class="program-archive-footer-dropdown-content row">
-												<div class="col-lg-2 col-12"><?php echo $program_instance['quarter']; ?></div>
-												<div class="col-lg-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
-												
-												
-												<div class="col-lg-2 col-12">
-													<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
-													<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
-													<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
-													<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
-												</div>
-												
-												<div class="col-lg-2 col-12">
-													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
-													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
-													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?><br />
-													<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])); ?>
-												</div>
-												
-												
-												
-												<div class="col-lg-2 col-12">
-													<div><?php echo $program_instance['app_status']; ?></div>
-													<div><?php echo $program_instance['app_status']; ?></div>
-													<div><?php echo $program_instance['app_status']; ?></div>
-													<div><?php echo $program_instance['app_status']; ?></div>
-												</div>
+										
+										
+											<?php //----- PROGRAM SCHEDULE TABLE HEADER -----//?>
+											<div class="program-archive-footer-dropdown-content program-archive-footer-dropdown-header row hidden-xs">
+												<div class="col-sm-2">Quarter<i class="icon-angle-down"></i></div>
+												<div class="col-sm-4">Dates<i class="icon-angle-down"></i></div>
+												<div class="col-sm-2">Nationality<i class="icon-angle-down"></i></div>
+												<div class="col-sm-2">Apply Deadline<i class="icon-angle-down"></i></div>
+												<div class="col-sm-2">Applications<i class="icon-angle-down"></i></div>
 											</div>
-										
+											
+											<?php //----- PROGRAM SCHEDULE INFO LOOP -----// ?>
+											
+											<?php foreach($program_info->schedule as $program_instance) { ?>
+											
+												<div class="program-archive-footer-dropdown-content row">
+													<div class="col-sm-2 col-md-2 col-12"><?php echo $program_instance['quarter']; ?></div>
+													<div class="col-sm-4 col-md-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
+													
+													
+													
+													<div class="col-xs-4 col-sm-2 col-md-2">
+														<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
+														<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
+														<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
+														<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
+													</div>
+													
+													<div class="col-xs-5 col-sm-2 col-md-2">
+														<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
+														<?php echo date("M d, Y", strtotime($program_instance['canadian_app_deadline'])); ?><br />
+														<?php echo date("M d, Y", strtotime($program_instance['african_app_deadline'])); ?><br />
+														<?php echo date("M d, Y", strtotime($program_instance['international_app_deadline'])); ?>
+													</div>
+													
+													
+													
+													<div class="col-xs-3 col-sm-2 col-md-2">
+													
+														<?php 
+														$application_status = array(
+															'app_status',
+															'canadian_app_status',
+															'african_app_status',
+															'international_app_status',
+														);
+
+														?>
+														
+														<?php 
+															foreach ($application_status as $application) {
+																$application_status_color = $application . '_color';
+																echo '<div>' . ucwords($program_instance[$application]) . '<i class="icon-circle-blank" style="color: #' . $program_instance[$application_status_color] . '"></i></div>';
+															}
+														?>
+													</div>
+												</div>
+											
+											<?php } ?>
 										<?php } ?>
 									</div>
 								</div>
+								
+								
+								
+								
+								
+								<?php // PROGRAM INFO ?>
 								<div class="row" id="info-<?php echo $program_info->program_id; ?>">
-									<div class="program-archive-footer-dropdown-content-container col-lg-12">
+									<div class="program-archive-footer-dropdown-content-container col-md-12">
 										<div class="row">
-											<div class="col-lg-2 col-12">Quarter 2013</div>
-											<div class="col-lg-2 col-12">Start Date</div>
-											<div class="col-lg-2 col-12">End Date</div>
-											<div class="col-lg-2 col-12">Application Open</div>
-											<div class="col-lg-2 col-12">Application Deadline</div>
-											<div class="col-lg-2 col-12">Application Status</div>
-										</div>
-										<div class="row">
-											<div class="col-lg-2 col-12">Quarter 2013</div>
-											<div class="col-lg-2 col-12">Start Date</div>
-											<div class="col-lg-2 col-12">End Date</div>
-											<div class="col-lg-2 col-12">Application Open</div>
-											<div class="col-lg-2 col-12">Application Deadline</div>
-											<div class="col-lg-2 col-12">Application Status</div>
+											<div class="col-xs-12 program-info-block"><h6>Program Duration<span><?php echo $program_info->academic_info['program_duration']; ?> Weeks</span></h6></div>
+
+											<?php if (isset($program_info->academic_info['program_prereqs'])) { ?>
+												<div class="col-xs-12 program-info-block">
+													<h6>Prerequisites</h6>
+													<?php foreach ($program_info->academic_info['program_prereqs'] as $prereq) { ?>
+														<div><a href="<?php echo get_permalink(get_page_by_path($prereq['slug'], OBJECT, 'program')); ?>"><i class="icon-location-arrow"></i> <?php echo $prereq['name']; ?></a></div>
+													<?php } ?>
+												</div>
+											<?php } ?>
+											
+											
+											<?php if (isset($program_info->academic_info['recommended_prereqs'])) { ?>
+												<div class="col-xs-12 program-info-block">
+													<?php if (!isset($program_info->academic_info['program_prereqs'])) { ?>
+														<h6>Prerequisites</h6>
+													<?php } ?>
+													
+													<ul>
+													<?php foreach($program_info->academic_info['recommended_prereqs'] as $prereq) { ?>
+														<li><?php echo $prereq; ?></li>
+													<?php } ?>
+													</ul>
+												</div>
+											<?php } ?>
+											
+											
+											<?php if ($program_info->academic_info['accreditation'] != '') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Accreditation</h6>
+													<ul>
+													<li><?php echo $program_info->academic_info['accreditation']; ?></li>
+													</ul>
+												</div>
+											<?php } ?>
+											
+											
+											
+											
+											<?php //HAS OUTREACH ?>
+											<div class="col-xs-12 program-info-block">
+											<h6>Outreach<span>
+												<?php 
+												if ($program_info->academic_info['has_outreach'] == 'yes') {
+													echo '<i class="icon-check"></i>';
+												} elseif ($program_info->academic_info['has_outreach'] == 'as-god-allows') {
+													echo '<i class="icon-check"></i>';
+												} else {
+													echo '<i class="icon-check-empty"></i>';
+												}
+												?>
+												<?php echo ucwords(str_replace( '-', ' ', $program_info->academic_info['has_outreach'])); ?>
+											</span></h6>
+											</div>
+											
+											
+											<?php // OUTREACH DURATION ?>
+											<?php if ($program_info->academic_info['has_outreach'] == 'yes') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Outreach Duration
+													<span><?php echo $program_info->academic_info['outreach_duration']; ?> Weeks</span>
+												</h6>
+												</div>
+											<?php } ?>
+											
+											
+											<?php // OUTREACH LOCALE ?>
+											<?php if ($program_info->academic_info['has_outreach'] == 'yes'  || $program_info->academic_info['has_outreach'] == 'as-god-allows') { ?>
+												<div class="col-xs-12 program-info-block">
+												<h6>Outreach Locale<span>
+													<?php $i = 1; ?>
+													<?php foreach($program_info->academic_info['outreach_locale'] as $outreach_locale) { ?>
+														<?php $comma = $i != 1 ? ', ': null; ?> 
+														<?php echo $comma . ucwords($outreach_locale); ?>
+														<?php ++$i; ?>
+													<?php } ?>
+												</span></h6>
+												</div>
+											<?php } ?>
+											
+											
+
 										</div>
 									</div>
 								
@@ -1982,78 +2349,342 @@
 			 } 
 			
 						
+//------------------------//
+//----- AUTHOR CLASS -----//
+//------------------------//
+/*
+ *
+ *	Class to retrieve author information
+ *	Should author's profile be set to private, no information will be passed through.
+ *	The term married indicates that an author is married, and their spouse is also present in the list.
+ *	If someone who is married is present, but their spouse is not, they will be put in the singles category.
+ *
+ *	@param string $author_ids Should be a comma separated string of all of the author's IDs.
+ *	@returns object $authors Returns an object of all of the authors that have a public profile.
+ *
+ */
+	class authorInfo {
+		var $post_id;
+		var $author_ids;
+		var $spouse_ids = array();
+		var $married;
+		var $single;
+	
+		private function get_authors() {
+			$authors = get_coauthors($this->post_id);
 			
+			foreach ($authors as $author) {
+				if ($this->author_status($author->ID)) {
+					$this->author_ids[] = $author->ID;
+				}
+			}
+			
+		}
+	
+	
+		//Take author's ID, and run it through a private function to find out if profile is public
+		private function author_status($author_id) {
+				if (rwmb_meta('profile_status', '', $post_id=$author_id) == 'public') {
+					return true;
+				} else {
+					return false;
+				}
+			}
+	
+	
+	
+		private function family_oriented() {
+				
+				//----- SEPARATE MARRIED COUPLES FROM SINGLES -----//
+				foreach($this->author_ids as $author) {
+					
+					//-----CHECK CURRENT LEADER AGAINST KNOWN SPOUSES-----//
+					if (!in_array($author, $this->spouse_ids)) {
+					
+						//-----DEFINE LEADER ID-----//
+						$author_object = get_post($author, OBJECT);
+						$author_id = $author_object->ID;
+						
+						//-----CHECK IF SPOUSE EXISTS-----//
+						if (rwmb_meta('has_spouse', '', $post_id=$author_id) == 1) {
+							$terms = rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$author_id );
+							
+							//-----SPOUSE ACTIVATED BUT NO SPOUSE SELECTED FAILSAFE-----//
+							if (!empty($terms)) {
+							
+								//-----GET SPOUSE ID-----//
+								foreach ($terms as $term) {
+									$spouse_raw_slug = $term->slug;
+									$spouse_slug = 'cap-' . $term->slug;
+									$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
+									$spouse_id = $spouse->ID;
+								}
+									
+								//----- CHECK IF SPOUSE IS PRESENT -----//
+								foreach ($this->author_ids as $i_author) {
+									$i_spouse_object = get_post($i_author, OBJECT);
+									$i_author_id = $i_spouse_object->ID;
+									
+									if ($spouse_id != $i_author_id) {
+										$spouse_present = false;
+									}  else {
+										$spouse_present = true;
+									}
+								}
+								
+								//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
+								if ($spouse_present) {
+								
+									//-----SORT USING HEAD OF HOUSEHOLD CHECKBOX -----//
+									if (rwmb_meta('head_household', '', $post_id=$author_id)) {
+										$couple = array(array('ID' => $author_id), array('ID' => $spouse_id));
+									} else {
+										$couple = array(array('ID' => $spouse_id), array('ID' => $author_id));
+									}
+								
+									$this->married[] = $couple;
+									$this->spouse_ids[] = $spouse_id;
+								
+								//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
+								} else {
+									$this->single[] = array('ID' => $author_id);
+								}
+							
+							} else {
+								$this->single[] = array('ID' => $author_id);
+							}
+						
+						//-----PROCEED THROUGH FOR SINGLE-----//
+						} else {
+							$this->single[] = array('ID' => $author_id);
+						}
+					}											
+				}
+			}
+	
+		
+		//If public, fill up information
+		private function populate_author_info($user_id) {
+					$user_object = get_coauthors($user_id);
+					$user_post_count = count_user_posts($user_id);
+					
+					//get associated author taxonomy term to grab post count
+					$author_terms = wp_get_post_terms($user_id, 'author');
+					
+					$link_active = $author_terms[0]->count > 0 ? true : false;
+					
+					return array(
+						'test' => 'some stuff',
+						'display_name'	=> $user_object[0]->display_name,
+						'first_name'	=> $user_object[0]->first_name,
+						'last_name'		=> $user_object[0]->last_name,
+						'description'	=> $user_object[0]->description,
+						'post_count'	=> $author_terms[0]->count,
+						'link_active'	=> $link_active,
+						);
+				}
+		
+		
+		//Construct Class using string of author IDs
+		function __construct($post_id, $author_ids=null) {
+		
+			if (is_null($author_ids)) {
+				$this->post_id = $post_id;
+				$this->get_authors();
+			} else {
+				$this->author_ids = $author_ids;
+			}
+
+			//separate married couples from singles
+			$this->family_oriented();
+			
+			//fill information for married couples
+			if (isset($this->married)) {
+				foreach ($this->married as $couples_key => $couple) {
+					foreach ($couple as $spouse_key => $spouse) {
+						$this->married[$couples_key][$spouse_key]['author_info'] = $this->populate_author_info($spouse['ID']);
+					}
+				}
+			}
+				
+			//fill information for singles
+			if (isset($this->single)) {
+				foreach ($this->single as $single_key => $single) {
+					$this->single[$single_key]['author_info'] = $this->populate_author_info($single['ID']);
+				}
+			}
+		}
+	}
+	
+//---------------------------//
+//----- DISPLAY AUTHORS -----//
+//---------------------------//
+/*
+ *	Function to display authors for a post
+ *
+ */
+ 
+	function display_authors($post_id, $author_ids) {
+	$authors = new authorInfo($post_id, $author_ids); ?>
+		<?php // MARRIED COUPLES ?>
+		<?php if (isset($authors->married)) { ?>
+			<?php foreach($authors->married as $couple){ ?>
+			<div class="school-leader-container">								
+				<div class="row">
+					<div class="col-sm-3 col-md-3 clearfix">
+						<?php foreach ($couple as $author_info) { ?>
+							<div class="row married-avatar-container">
+								<div class="col-md-12 avatar-container"><?php echo get_the_post_thumbnail($author_info['ID'], 'thumbnail'); ?></div>
+							</div>
+						<?php } ?>
+					</div>
+																			
+				
+					<div class="col-sm-9 col-md-9">
+						<h5>
+						<?php $n = 1; ?>
+						<?php foreach ($couple as $author_info) { ?>
+							<?php if ($n == 1) { 
+									echo $author_info['author_info']['first_name'] . ' & ';
+									$n = ++$n;
+								} else {
+									echo $author_info['author_info']['display_name'];
+								} ?>
+						<?php } ?>
+						</h5>
+						
+							<?php foreach ($couple as $author_info) { ?>
+								<p><?php echo $author_info['author_info']['description']; ?></p>
+							<?php } ?>
+				
+						</div>
+					</div>
+				</div>
+			<?php } ?>
+		<?php } ?>
+		
+		<?php // SINGLES ?>
+		<?php if (isset($authors->single)) { ?>
+			<?php foreach($authors->single as $single) { ?>
+				<div class="school-leader-container">
+					<div class="row">
+						<div class="col-md-3 avatar-container">
+							<?php echo get_the_post_thumbnail($single['ID'], 'thumbnail'); ?>
+						</div>
+					
+						<div class="col-md-9">
+							<h5><?php echo $single['author_info']['display_name']; ?></h5>
+							<p><?php echo $single['author_info']['description']; ?></p>
+						</div>
+					</div>
+				</div>
+			<?php } ?>
+		<?php } ?>
+
+	<?php }
+
+
+
+
+
+
+
+
+					
 			
 			//----------------------------------------------------------//
 			//----- FUNCTION TO RETRIEVE AND DISPLAY RELATED POSTS -----//
 			//----------------------------------------------------------//
+			/*
+			 *	Function retrieves related posts based on post type, and 
+			 *	also displays a link to the post type archive using the 
+			 *	term used in the taxonomy, auto populated by the post type.
+			 *
+			 *	The only improvement at this point would be to make the 
+			 *	archive URL auto generate itself based on getting the post
+			 *	type, and the term of the auto populated taxonomy.
+			 *
+			 *	@input array $related_args
+			 *	@returns HTML
+			 *
+			 */
 			
 			function get_related_posts($related_args) {
 			
+			
+			
 			if (!isset($related_args["title"])){$related_args["title"] = 'Related Posts';}
 			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
-			if (!isset($related_args["post_type"])){$related_args["post_type"] = 'post';}
 			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
 			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
 			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
-			if (!isset($related_args["archive_url"])){$related_args["archive_url"] = get_bloginfo(info) . '/blog/';}
+			if (!isset($related_args["archive_url"])){
 			
+				if (get_post_type() == 'program') {
+					$related_args["archive_url"] = get_bloginfo('url') . '/' . 'program-blogs' . '/' . the_slug();
+					$related_args['program_taxo'] = the_slug();
+				} elseif (get_post_type() == 'projects') {
+					$related_args["archive_url"] = get_bloginfo('url') . '/' . 'project-blogs' . '/' . the_slug();
+					$related_args['project_taxo'] = the_slug();
+				} elseif (get_post_type() == 'target_nations') {
+					$related_args["archive_url"] = get_bloginfo('url') . '/' . 'target-nation-blogs' . '/' . the_slug();
+					$related_args['target_nation_taxo'] = the_slug();
+				} else {
+					$related_args['archive_url'] = get_bloginfo('url') . '/' . 'blog';
+				}
+			}
 			?>
-			
 				
-					   <?php $args = array(
-							'posts_per_page' 	=> $related_args["posts_per_page"],
-							'post_type' 		=> $related_args["post_type"],
-							'program_taxo' 		=> $related_args["program_taxo"],
-							'project_taxo'		=> $related_args["project_taxo"],
-							'target_nation_taxo'=> $related_args["target_nation_taxo"],
-					   ); ?>
-						   
-						   <?php $my_query = new WP_Query( $args ); ?>
-						   <?php if ( $my_query->have_posts() ) { ?>
-								<li><h2><?php echo $related_args['title']; ?></h2>
-								<ul>
-							   <?php while ( $my_query->have_posts() ) { ?>
-								   <?php $my_query->the_post(); ?>
-								   
-										<li>
-											<div class="row sidebar-related-post">
-												<div class="sidebar-thumbnail-container visible-lg col-lg-4">
-													<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
-												</div>
-												
-												<div class="sidebar-related-post-content col-lg-8">
-													<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
-													<p><?php the_time( 'F j, Y' ); ?></p>
-												</div>
-											</div>
-										</li>
-							   <?php } ?>
-							   
-								<?php $args = array(
-									'post_type' 	=> 'post',
-									'program_taxo' 	=> $related_args['program_taxo'],
-									'project_taxo' 	=> $related_args['project_taxo'],
-									'nopaging'	=> true,
-								);
-								$num = count( get_posts( $args ) ); ?>
-								
-									<!--RELATED POST MORE BUTTONS-->
-									<li>
-										<div class="sidebar-related-posts-more">
-											<div class="sidebar-related-posts-view-all">
-												<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
-											</div>
-											
-											<div class="sidebar-related-posts-subscribe">
-												<a href="<?php bloginfo('rss2_url'); ?>">Subscribe</a>
-											</div>
-											<div class="clearfix"></div>
-										</div>
-									</li>
-								</ul>
-						   <?php } ?>
-						   <?php wp_reset_postdata(); ?>
+		   <?php $args = array(
+				'posts_per_page' 	=> $related_args["posts_per_page"],
+				'post_type' 		=> 'post',
+				'program_taxo' 		=> $related_args["program_taxo"],
+				'projects_taxo'		=> $related_args["project_taxo"],
+				'target_nations_taxo'=> $related_args["target_nation_taxo"],
+		   ); ?>
+			   
+			   <?php $my_query = new WP_Query( $args ); ?>
+			   <?php if ( $my_query->have_posts() ) { ?>
+					<li><h2><?php echo $related_args['title']; ?></h2>
+					<ul>
+				   <?php while ( $my_query->have_posts() ) { ?>
+					   <?php $my_query->the_post(); ?>
+					   
+							<li>
+								<div class="row sidebar-related-post">
+									<div class="sidebar-thumbnail-container visible-md visible-lg col-md-4">
+										<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
+									</div>
+									
+									<div class="sidebar-related-post-content col-md-8">
+										<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+										<p><?php the_time( 'F j, Y' ); ?></p>
+									</div>
+								</div>
+							</li>
+				   <?php } ?>
+				   
+					<?php $args = array(
+						'post_type' 	=> 'post',
+						'program_taxo' 	=> $related_args['program_taxo'],
+						'projects_taxo' 	=> $related_args['project_taxo'],
+						'target_nations_taxo'	=> $related_args['target_nation_taxo'],
+						'nopaging'	=> true,
+					);
+					$num = count( get_posts( $args ) ); ?>
+					
+						<!--RELATED POST MORE BUTTONS-->
+						<li>
+							<div class="sidebar-related-posts-more">
+								<div class="sidebar-related-posts-view-all">
+									<a href="<?php echo $related_args['archive_url']; ?>">View All (<?php echo $num; ?>) </a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</li>
+					</ul>
+			   <?php } ?>
+			   <?php wp_reset_postdata(); ?>
 						   
 			<?php } //  END GET RELATED POSTS
 			
@@ -2144,18 +2775,18 @@ class ywammontana_walker_comment extends Walker_Comment {
 		<li <?php comment_class( $parent_class ); ?> id="comment-<?php comment_ID() ?>">
 			<div id="comment-body-<?php comment_ID() ?>" class="comment-body row">
 			
-				<div class="col-lg-2 comment-author vcard author">
+				<div class="col-md-2 comment-author vcard author">
 					<?php echo ( $args['avatar_size'] != 0 ? get_avatar( $comment, $args['avatar_size'] ) :'' ); ?>
 				</div><!-- /.comment-author -->
 
-				<div id="comment-content-<?php comment_ID(); ?>" class="col-lg-10 comment-content">
+				<div id="comment-content-<?php comment_ID(); ?>" class="col-md-10 comment-content">
 					
 					
 						
 						<!-------- COMMENTS BODY---------->
 						<div class="row">
 						
-							<div class="col-lg-12">
+							<div class="col-md-12">
 							
 								<?php if( !$comment->comment_approved ) : ?>
 									<em class="comment-awaiting-moderation">Your comment is awaiting moderation.</em>	
@@ -2170,7 +2801,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 						<!---------- COMMENTS META --------->
 						<div class="row">						
 							
-							<div class="col-lg-12 comment-footer">
+							<div class="col-md-12 comment-footer">
 								<div class="comment-meta comment-meta-data">
 									<?php comment_date(); ?> at <?php comment_time(); ?> 					
 									
@@ -2214,7 +2845,16 @@ class ywammontana_walker_comment extends Walker_Comment {
 }	
 			
 
-
+		/*
+		 *	Function to get the apply link
+		 *
+		 *	@Returns $apply_link_url
+		 */
+		 
+		 function get_apply_link() {
+			 $social_options = get_option('social_options');
+			 return $social_options['apply_link_url'];
+		 }
 
 
 
@@ -2227,7 +2867,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 		
 			//----- ADD THEME OPTIONS LINK UNDER APPEARANCE TAB -----//
 			function theme_options_page() {
-			add_theme_page('Water Tower Options', 'Water Tower', 'manage_options', 'theme_options', 'theme_options_page_display');
+			add_options_page('Water Tower Options', 'Water Tower', 'manage_options', 'theme_options', 'theme_options_page_display');
 			}
 			add_action('admin_menu', 'theme_options_page');
 
@@ -2243,21 +2883,35 @@ class ywammontana_walker_comment extends Walker_Comment {
 			<h2 class="nav-tab-wrapper">  
 	            <a href="?page=theme_options&tab=display_options" class="nav-tab <?php echo $active_tab == 'display_options' ? 'nav-tab-active' : ''; ?>">Display</a>
 	            <a href="?page=theme_options&tab=front_page_options" class="nav-tab <?php echo $active_tab == 'front_page_options' ? 'nav-tab-active' : ''; ?>">Front Page</a>  
-	            <a href="#" class="nav-tab">Programs</a>
+	            <a href="?page=theme_options&tab=program_options" class="nav-tab <?php echo $active_tab == 'program_options' ? 'nav-tab-active' : ''; ?>">Programs</a>
+	            <a href="?page=theme_options&tab=social_options" class="nav-tab <?php echo $active_tab == 'social_options' ? 'nav-tab-active' : ''; ?>">Social</a>
 	            <a href="#" class="nav-tab">Authors</a>  
 	        </h2>
 			
 			<p>Options relating to the Custom Plugin.</p>
 				<form action="options.php" method="post">
 					
-					<?php if ( $active_tab == 'display_options' ) { ?>
-						<?php settings_fields('display_options'); ?>
-						<?php do_settings_sections('display_options'); ?>
-					<?php } elseif ( $active_tab == 'front_page_options' ) { ?>
-						<?php settings_fields('front_page_options'); ?>
-						<?php do_settings_sections('front_page_options'); ?>
-					<?php } else { ?>
-					<?php } ?>
+					<?php 
+					if ( $active_tab == 'display_options' ) {
+						settings_fields('display_options');
+						do_settings_sections('display_options');
+					
+					} elseif ( $active_tab == 'front_page_options' ) {
+						settings_fields('front_page_options');
+						do_settings_sections('front_page_options');
+					
+					} elseif ( $active_tab == 'program_options' ) {
+						settings_fields('program_options');
+						do_settings_sections('program_options');
+					
+					} elseif ( $active_tab == 'social_options' ) {
+						settings_fields('social_options');
+						do_settings_sections('social_options');
+						
+					} else {
+
+					} 
+					?>
 					 
 					<input name="Submit" type="submit" value="<?php esc_attr_e('Save Changes'); ?>" class="button button-primary" />
 				</form>
@@ -2269,6 +2923,15 @@ class ywammontana_walker_comment extends Walker_Comment {
 			//----- REGISTER ALL SETTINGS -----//			
 			function water_tower_admin_init(){
 				
+			
+				//----- REGISTER GENERAL SETTINGS -----//
+				register_setting( 'general_options', 'general_options');
+				
+					//----- PROGRAM SETTINGS -----//
+					add_settings_section('program_settings', 'Program Settings', 'program_settings_text', 'program_options');
+							add_settings_field('ongoing_program_message', 'Ongoing Program Message', 'get_ongoing_program_message', 'program_options', 'program_settings');
+							add_settings_field('program_open_app_color', 'Open Application Color', 'get_program_settings_open_app_color', 'program_options', 'program_settings');
+							add_settings_field('program_closed_app_color', 'Closed Application Color', 'get_program_settings_closed_app_color', 'program_options', 'program_settings');
 			
 				//----- REGISTER DISPLAY OPTIONS SETTINGS -----//
 				register_setting( 'display_options', 'display_options' );
@@ -2293,9 +2956,40 @@ class ywammontana_walker_comment extends Walker_Comment {
 					
 					//----- FRONT PAGE MODULES -----//
 			
-			
+				
+				
+				//----- REGISTER PROGRAM SETTINGS -----//
+				register_setting( 'program_options', 'program_options');
+				
+					//----- PROGRAM SETTINGS -----//
+					add_settings_section('program_settings', 'Program Settings', 'program_settings_text', 'program_options');
+							add_settings_field('ongoing_program_message', 'Ongoing Program Message', 'get_ongoing_program_message', 'program_options', 'program_settings');
+							add_settings_field('ongoing_support_desc', 'Ongoing Support Description', 'get_ongoing_support_desc', 'program_options', 'program_settings');
+							add_settings_field('program_open_app_color', 'Open Application Color', 'get_program_settings_open_app_color', 'program_options', 'program_settings');
+							add_settings_field('program_closed_app_color', 'Closed Application Color', 'get_program_settings_closed_app_color', 'program_options', 'program_settings');
+				
+				//----- SOCIAL MEDIA SETTINGS -----//
+				register_setting( 'social_options', 'social_options');
+					
+					//-----SOCIAL MEDIA SETTINGS -----//
+					add_settings_section('application_options', 'Application Settings', 'application_settings_text', 'social_options');
+						add_settings_field('apply_link_url', 'Application Link URL', 'get_apply_link_url', 'social_options', 'application_options');
+						
+					add_settings_section('social_media_options', 'Social Media Settins', 'social_media_settings_text', 'social_options');
+						add_settings_field('facebook_url', 'Facebook Page URL', 'get_facebook_url', 'social_options', 'social_media_options');
+						add_settings_field('twitter_url', 'Twitter Page URL', 'get_twitter_url', 'social_options', 'social_media_options');
+						add_settings_field('instagram_url', 'Instagram Page URL', 'get_instagram_url', 'social_options', 'social_media_options');
+						add_settings_field('vimeo_url', 'Vimeo Page URL', 'get_vimeo_url', 'social_options', 'social_media_options');
+				
 			}
 			add_action('admin_init', 'water_tower_admin_init');
+			
+			
+			
+			//----- GENERAL SETTINGS MARKUP -----//
+			function general_settings_text() {
+				echo '<p>Below are all of the general settings of the website.</p>';
+			}
 			
 			
 			
@@ -2353,7 +3047,79 @@ class ywammontana_walker_comment extends Walker_Comment {
 					echo $options['alert_status_message'];
 					echo '</textarea>';
 				}
+				
+				
+				
+				
+			//----- PROGRAM SETTINGS MARKUP -----//
+			function program_settings_text() {
+				echo '<p>Use this section to make changes to the functionality of our programs pages and archive page.  These settings may or may not effect all programs depending on which setting is changed.  Settings found here will be propagated throughout the website in multiple places, so make changes wisely, and sparingly.</p>';
+			}
+			
+				function get_ongoing_program_message() {
+					$options = get_option('program_options');
+					echo "<textarea id='ongoing_program_message' name='program_options[ongoing_program_message]' rows='5' cols='50'>";
+					echo $options['ongoing_program_message'];
+					echo '</textarea>';
+				}
+				
+				function get_ongoing_support_desc() {
+					$options = get_option('program_options');
+					echo "<textarea id='ongoing_support_desc' name='program_options[ongoing_support_desc]' rows='5' cols='50'>";
+					echo $options['ongoing_support_desc'];
+					echo '</textarea>';
+				}
+				
+				function get_program_settings_open_app_color() {
+					$options = get_option('program_options');
+					echo "<input id='program_open_app_color' style='color: white; font-weight: bold; background: #{$options['program_open_app_color']};' name='program_options[program_open_app_color]' name='program_options[program_open_app_color]' size='40' type='text' value='{$options['program_open_app_color']}' />";
+				}
+				
+				function get_program_settings_closed_app_color() {
+					$options = get_option('program_options');
+					echo "<input id='program_closed_app_color' style='color: white; font-weight: bold; background: #{$options['program_closed_app_color']};' name='program_options[program_closed_app_color]' name='program_options[program_closed_app_color]' size='40' type='text' value='{$options['program_closed_app_color']}' />";
+				}
 		
+		
+		
+		//----- SOCIAL SETTINGS MARKUP -----//
+			function social_settings_text() {
+				echo '<p>Below are all of the general settings of the website.</p>';
+			}
+			
+			function application_settings_text() {
+				echo '<p>These settings will affect the way anything related to our application process behave</p>';
+			}
+				
+				function get_apply_link_url() {
+					$options = get_option('social_options');
+					echo "<input id='apply_link_url' name='social_options[apply_link_url]' name='social_options[apply_link_url]' size='40' type='text' value='{$options['apply_link_url']}' />";
+				}
+			
+			//----- SOCIAL MEDIA SECTION -----//	
+			function social_media_settings_text() {
+				echo '<p>Below are all of the social media settings for the website including links to our existing profiles on social media sites, along with API keys to the sites so that we can interact with the data stored on the servers of those sites.  API keys should only be changed by those who have access to, and understand how Water Tower is programmed to work.  API keys should not be changed frequently, if ever.</p>';
+			}
+			
+				function get_facebook_url() {
+					$options = get_option('social_options');
+					echo "<input id='facebook_url' name='social_options[facebook_url]' name='social_options[facebook_url]' size='40' type='text' value='{$options['facebook_url']}' />";
+				}
+				
+				function get_twitter_url() {
+					$options = get_option('social_options');
+					echo "<input id='twitter_url' name='social_options[twitter_url]' name='social_options[twitter_url]' size='40' type='text' value='{$options['twitter_url']}' />";
+				}
+				
+				function get_instagram_url() {
+					$options = get_option('social_options');
+					echo "<input id='instagram_url' name='social_options[instagram_url]' name='social_options[instagram_url]' size='40' type='text' value='{$options['instagram_url']}' />";
+				}
+				
+				function get_vimeo_url() {
+					$options = get_option('social_options');
+					echo "<input id='vimeo_url' name='social_options[vimeo_url]' name='social_options[vimeo_url]' size='40' type='text' value='{$options['vimeo_url']}' />";
+				}
 					
 		
 		//--------------------------------------------//
@@ -2543,7 +3309,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="col-lg-<?php echo $span; ?> col-6 instagram-container">
+		  		<div class="col-md-<?php echo $span; ?> col-6 instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
@@ -2626,12 +3392,12 @@ class ywammontana_walker_comment extends Walker_Comment {
 	function no_posts_found ($post_type) { ?>
 		<div class="row no_posts_found">
 			
-			<div class="col-lg-3">
+			<div class="col-md-3">
 				<h1>Ooops,</h1>
 				<p>We searched our whole database and couldn't find any <?php echo $post_type; ?> like that, or by that name.  But we did manage to find these guy's in there. <a href="http://www.youtube.com/watch?v=6qsH_LFRr6k">No wonder it's been slow lately...</a></p>
 			</div>
 			
-			<div class="col-lg-7">
+			<div class="col-md-7">
 				<img src="<?php echo get_bloginfo ('template_directory'); ?>/images/no-posts.jpg" />
 			</div>
 			

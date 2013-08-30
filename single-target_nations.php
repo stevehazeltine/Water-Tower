@@ -13,7 +13,7 @@
 		
 		
 		<!-------- TARGET NATION CONTENT ------->
-		<div class="col-lg-8 content-container">
+		<div class="col-md-8 content-container">
 	
 			<div class="target-nations-title">
 				<h1><?php the_title(); ?></h1>
@@ -26,55 +26,8 @@
 		
 		<!------- TARGET NATION SIDEBAR ------->
 		
-		<div class="col-lg-4 sidebar">
-			
-			
-			
-			
-			
-			<ul class="target-nation-sidebar">
-				<?php get_related_posts(5, '', '', get_the_title()); ?>
-			</ul>		
-			
-			
-			<!------GLOBAL PARTNERS -------->
-			<div class="row target-nations-global-partners">
-				<div class="col-lg-12">
-				<h2>Global Partners</h2>
-					
-					<div class="row tn-global-partner-group-container">
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-					</div>
-					
-					<div class="row tn-global-partner-group-container">
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-						<div class=" col-lg-3 target-nations-global-partner">
-							<img src="http://placehold.it/150x150" />
-						</div>
-					</div>
-					
-				</div>
-			</div>
-			
+		<div class="col-md-4 sidebar">
+			<?php get_sidebar(); ?>
 		</div>
 		
 		

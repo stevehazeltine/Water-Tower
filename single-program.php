@@ -24,17 +24,19 @@
 		 
 				
 					
-					<div class="col-lg-8 school-main-content-container">
+					<div class="col-md-8 school-main-content-container">
 							<div class="school-title-container">
 								<h2 class="school-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>">
 									<span class="school-long-title"><?php the_title(); ?></span>
 								</a></h2>
+								
 							</div>
 					
 				 		
 				 		 <!--MAIN CONTENT FOR PROGRAM PAGE-->
 				 		 		
 								 <div class="post school-main-content">
+														
 														
 										 <!--OVERVIEW OF THE SCHOOL-->
 										 <div class="entry">
@@ -65,9 +67,9 @@
 												
 												
 												
-													<div class="col-5 col-lg-4 col-sm-4">
+													<div class="hidden-xs col-xs-8 col-md-4 col-sm-4">
 														<div class="chart-container">
-															<canvas id="lecture-overview" class="chart" width="800" height="800"></canvas>
+															<canvas id="lecture-overview" class="chart" width="320" height="320"></canvas>
 														
 															<script>
 																jQuery(document).ready(function($) {
@@ -106,7 +108,7 @@
 																
 																	]
 																var options = {
-																	segmentStrokeWidth : 10,
+																	segmentStrokeWidth : 2,
 																	percentageInnerCutout : 65,
 																	animation: false,
 																}
@@ -116,7 +118,7 @@
 																		
 																});			
 															</script>
-															<div class="lecture-overview-chart-hours hidden-sm">
+															<div class="lecture-overview-chart-hours hidden-xs hidden-sm">
 																<?php echo $total_hours; ?>
 																<div class="lecture-overview-hours-title">Hours/Week</div>
 															</div>
@@ -124,7 +126,7 @@
 													</div>
 												
 												
-													<div class="col-7 col-lg-8 col-sm-8">
+													<div class="hidden-xs col-md-8 col-sm-8 lecture-overview-chart-key-container">
 														<ul class="lecture-phase-overview-key">
 														<?php $i = 1 ?>
 														
@@ -162,16 +164,16 @@
 													
 														<?php while (rwmb_meta($activity_title) !== '') { ?>
 														<div class="lecture-phase-activity-details-container row">
-															<div class="col-9 col-lg-10">
+															<div class="col-xs-9 col-md-10">
 																<h6><?php echo rwmb_meta($activity_title); ?></h6>
 																<?php echo rwmb_meta($activity_desc); ?>
 															</div>
 														
 														
-															<div class="col-3 col-lg-2">
+															<div class="col-xs-3 col-md-2">
 															<div class="lecture-phase-activity-detail-chart">
 																<div class="chart-container">
-																	<div class="lecture-phase-activity-detail-chart-hours"><?php echo rwmb_meta($activity_hours); ?></div>
+																	<div class="lecture-phase-activity-detail-chart-hours hidden-xs"><?php echo rwmb_meta($activity_hours); ?></div>
 																	<canvas id="activity-detail-<?php echo $n; ?>" class="chart" width="150" height="150"></canvas>
 																	
 																	<script>
@@ -270,7 +272,7 @@
 														 <?php while (rwmb_meta($title) != '') :?>
 														   
 														   		<div class="row lecture-phase-info">
-																	<div class="col-lg-12 lecture-phase-info-title">
+																	<div class="col-md-12 lecture-phase-info-title">
 																		<h6><?php echo rwmb_meta($title); ?> <i class="icon-long-arrow-right" style="margin: 0px 10px;"></i><?php echo rwmb_meta($hours); ?> Hours/Week</h6>
 																		
 																		<p>
@@ -355,179 +357,23 @@
 											 <?php } ?>
 											 
 					
-					
-					
-					<?php $prereqs = wp_get_post_terms($post->ID, 'prereqs_taxo'); ?>
-					<?php foreach($prereqs as $prereq) {
-						print_r($prereq);
-					} ?>
+	
 					
 											 
 											 
 										<!--------- SCHOOL LEADERS ----------->
-										<h4>Leaders</h4>
-										<?php  
-											
-											
-											function get_school_leaders($leader_string) {
-												$leaders = explode(',', $leader_string);
-												$skip_leaders = array();
-												
-													
-													//----- SEPARATE MARRIED COUPLES FROM SINGLES -----//
-													foreach($leaders as $leader) {
-														
-														
-														//-----CHECK CURRENT LEADER AGAINST KNOWN SPOUSES-----//
-														if (!in_array($leader, $skip_leaders)) {
-														
-															//-----DEFINE LEADER ID-----//
-															$leader_object = get_page_by_path('cap-' . $leader, OBJECT, 'guest-author');
-															$leader_id = $leader_object->ID;
-															
-															//-----CHECK IF SPOUSE EXISTS-----//
-															if (rwmb_meta('has_spouse', '', $post_id=$leader_id) == 1) {
-																$terms =  rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$leader_id );
-																
-																
-																//-----SPOUSE ACTIVATED BUT NO SPOUSE SELECTED FAILSAFE-----//
-																if (!empty($terms)) {
-																
-																	//-----GET SPOUSE ID-----//
-																	foreach ($terms as $term) {
-																		$spouse_raw_slug = $term->slug;
-																		$spouse_slug = 'cap-' . $term->slug;
-																		$spouse = get_page_by_path($spouse_slug, OBJECT, 'guest-author');
-																		$spouse_id = $spouse->ID;
-																		}
-																		
-																	//-----CHECK IF SPOUSE IS PRESENT-----//
-																	foreach ($leaders as $i_spouse) {
-																		$i_spouse_object = get_page_by_path('cap-' . $i_spouse, OBJECT, 'guest-author');
-																		$i_spouse_id = $leader_object->ID;
-																		
-																		if ($i_spouse_id == $spouse_id) {
-																			$spouse_present = true;
-																		}  else {
-																			$spouse_present = false;
-																		}
-																	}
-																	
-																	//-----IF SPOUSE IS PRESENT APPEND ID'S TOGETHER-----//
-																	if ($spouse_present = true) {
-																		$married_couples .= $leader_id . '-' . $spouse_id . ',';
-																		$skip_leaders[] = $spouse_raw_slug;
-																	
-																	//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
-																	} else {
-																		$singles .= $leader_id . ',';
-																	}
-																
-																} else {
-																	$singles .= $leader_id . ',';
-																}
-															
-															//-----PROCEED THROUGH FOR SINGLE-----//
-															} else {
-																$singles .= $leader_id . ',';
-															}
-														}											
-													}
-													
-													if (!empty($married_couples)) {
-														$married_couples = explode(',', rtrim($married_couples, ','));
-													}
-													
-													$singles = explode(',', rtrim($singles, ','));?>
-													
-													
-													<?php //-----DISPLAY MARRIED COUPLES-----//?>
-													<?php if (isset($married_couples)) { ?>
-														<?php foreach($married_couples as $married_couple) { ?>
-															<?php $spouses = explode('-', $married_couple) ?>
-															<div class="school-leader-container">
-															
-															
-																<div class="row">
-																	<div class="col-lg-3">
-																		
-																			<?php foreach ($spouses as $spouse) { ?>
-																			<div class="row married-avatar-container">
-																				<?php $spouse_object = get_coauthors($spouse); ?>
-																				<div class="col-lg-12 avatar-container"><?php echo get_the_post_thumbnail($spouse_object[0]->ID, 'thumbnail'); ?></div>
-																			</div>
-																			<?php } ?>
-																		
-																	</div>
-																															
-																
-																	<div class="col-lg-9">
-																		<?php //-----DISPLAY NAMES-----//?>
-																		<h5>
-																		<?php $n = 1; ?>
-																		<?php foreach ($spouses as $spouse) { ?>
-																			<?php $spouse_object = get_coauthors($spouse); ?>
-																			<?php if ($n==1) { 
-																					echo $spouse_object[0]->first_name . ' & ';
-																					$coutner = ++$n;
-																				} else {
-																					echo $spouse_object[0]->display_name;
-																				} ?>
-																		<?php } ?>
-																		</h5>
-																		
-																		<p>
-																			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel auctor ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam in tempor dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris ac risus ac mauris convallis tincidunt. Curabitur quis venenatis neque, vel vulputate magna. Donec suscipit arcu sit amet enim condimentum, nec semper odio venenatis. Fusce dictum risus sed dolor malesuada cursus. In commodo, leo nec vehicula lacinia, neque risus cursus purus, malesuada feugiat est nunc non quam. Suspendisse pellentesque nulla est.
-																		</p>
-																	</div>
-																
-																</div>
-																
-															</div>
-														<?php } ?>
-													<?php } ?>
-													
-													
-													<?php //-----DISPLAY SINGLES-----//?>
-													<?php foreach($singles as $single) { ?>
-														<div class="school-leader-container">
-														
-														
-															<div class="row">
-																<div class="col-lg-3 avatar-container">
-
-																	<?php $single_object = get_coauthors($single); ?>
-																	<?php echo get_the_post_thumbnail($single_object[0]->ID, 'thumbnail'); ?>
-
-																</div>
-																														
-															
-																<div class="col-lg-9">
-																	<?php //-----DISPLAY NAMES-----//?>
-																	<h5><?php echo $single_object[0]->display_name; ?></h5>
-																	<p><?php echo $single_object[0]->description; ?></p>
-																</div>
-															
-															</div>
-															
-														</div>
-													<?php } ?>
-													
-													
-													
-												<?php }
-
-											
+										<?php									
 											
 											
 											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$program_id );
+											
+											if (!empty($terms)) {
 												foreach ( $terms as $term ) {
-												   $leader_string .= $term->slug . ',';
+													$author_object = get_page_by_path('cap-' . $term->slug, OBJECT, 'guest-author');
+												   $leader_string[] = $author_object->ID;
 												}
-												
-												$leader_string = rtrim($leader_string, ',');
-												get_school_leaders($leader_string);
-												
+												display_authors($program_id, $leader_string);
+											}
 												
 												
 												
@@ -597,7 +443,7 @@
 
 										 </div><!-- .entry -->
 								 </div> <!-- .post -->
-					</div><!--col-lg-8 content container-->
+					</div><!--col-md-8 content container-->
 							 
 					
 					
@@ -605,77 +451,194 @@
 					
 					
 					<!--PROGRAM SIDEBAR-->							 
-					 <div class="col-lg-4 sidebar">
+					 <div class="col-12 col-md-4 sidebar">
 					 
-					 
-						<div  class="row">
-						 	<div class="col-lg-12">
-						 		<div class="apply-button-window">
-						 			
-						 			
-						 			<div class="apply-button-container">
-						 				<div class="apply-button-hover">
-						 					<a href="#_"><h4>Apply Now <i class="icon-chevron-right"></i></h4></a>
-						 				</div>
-						 				
-						 				<div class="apply-button-active">
-						 					<span><a href="#"><i class="icon-globe"></i> Online</a></span>
-											<span><a href="#"><i class="icon-pencil"></i> PDF</a></span>
-						 				</div>
-						 			</div>
-						 			
-						 		</div>
+					 	<?php //----- APPLY BUTTON -----// ?>
+						 	<div class="apply-button-container">
+						 		<a href="http://<?php echo get_apply_link(); ?>" target="_new"><div class="apply-button-text">Apply Online</div></a>
+						 		<div class="apply-button-dropdown-button"><i class="icon-caret-down"></i></div>
+						 		
+						 		<ul>
+					 				<li class="apply-button-dropdown-item">Online and offline versions of our application are available, however we highly recomend our online option as it has been optimized to help our staff process, and communicate with you in the most efficient manner.</li>
+									<a href="<?php echo get_bloginfo('url'); ?>/contact"><li class="apply-button-dropdown-item-button">Contact Registrar</li></a>
+								</ul>
+						 		
 						 	</div>
-						</div>
 
 						
 						
 						<ul class="school-sidebar">	
-							<li><h2>Program Details</h2>
-								<ul>
-								
-									<?php $i = 1; ?>
-									<?php $start_date = 'start_date'.$i; ?>
-									<?php $end_date = 'end_date'.$i; ?>
-									<?php $total_cost = 'total_cost'.$i; ?>
-									<?php $season = 'season'.$i; ?>
+								<ul class="program-info">
 									
-									<?php while (rwmb_meta($start_date) != '') : ?>
-											<li class="sidebar-info-item">
-												<div class="sidebar-info-title">
-													<h6><?php echo rwmb_meta($season); ?></h6>
-												</div>
-												<div class="sidebar-info-details">
-													<div>
-														<?php echo date("M d", strtotime($start_date));?> - 
-														<?php echo date("M d, Y", strtotime(rwmb_meta($end_date))); ?>
-													</div>
-													<div>
-														<?php setlocale(LC_MONETARY,"en_US"); ?>
-														<?php echo money_format( '%i', rwmb_meta($total_cost)); ?>
-													</div>
-												</div>
-												<div class="clearfix"></div>
-											</li>
-										<?php $i = $i+1 ?>
-										<?php $start_date = 'start_date'.$i; ?>
-										<?php $end_date = 'end_date'.$i; ?>
-										<?php $total_cost = 'total_cost'.$i; ?>
-										<?php $season = 'season'.$i; ?>
-									<?php endwhile ?>
+									<?php
+									/*
+									 *	Display all of the program information from the $program_info object
+									 *
+									 */
+									 
+									 	$program_info = new programInfo($program_id);
+									 	$i = 1; 
+									 	
+											// Loop through schedule information
+											if (isset($program_info->schedule)) {
+												foreach ($program_info->schedule as $instance) {
+												
+													// CHECK IF SCHOOL IS ONGOING OR NOT
+													if (rwmb_meta('ongoing_status') != 1){
+													
+													
+														$dropdown_class = $i == 1 ? 'dropped-down' : '';
+														$active_info_section = $i == 1 ? 'active-info-section' : '';
+													
+														echo '<li id="' . $instance['start_date'] . '" class="program-info-section-title ' . $active_info_section . '">' . '<a class="title-link" href="#_" data-quarter="' . $instance['start_date'] . '">' . $instance['quarter'] . ' <i class="icon-caret-down"></i></a>';
+														echo '<span class="application-status">Applications: ' . ucfirst($instance['app_status']);
+														echo '<i style="color: #' . $instance['app_status_color'] . '" class="icon-circle-blank"></i></span>' . '<ul class="program-info-dropdown ' . $dropdown_class . '">';
+														echo '<li>' . '<span class="program-info-section-subtitle">Start</span>' . date("F d, Y", strtotime($instance["start_date"])) . '</li>';
+														echo '<li>' . '<span class="program-info-section-subtitle">Finish</span>' . date("F d, Y", strtotime($instance["end_date"])) . '</li>';
+														
+														if ($instance['total_cost'] != '') {
+															echo '<li>' . '<span class="program-info-section-subtitle">Program Cost</span>' . $instance["total_cost"] . '</li>';
+														}
+															
+														echo '<li>' . '<span class="program-info-section-subtitle">Application Deadline</span>' . date("F d, Y", strtotime($instance["app_deadline"])) . '</li>';
+														echo '<li class="international-deadline">' . '<span class="program-info-section-subtitle">Canadian App Deadline</span>' . date("F d, Y", strtotime($instance["canadian_app_deadline"])) . '</li>';
+														
+														echo '<li class="international-deadline">' . '<span class="program-info-section-subtitle">African App Deadline</span>' . date("F d, Y", strtotime($instance["african_app_deadline"])) . '</li>';
+														
+														echo '<li class="international-deadline">' . '<span class="program-info-section-subtitle">International App Deadline</span>' . date("F d, Y", strtotime($instance["international_app_deadline"])) . '</li>';
+														
+														
+														echo '<li class="program-info-more-deadlines"><a href="#_" data-quarter="' . $instance['start_date'] . '"><i class="icon-caret-down"></i>International Deadlines</a></li>';
+														echo '</ul>';
+														
+														echo '</li>';
+														
+														$i = ++$i; ?>
+														
+														
+														
+													<?php // DISPLAY ONGOING SECTION FOR SCHOOLS WITH ONGOING SCHEDULES
+													} else { ?>
+													<li id="ongoing-info-section" class="program-info-section-title active-info-section">
+														<a class="title-link" data-quarter="ongoing-info-section" href="#_">Ongoing Schedule <i class="icon-caret-down"></i></a>
+														<span class="application-status">Applications: <?php echo ucfirst($instance['app_status']); ?><i style="color: #<?php echo $instance['app_status_color']; ?>;" class="icon-circle-blank"></i></span>
+															<ul class="program-info-dropdown dropped-down">
+																<li class="ongoing-desc"><?php echo $instance['ongoing_desc']; ?></li>
+																<li><span class="program-info-section-subtitle">Approx. Startup Costs</span><?php echo $instance['ongoing_startup_cost']; ?></li>
+																<li><span class="program-info-section-subtitle">Approx. Cost of Living</span><?php echo $instance['ongoing_monthly_cost']; ?>/Month</li>
+																
+																<?php if ($instance['ongoing_min_support_single'] != null) { ?>
+																<li><span class="program-info-section-subtitle">Support (Single)</span><?php echo $instance['ongoing_min_support_single']; ?>/Month</li>
+																<?php } ?>
+																
+																<?php if ($instance['ongoing_min_support_married'] != null) { ?>
+																<li><span class="program-info-section-subtitle">Support (Married)</span><?php echo $instance['ongoing_min_support_married'] ?>/Month</li> 
+																<?php } ?>
+																
+																<li class="ongoing-support-desc"><?php echo $instance['ongoing_support_desc']; ?></li>
+															</ul>
+													</li>
+	
+												<?php } ?>
+												
+											<?php } ?>
+										<?php } else { ?>
+											<li id="no-info-section" class="program-info-section-title active-info-section">
+														<a class="title-link" data-quarter="no-info-section" href="#_">Dates Not Avaiable <i class="icon-caret-down"></i></a>
+															<ul class="program-info-dropdown dropped-down">
+																<li class="ongoing-desc">Sorry, but we don't have any dates for this school yet.</li>
+															</ul>
+													</li>
+										<?php } ?>
+										
+										
+									
+									
+									
+									
+									
+										<li id="additional-info-section" class="program-info-section-title">
+											<a class="title-link" data-quarter="additional-info-section" href="#_">Additional Information <i class="icon-caret-down"></i></a>
+												<ul class="program-info-dropdown">
+													<li><span class="program-info-section-subtitle">Duration</span><?php echo $program_info->academic_info['program_duration'];?> Weeks</li>
+													
+													
+													
+													<li>
+														<span class="program-info-section-subtitle">Outreach</span>
+														<?php 
+														if ($program_info->academic_info['has_outreach'] == 'yes') { 
+															echo 'Yes <i class="icon-check"></i>';
+														} elseif ($program_info->academic_info['has_outreach'] == 'as-god-allows') {
+															echo 'As God Allows <i class="icon-check"></i>';
+														} else {
+															echo 'No <i class="icon-check-empty"></i>'; 
+														}
+														?>
+													</li>
+													
+													
+													<?php //----- CHECK FOR OUTREACH BEFORE CONTINUING -----// ?>
+													<?php if ($program_info->academic_info['has_outreach'] == 'yes' || $program_info->academic_info['has_outreach'] == 'as-god-allows') { ?>
+														
+														<?php if ($program_info->academic_info['has_outreach'] != 'as-god-allows') { ?>
+															<li>
+																<span class="program-info-section-subtitle">Outreach Duration</span>
+																<?php echo $program_info->academic_info['outreach_duration']; ?> Weeks
+															</li>
+														<?php } ?>
+														
+														<li>
+															<span class="program-info-section-subtitle">Outreach Locale</span>
+															<?php $i = 1; ?>
+															<?php foreach($program_info->academic_info['outreach_locale'] as $outreach_locale) { ?>
+																<?php $comma = $i != 1 ? ', ': null; ?> 
+																<?php echo $comma . ucwords($outreach_locale); ?>
+																<?php ++$i; ?>
+															<?php } ?>
+														</li>
+													<?php } ?>
+													
+													
+													<li class="clearfix"><span class="program-info-section-subtitle">Prerequisites</span></li>
+													
+												
+													<?php 
+													if (!is_null($program_info->academic_info['program_prereqs'])) {
+														foreach ($program_info->academic_info['program_prereqs'] as $program_prereqs) {
+															echo '<li class="program-info-sub-desc">';
+															echo '<a href="' . get_permalink( get_page_by_path( $program_prereqs['slug'], OBJECT, 'program' ) ) . '"><i class="icon-location-arrow"></i>' . $program_prereqs['name'] . '</a>';
+															echo '</li>';
+														}
+													}
+														
+													?>
+
+													<?php
+													if (!is_null($program_info->academic_info['recommended_prereqs'])) {
+														foreach ($program_info->academic_info['recommended_prereqs'] as $recommended_prereq) {
+															echo '<li class="program-info-sub-desc">';
+															echo $recommended_prereq;
+															echo '</li>';
+														}
+													}
+													?>
+													
+													
+													
+												</ul>
+										</li>
+									
 						
 								</ul>
 							</li>
 							
 							
 							<?php // RETRIEVE RELATED POSTS ?>
-							<?php $archive_url = get_bloginfo('url') . '/program_taxo/' . $program_slug . '?posttype=post&programid=' . $program_id; ?>
-
 							<?php $related_args = array (
 									'posts_per_page' 	=> 5,
 									'post_type' 		=> 'post',
 									'program_taxo'		=> $program_slug,
-									'archive_url'		=> $archive_url,
 							) ?>
 							
 							<?php get_related_posts($related_args); ?> 

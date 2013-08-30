@@ -1,5 +1,6 @@
 .global-footer {
 	margin-top: 0px;
+	margin-bottom: -5px;
 }
 
 	@media (max-width: 979px) {

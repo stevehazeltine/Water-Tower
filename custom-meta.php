@@ -7,6 +7,42 @@ global $meta_boxes;
 $meta_boxes = array();
 
 
+
+$meta_boxes[] = array(
+	'title'  => 'Profile Options',
+	'pages' => array( 'guest-author'),
+	'context' => 'side',
+	'priority' => 'high',
+	'fields' => array(
+	
+	
+		//PERSONEL STATUS
+		array (
+			'name'	=> 'Personnel Status',
+			'id'	=> "{$prefix}status",
+			'type'	=> 'select',
+			'options'=> array (
+				'student' => 'Student',
+				'staff'	  => 'Staff',
+			),
+		),
+	
+		//PROFILE STATUS
+		array(
+			'name' => 'Profile Status',
+			'id'   => "{$prefix}profile_status",
+			'type' => 'select',
+			'options'  => array(
+				'public'	=>	'Public',
+				'private'	=>	'private',
+			),
+			'desc'	=> 'Setting a users profile to private will make it so that absolute none of their information is passed through the public side of the web site.  Posts, and teachings can still be assigned, but they will not be attributed to the author in the front end until their profile is set back to public.',
+		),
+
+	),
+
+);
+
 $meta_boxes[] = array(
 	'title'  => 'Additional Information',
 	'pages' => array( 'guest-author'),
@@ -33,6 +69,14 @@ $meta_boxes[] = array(
 			),
 		),
 		
+		//HEAD OF HOUSEHOLD
+		array(
+			'name' => 'Head of the Household',
+			'id'   => "{$prefix}head_household",
+			'type' => 'checkbox',
+			'std'  => 0,
+		),
+		
 		//GUEST AUTHOR SCHOOLS STAFFED
 		array (
 			'name'	=> 'Schools Staffed',
@@ -43,28 +87,6 @@ $meta_boxes[] = array(
 				'type'		=> 'select_advanced',
 				),
 			'multiple'=> true,
-		),
-
-	),
-
-);
-
-$meta_boxes[] = array(
-	'title'  => 'Author Controls',
-	'pages' => array( 'guest-author'),
-	'context' => 'side',
-	'priority' => 'high',
-	'fields' => array(
-		
-		//GUEST AUTHOR SPOUSE
-		array (
-			'name'	=> 'Status',
-			'id'	=> "{$prefix}status",
-			'type'	=> 'select',
-			'options'=> array (
-				'student' => 'Student',
-				'staff'	  => 'Staff',
-			),
 		),
 
 	),
@@ -419,33 +441,14 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-			'name'  => 'Program Duration',
+			'name'  => 'Program Duration (Weeks)',
 			'id'    => "{$prefix}program_duration",
-			'desc'  => 'Enter the program duration in months',
+			'desc'  => 'Enter the program duration.',
 			'type'  => 'number',
 			'std'   => '',
 		),
 		
-		
-		//MINIMUM RECOMMENDED AGE
-		array(
-			'name'  => 'Minimum Recommended Age',
-			'id'    => "{$prefix}minimum_age_rec",
-			'desc'  => 'Insert the minimum age recommended for the school.',
-			'type'  => 'number',
-			'std'   => '',
-			'clone' => false,
-		),
-		
-		//MAXIMUM RECOMMENDED AGE
-		array(
-			'name'  => 'Maximum Recommended Age',
-			'id'    => "{$prefix}maximum_age_rec",
-			'desc'  => 'Insert the maximum age recommended for the school.',
-			'type'  => 'number',
-			'std'   => '',
-			'clone' => false,
-		),
+
 		
 		// SCHOOL LEADERS
 		array (
@@ -463,18 +466,7 @@ $meta_boxes[] = array(
 									background-color: transparent;">',
 
 		),
-				
-		//FILE ATTACHEMENTS
-		array(
-			'name' => 'Resource Documents',
-			'id'   => "{$prefix}file",
-			'type' => 'file_advanced',
-			'desc' => 'Use this section to upload documents that may provide extra information about your program that may not be necessary to put on the main page of the program',
-			'after'=> '				<hr style="margin: 30px -12px;
-									border-top: 1px solid #CCC;
-									border-bottom: 1px solid #FFF;
-									background-color: transparent;">',
-		),
+		
 		
 		//PREREQUISITES
 		array(
@@ -486,18 +478,10 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-			'name'  => __('Minimum Age With GED', 'water-tower'),
-			'id'    => "{$prefix}min_age_wged_prereqs",
-			'desc'  => __('Insert the minimum age requirement of an application applying who has earned a GED.', 'water-tower'),
-			'type'  => 'number',
-			'std'   => 0,
-		),
-		
-		array(
-			'name'  => __('Custom Prerequisites', 'rwmb'),
+			'name'  => __('Recommended Prerequisites', 'rwmb'),
 			'id'    => "{$prefix}custom_prereqs",
-			'desc'  => 'Please enter any custom prerequisites needed to apply for this school here.',
-			'type'  => 'text',
+			'desc'  => 'Please enter any recomended prerequisites needed to apply for this school here.',
+			'type'  => 'textarea',
 			'std'   => '',
 			'clone' => true,
 		),
@@ -513,7 +497,23 @@ $meta_boxes[] = array(
 			'std'   => '',
 			'clone' => false,
 		),
-	),
+
+		
+		
+				
+		//FILE ATTACHEMENTS
+		array(
+			'name' => 'Resource Documents',
+			'id'   => "{$prefix}file",
+			'type' => 'file_advanced',
+			'desc' => 'Use this section to upload documents that may provide extra information about your program that may not be necessary to put on the main page of the program',
+			'after'=> '				<hr style="margin: 30px -12px;
+									border-top: 1px solid #CCC;
+									border-bottom: 1px solid #FFF;
+									background-color: transparent;">',
+		),
+		
+			),
 	
 );
 
@@ -561,15 +561,50 @@ $meta_boxes[] = array(
 			),
 			
 		array(
+				'name' => 'Ongoing Application Status',
+				'id'   => $prefix . 'ongoing_app_status',
+				'type' => 'Select',
+				'desc' => 'Since the school is ongoing, the application status needs to be set manually.  Please select a status for applications for this school.',
+				'options' => array(
+					'open' => 'open',
+					'closed' => 'closed',
+					'full'	=> 'full',
+				),
+			),
+			
+		array(
 				'name' => 'Ongoing Total Cost',
-				'id'   => $prefix . 'ongoing_total_cost',
-				'type' => 'text',
-				'desc' => 'Enter the cost of program',
+				'id'   => $prefix . 'ongoing_startup_cost',
+				'type' => 'number',
+				'desc' => 'Enter the estimated startup cost of a student participating in this program.',
+			),
+			
+		array(
+				'name' => 'Ongoing Monthly Cost',
+				'id'   => $prefix . 'ongoing_monthly_cost',
+				'type' => 'number',
+				'desc' => 'Enter the estimated monthly cost of a student in this program.',
+			),
+			
+		array(
+				'name' => 'Ongoing Minimum Required Support (Single)',
+				'id'   => $prefix . 'ongoing_min_support_single',
+				'type' => 'number',
+				'desc' => 'Enter the minimum amount of support required to participate in this program.',
+				
+			),
+			
+		array(
+				'name' => 'Ongoing Minimum Required Support (Married)',
+				'id'   => $prefix . 'ongoing_min_support_married',
+				'type' => 'number',
+				'desc' => 'Enter the minimum amount of support required to participate in this program for married participants.',
 				'after'=> '				<hr style="margin: 30px -12px;
 									border-top: 1px solid #CCC;
 									border-bottom: 1px solid #FFF;
 									background-color: transparent;">',
 			),
+		
 		
 	
 	
@@ -1497,8 +1532,12 @@ $meta_boxes[] = array(
 			'name' => 'Has Outreach',
 			'id'   => "{$prefix}has_outreach_phase",
 			'desc' => 'Check this box if this school has an outreach phase.',
-			'type' => 'checkbox',
-			'std'  => 0,
+			'type' => 'select',
+			'options' => array(
+				'no'	=>	'No',
+				'yes'	=>	'Yes',
+				'as-god-allows'	=> 'As God Allows',
+			),
 		),
 		
 		array(
@@ -1511,7 +1550,7 @@ $meta_boxes[] = array(
 		
 		array(
 			'name' => 'Outreach Locale',
-			'id'   => "{$prefix}outreach_phase_locale",
+			'id'   => "{$prefix}outreach_locale",
 			'desc' => 'Choose all locales that apply to the outreach of the school',
 			'type' => 'checkbox_list',
 			'options'  => array (
@@ -1525,7 +1564,7 @@ $meta_boxes[] = array(
 			'name' => 'Description',
 			'id'   => "{$prefix}outreach_phase_desc",
 			'desc' => 'Enter a description for the outreach phase of the school',
-			'type' => 'textarea',
+			'type' => 'wysiwyg',
 			'std'  => '',
 		),
 	)
@@ -1540,14 +1579,6 @@ $meta_boxes[] = array(
 	'priority' => 'high',
 	'fields' => array(
 	
-		array(
-			'name' => 'Current Status',
-			'id'   => "{$prefix}running",
-			'desc' => 'Check this box if this school should be advertised as available and running.',
-			'type' => 'checkbox',
-			// Value can be 0 or 1
-			'std'  => 1,
-		),
 		
 		array(
 			'name' => 'Include Outreach Map',
@@ -1585,16 +1616,6 @@ $meta_boxes[] = array(
 			'std'   => '',
 			'clone' => false,
 		),
-		
-		array(
-			'name'  => 'Featured Video Vimeo ID',
-			'id'    => "{$prefix}featured_video_vimeo",
-			'desc'  => 'Insert the ID from vimeo. Typically this can be found in the url, it should be a string of numbers.',
-			'type'  => 'text',
-			'std'   => '',
-			'clone' => false,
-		),
-
 	
 	),
 );
@@ -1928,20 +1949,11 @@ $meta_boxes[] = array(
 		),
 		
 		array(
-				'name' => 'Teaching Date',
-				'id'   => $prefix . 'teaching_date',
-				'type' => 'date',
-
-				// jQuery date picker options. See here http://jqueryui.com/demos/datepicker
-				'js_options' => array(
-					'appendText'      => '(Month Day, Year)',
-					'autoSize'        => true,
-					'buttonText'      => 'Select Date',
-					'dateFormat'      => 'yymmdd',
-					'numberOfMonths'  => 2,
-					'showButtonPanel' => true,
-				),
-			),
+				'name' => 'Media File Source',
+				'id'   => "{$prefix}media_files_source",
+				'type' => 'text',
+				'desc' => 'If the media file has an original source, please provide a URL to that source',
+		),
 		
 	),
 );

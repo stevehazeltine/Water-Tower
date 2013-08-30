@@ -11,7 +11,7 @@ Template Name: Vacation With A Purpose
 			<?php get_banner($banner_args); ?>
 		    
 		    <div class="row">
-			    <div class="col-lg-9">
+			    <div class="col-md-9">
 			    	<h1><?php the_title(); ?></h1>
 					<?php the_content(); ?>
 					
@@ -20,7 +20,7 @@ Template Name: Vacation With A Purpose
 					<?php get_active_project_index(); ?>
 			    </div>
 			    
-			    <div class="sidebar col-lg-3">
+			    <div class="sidebar col-md-3">
 			    	<?php get_sidebar(); ?>
 			    </div>
 		    </div>

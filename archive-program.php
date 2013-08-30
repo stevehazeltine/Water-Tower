@@ -4,10 +4,10 @@
 		
 
 		
-		<div class="col-lg-8 program-archive-container">
+		<div class="col-md-8 program-archive-container">
 			<h1>Schools</h1>
 			<div class="row">
-				<div class="col-lg-12">
+				<div class="col-md-12">
 					<?php //----- USE PROGRAM ARCHIVE PAGE IN BACKEND TO PULL INFO FROM -----// ?>
 					<?php $program_archive_content = get_post('1282'); ?>
 					<?php echo $program_archive_content->post_content; ?>
@@ -204,7 +204,7 @@
 		
 		
 		
-		<div class="col-lg-4 program-archive-nav visible-lg" >
+		<div class="col-md-4 program-archive-nav visible-md visible-lg" >
 	       <div data-spy="affix" data-offset-top="210" id="scrollspy-nav" class="program-archive-menu">
 	         <ul class="nav">
 	        
