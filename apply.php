@@ -9,7 +9,7 @@ Template Name: Apply
 <div class="row" style="margin-bottom: 45px;">
 
 		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
-			 <div class="col-lg-9 post">
+			 <div class="col-md-9 post">
 	
 					 <h2><?php the_title(); ?></h2>		
 			
@@ -23,7 +23,7 @@ Template Name: Apply
 				<p>Oh man, we seriously need to work on this.  It appears that we have lead you astray somehow, you may want to try back later.  Sorry about that.</p>
 			<?php endif; ?>
  
-	<div class="col-lg-3">
+	<div class="col-md-3">
 		<p>Application Process</p>
 		<p>Privacy Policy</p>
 		<p>Reference Forms</p>
@@ -38,7 +38,7 @@ Template Name: Apply
 		<!--DISPLAY APPLICATION SPLASH PAGE IF USER IS LOGGED IN-->
 			
 			<div class="row">
-				<div class="col-lg-12">
+				<div class="col-md-12">
 				
 					<?php global $current_user;
 					      get_currentuserinfo();
@@ -68,7 +68,7 @@ Template Name: Apply
 		<!--REQUEST USER LOGS IN TO CONTINUE FILLING OUT APPLICATION, OR REGISTERS TO BEGIN A NEW APPLICATION-->
 		
 		    <div class="row">
-		    	<div class="col-lg-6">
+		    	<div class="col-md-6">
 		    		<h4>Log in to continue your application or start a new one.</h4>
 					
 					<?php $args = array(
@@ -89,13 +89,13 @@ Template Name: Apply
 				    ?> 
 		    		
 		    		<?php wp_login_form( $args ); ?>
-		    	</div><!--col-lg-6-->
+		    	</div><!--col-md-6-->
 		    	
-		    	<div class="col-lg-6">
+		    	<div class="col-md-6">
 		    		<h4>Register to start a new application</h4>
 		    		<?php gravity_form_enqueue_scripts(2, true); ?>
 		    		<?php gravity_form(2, $display_title=true, $display_description=true, $display_inactive=false, $field_values=null, $ajax=false, $tabindex); ?>
-		    	</div><!--col-lg-6-->
+		    	</div><!--col-md-6-->
 		    </div><!--.row-->
 			
 	<?php } ?>

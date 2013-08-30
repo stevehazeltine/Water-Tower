@@ -2,38 +2,6 @@
 	<?php if ( !dynamic_sidebar() ) : ?>
 		
 		
-		<?php if (is_singular()) { ?>
-		
-		
-		
-		<li class="sidebar-about-the-author">
-			<?php $coauthors = get_coauthors(); ?>
-				<?php foreach( $coauthors as $coauthor ) { ?>
-					
-								<?php echo get_the_post_thumbnail( $coauthor->ID, 'thumbnail-card' ); ?>
-
-								<h2><?php echo $coauthor->display_name; ?></h2>
-								<p><?php echo $coauthor->description; ?></p>
-								<div class="author-meta">View Stacey's Posts</div>
-
-								
-				<?php } ?>			
-			
-		
-		</li>
-		
-		<?php } ?>
-		
-		
-		
-		<?php //----- RECENT POSTS -----// ?>
-		<li>
-			<?php $args = array(
-				'title' => 'Latest Posts',
-			) ?>
-		
-			<?php get_related_posts($args); ?>
-		</li>
 		
 		
 		<!-------------------CATEGORIES----------------->
@@ -54,6 +22,20 @@
 		
 		
 		
+		
+		
+		<?php //----- RECENT POSTS -----// ?>
+		<?php 
+		$args = array(
+			'title' => 'Latest Posts',
+			'posts_per_page' => 3,
+		);
+		get_related_posts($args); 
+		?>
+
+		
+		
+		
 		<?php //----- SUBSCRIBE WIDGET -----// ?>
 		<li class="subscribe-widget-container">
 			<h2><?php _e('Subscribe'); ?></h2>
@@ -65,10 +47,10 @@
 			</div>
 			<div class="subscribe-widget-footer">
 				<ul>
-					<li><i class="icon-rss"></i>RSS</li>
-					<li><i class="icon-facebook"></i></li>
-					<li><i class="icon-twitter"></i></li>
-					<li><i class="icon-instagram"></i></li>
+					<li><a href="<?php bloginfo('rss2_url'); ?>"><i class="icon-rss"></i>RSS</a></li>
+					<li><a href="<?php echo get_social_media_link('facebook_url'); ?>"><i class="icon-facebook"></i></a></li>
+					<li><a href="<?php echo get_social_media_link('twitter_url'); ?>"><i class="icon-twitter"></i></a></li>
+					<li><a href="<?php echo get_social_media_link('instagram_url'); ?>"><i class="icon-instagram"></i></a></li>
 				</ul>
 			</div>
 		</li>

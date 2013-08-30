@@ -23,7 +23,19 @@ Template Name: Front Page
 								
 								<div class="rsABlock frontpage-slider-content frontpage-slider-content-left" style="background: #<?php echo get_program_color($featuredschool[0]['program_id']); ?>;" data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
 									<h2><?php echo get_the_title($featuredschool[0]['program_id']); ?></h2>
-									<p>Starts <?php echo date("F d, Y", strtotime($featuredschool[0]['start_date']));?></p>
+									<p><?php echo substr(get_post_field('post_content', $featuredschool[0]['program_id']), 0, 300); ?> [...]</p>
+									<div class="rsABlock-footer">
+										
+										<?php 
+											echo all_class_ribbon(5);
+										?>
+										
+										<p class="frontpage-slider-content-left">Starts <?php echo date("F d, Y", strtotime($featuredschool[0]['start_date']));?>
+											<span class="program-class"><?php echo $featuredschool[0]['program_class']; ?></span>
+										</p>
+										
+										
+									</div>
 								</div>
 								
 							</div>
@@ -56,6 +68,36 @@ Template Name: Front Page
 						   <?php } ?>
 					   <?php } ?>
 					   <?php wp_reset_postdata(); ?>
+					   
+					   
+					   
+					   <?php //----- DISPLAY MOST RECENT POST -----//?>
+					   
+					   <?php $args = array(
+						'post_type' 	 			=>	'post',
+						'posts_per_page'			=>  1,
+						); ?>
+						
+						
+						   <?php $my_query = new WP_Query( $args ); ?>
+						   <?php if ( $my_query->have_posts() ) { ?>
+							   <?php while ( $my_query->have_posts() ) { ?>
+								   <?php $my_query->the_post(); ?>
+					   
+					    <div class="rsContent">
+							<?php echo the_post_thumbnail('16:9-media'); ?>
+							
+							<div class="rsABlock frontpage-slider-content frontpage-slider-content-left" style="background: #444;" data-move-effect="left" data-move-offset="800" data-easing="easeOutSine">
+								<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+								<p><?php the_excerpt(); ?></p>
+							</div>
+							
+						</div>
+						<?php } ?>
+					   <?php } ?>
+					   <?php wp_reset_postdata(); ?>
+					   
+					   
 
 				</div>
 
@@ -86,24 +128,18 @@ Template Name: Front Page
             
             <?php $upcomingschools = get_upcoming_schools(4, true); ?>
             <?php $upcomingschools = $upcomingschools->schools; ?>
-  			
-  			<div class="row">
-            	<div class="col-lg-12 home-page-blogroll">
+
+            	<div class="home-page-blogroll">
 	            	<h4>Upcoming Schools</h4>
 				
 					<div class="row">
 					
 								<?php foreach($upcomingschools as $school) { ?>					
-									<div class="blogroll-upcoming-school col-6 col-lg-3">
+									<div class="blogroll-upcoming-school blogroll-block col-xs-6 col-md-3">
 										
 										<div class="blogroll-upcoming-school-image">
 											<?php echo get_the_post_thumbnail( $school['program_id'], 'thumbnail-card'); ?>
-											<div class="blogroll-upcoming-school-rollover" style="background: #<?php echo get_program_color($school['program_id']); ?>">
-												<div class="blogroll-upcoming-school-rollover-meta">
-													<h6 class="blogroll-upcoming-school-meta-title"><i class="icon-calendar"></i> Starts</h6>
-													<p><?php echo date("F d, Y", strtotime($school['start_date'])); ?></p>
-												</div>
-											</div>
+											
 										</div>
 																				
 										<a href="<?php echo get_permalink($school['program_id']); ?>" rel="bookmark">
@@ -114,7 +150,6 @@ Template Name: Front Page
 
 					</div>
 				</div>
-			</div>
           
             
             
@@ -130,7 +165,7 @@ Template Name: Front Page
             
              <!---------------- FEATURED VIDEOS ----------------->
             <div class="row">
-            	<div class="col-lg-12 home-page-blogroll">
+            	<div class="col-md-12 home-page-blogroll visible-md visible-lg">
 	            	<h4>Featured Videos</h4>
             	
             	
@@ -150,7 +185,7 @@ Template Name: Front Page
 						   <?php while ( $my_query->have_posts() ) { ?>
 							   <?php $my_query->the_post(); ?>
 	
-							    <div class="col-lg-4">
+							    <div class="col-md-4">
 									<div id="video<?php echo $i; ?>" class="royalSlider videoGallery rsDefault">
 									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
 									</div>
@@ -176,7 +211,7 @@ Template Name: Front Page
 
             <!---------------- RECENT POSTS ----------------->
             <div class="row">
-            	<div class="col-lg-12 home-page-blogroll">
+            	<div class="col-md-12 home-page-blogroll">
 	            	<h4>Recent Posts</h4>
             	
             	
@@ -185,13 +220,10 @@ Template Name: Front Page
             	
             	
 						<div class="row">
-						<?php //IF ALERT STATUS IS ACTIVATED FOR SLIDER PUSH LATEST POST TO FRONT, OTHERWISE EXCLUDE IT TO PREVENT DUPLICATION ?>
-						<?php if (rwmb_meta('alert_slider_activation') == 1) { $offset_posts = 0; } else { $offset_posts = 1; } ?>
 						
 							<?php $args = array(
 							'post_type' 	 			=>	'post',
 							'posts_per_page'			=>  4,
-							'offset'					=>  $offset_posts,
 							); ?>
 							   
 							   <?php $my_query = new WP_Query( $args ); ?>
@@ -199,7 +231,7 @@ Template Name: Front Page
 								   <?php while ( $my_query->have_posts() ) { ?>
 									   <?php $my_query->the_post(); ?>
 
-										<div class="col-6 col-lg-3">
+										<div class="col-xs-6 col-md-3 blogroll-block home-page-post-container">
 											
 											<?php // check if the post has a Post Thumbnail assigned to it.
 												if ( has_post_thumbnail() ) {

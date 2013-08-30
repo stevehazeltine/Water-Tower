@@ -1,4 +1,86 @@
 			
+			//ANIMATE AUTO FUNCTION
+			jQuery.fn.animateAuto = function(prop, speed, callback){
+				var elem, height, width;
+				return this.each(function(i, el){
+					el = jQuery(el), elem = el.clone().css({"height":"auto","width":"auto"}).appendTo(el.parent());
+					height = elem.css("height"),
+					width = elem.css("width"),
+					elem.remove();
+					
+					if(prop === "height")
+						el.animate({"height":height}, speed, callback);
+					else if(prop === "width")
+						el.animate({"width":width}, speed, callback);  
+					else if(prop === "both")
+						el.animate({"width":width,"height":height}, speed, callback);
+				});  
+			}
+			
+			
+			
+			//APPLY BUTTON ENGINE
+			$(document).ready(function () {
+				$('.apply-button-container .icon-caret-down').click(function() {
+				
+					if (!$('.apply-button-container').hasClass('apply-is-dropped-down')) {
+						$('.apply-button-container').addClass('apply-is-dropped-down');
+						$('.apply-button-container > ul').animateAuto('height', 200);
+					} else {
+						$('.apply-button-container').removeClass('apply-is-dropped-down');
+						$('.apply-button-container > ul').animate({ height: '0'}, 200);
+					}
+				});
+			});
+			
+			
+
+			//PROGRAM INFO ENGINE
+			$(document).ready(function () { 
+				$('.program-info-section-title .title-link').click(function() {
+					quarterDropdown = $(this).attr('data-quarter');
+					dropdownheight = $('#' + quarterDropdown + ' .program-info-dropdown' ).height;
+					
+					if (!$('#' + quarterDropdown + ' .program-info-dropdown').hasClass('dropped-down')) {
+						$('.program-info .dropped-down').animate({height: '0'}, 200, function() {
+							$('.program-info .dropped-down').removeClass('dropped-down');
+							$('.active-info-section').removeClass('active-info-section');
+							
+							
+							$('#' + quarterDropdown + ' .program-info-dropdown' ).animateAuto('height', 200, function() {
+								$('#' + quarterDropdown + ' .program-info-dropdown' ).css('height', 'auto');
+								$('#' + quarterDropdown + ' .program-info-dropdown' ).addClass('dropped-down');
+								$('#' + quarterDropdown).addClass('active-info-section');
+							});
+							
+							
+						});
+					}
+					
+					
+				});
+			});
+			
+			$(document).ready(function () { 
+				$('.program-info-more-deadlines a').click(function() {
+					quarter = $(this).attr('data-quarter');
+					if ($('#' + quarter + ' .international-deadline').hasClass('dropped')) {
+						$('#' + quarter + ' .dropped').animate({ height: "0" }, 200, function() {
+							$('#' + quarter + ' .international-deadline').removeClass('dropped');
+							$('#' + quarter + ' .program-info-more-deadlines i').removeClass('icon-caret-up');
+							$('#' + quarter + ' .program-info-more-deadlines i').addClass('icon-caret-down');
+						});
+					} else {
+						$('#' + quarter + ' .international-deadline').animate({ height: "21" }, 200, function() {
+							$('#' + quarter + ' .international-deadline').addClass('dropped');
+							$('#' + quarter + ' .program-info-more-deadlines i').removeClass('icon-caret-down');
+							$('#' + quarter + ' .program-info-more-deadlines i').addClass('icon-caret-up');
+						});
+					}
+				});
+			});
+			
+			
 			//DESKTOP MENU BLOGROLL ENGINE
 			$(document).ready(function() {
 				$('[id^=related-post-menu-item]').hover(function() {
@@ -151,7 +233,7 @@
 					loopRewind: true,
 					autoPlay: {
 			    		enabled: true,
-			    		delay: 4000,
+			    		delay: 6000,
 			    		pauseOnHover: true,
 			    	},
 			    	

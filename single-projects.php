@@ -8,20 +8,10 @@
 				<?php $project_id = get_the_ID(); ?>
 				<?php $project_slug = sanitize_title( get_the_title(), $fallback_title ); ?>
 
-	<div class="banner-image normal-slider">
-		<div id="banner-gallery" class="royalSlider rsDefault royal-slider-banner">
-		    <img class="rsImg" src="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full-banner'); echo $image[0];?>" />
-		    <?php // check if the post has a Post Thumbnail assigned to it.
-				$images = rwmb_meta( 'slide_imgs', 'type=image' );
-				foreach ( $images as $image ) { ?>
-				    <img class="rsImg" src="<?php echo str_replace( '.jpg', '-1350x450.jpg', $image[full_url]); ?>" />
-			<?php } ?>
-		    
-		</div>
-	</div>
+	<?php get_banner($banner_args); ?>
 	
 	<div class="row">
-		<div class="col-lg-8">
+		<div class="col-md-8">
 			<h2><?php the_title(); ?></h2>
 			<?php the_content(); ?>
 			<?php get_videos( null ,$project_slug); ?>
@@ -32,14 +22,14 @@
 			
 			<!--------------------------------->
 			<!----- PROJECT STATUS CHART ------>
-			<!--------------------------------->
+			<!--------------------------------
 			
 			
 			<h4>Project Status</h4>
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac ullamcorper dui, a vulputate diam. Morbi a metus vulputate, lobortis lacus lacinia, faucibus nisi. Duis at diam sagittis, fermentum felis at, vulputate mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat lorem, ultrices et justo in, ullamcorper tincidunt neque. Ut pharetra massa justo, a dignissim odio egestas ac. Nunc tincidunt auctor velit sed malesuada. Aenean ac rhoncus eros, tempus condimentum dolor. Donec tristique viverra leo. Duis mauris turpis, vehicula et odio eget, posuere commodo mauris. Nulla quis lacus ligula.</p>
 			
 			<div class="row">
-				<div class="col-lg-5">
+				<div class="col-md-5">
 					<div class="project-status-chart">
 						<canvas id="project-status-all" width="800" height="800"></canvas>
 						<canvas id="project-status-actual" width="800" height="800"></canvas>
@@ -110,7 +100,7 @@
 						</script>
 					</div>
 				</div>
-				<div class="col-lg-7 project-status-chart-key">
+				<div class="col-md-7 project-status-chart-key">
 				
 					<?php //LOOP THROUGH PHASE TITLES, COLORS & DESCRIPTIONS ?>
 					<?php $i = 1; ?>
@@ -139,38 +129,35 @@
 							<h5>To Be Completed</h5>
 					</div>
 				</div>
-			</div><!--/.row-->
+			</div>
 			
 			
 			<div class="row project-funds">
-				<div class="col-lg-12">
+				<div class="col-md-12">
 					<div class="row" style="position: relative;">
-						<div class="col-lg-10 project-funds-meter-container">
+						<div class="col-md-10 project-funds-meter-container">
 						
 						<h4>Project Funds Raised</h4>
 						
 							<div class="project-funds-meter">
 								<div class="project-funds-meter-inner" style="width: 45%;"></div>
 							</div>
-						</div><!--/.project-funds-raised-container-->
-						<div class="col-lg-2 project-funds-percentage">
+						</div>
+						<div class="col-md-2 project-funds-percentage">
 							<h5>45%</h5>
 						</div>
 					</div>
 				</div>
-			</div><!--/.row-->
+			</div><!--sdf-->
 			
-			
-			<!----- END PROJECT STATUS CHART ----->
-			
-		</div>
+		</div> 
 		
 		
 		<!------------------->
 		<!----- SIDEBAR ----->
 		<!------------------->
 		
-		<div class="col-lg-4 sidebar">
+		<div class="col-md-4 sidebar">
 			<ul>
 				<?php $related_args = array (
 						'posts_per_page' 	=> 3,

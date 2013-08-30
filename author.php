@@ -2,88 +2,63 @@
 
 <?php //SET THE CURAUTH VARIABLE ?>
 <?php $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author)); ?>
+<?php $post_object = get_page_by_path('cap-' . $author_name, OBJECT, 'guest-author'); ?>
+<?php $coauthor_object = get_coauthors($post_object->ID); ?>
 
 
-<?php $coauthors = get_coauthors(); ?>
-<?php foreach( $coauthors as $coauthor ) { ?>
-			<div class="banner-image">
-				<?php echo get_the_post_thumbnail( $coauthor->ID, 'full-banner' ); ?>
-			</div>
-<?php } ?>	
+<?php
+$args = array(
+	'post-id' => $coauthor_object[0]->ID,
+	'post-type' => 'guest-author',
+);
+ 
+get_banner($args); 
+?>
 
 
 <div class="row">
 
-	<div class="col-lg-9">
-	
-	    <div class="row">
-	    	<div class="col-lg-2 author-page-avatar">
-	    		<?php echo get_avatar( $curauth->ID, 200 ); ?>
-	    	</div>
-	    	
-	    	<div class="col-lg-7">
-	    		<h2><?php echo $curauth->display_name; ?></h2>
-	    			<?php echo $curauth->description; ?>
-	    		
-	    		
-	    		<!---START DESCRIPTION SECTION----->
-			    <div class="row author-page-about-container">
-			    	<div class="author-page-school-associations">
-			    		<?php $terms = wp_get_object_terms( $curauth->ID, 'programs_completed'); ?>
-			    		<?php if (!empty($terms)) { ?>
-			    			<h5>Programs Completed</h5>
-		    					<ul class="author-page-program-list">
-								    <?php foreach ($terms as $term) { ?>
-									    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-								    <?php } ?>
-		    					</ul>
-						<?php } ?>
-					</div>
-					
-					<div class="author-page-school-associations">
-			    		<?php $terms = wp_get_object_terms( $curauth->ID, 'programs_staffed'); ?>
-			    		<?php if (!empty($terms)) { ?>
-			    			<h5>Programs Staffed</h5>
-			    					<ul class="author-page-program-list">
-									    <?php foreach ($terms as $term) { ?>
-										    <li><a href="<?php echo get_bloginfo( 'url' );?>/programs/<?php echo $term->slug; ?>/"><?php echo ucwords(str_replace( '-', ' ', $term->slug )); ?></a></li>
-									    <?php } ?>
-			    					</ul>
-						<?php } ?>
-					</div>
-			    </div>
-	    		
-	    	</div>
-	    	
-	    </div><!--row-->
-	    
-	    
-	    
-	    
-	    
-	
-	
-	
-	    <!--------START POSTS BY AUTHOR SECTION------------->
-	
-	
-	    <div class="row archive-content-container">
-			<div class="col-lg-9 archive-posts-container">
-				
-				<?php insert_loop('excerpt'); ?>				
-				
-			</div><!--col-lg-9-->
-		</div><!--archive-content-container-->
-	</div><!--col-lg-9-->
-</div><!-----ROW------>		
-		
-		    
-	    <div class="row">
-			<div class="col-lg-9">
-				<?php if (function_exists("pagination")) {
-				    pagination($additional_loop->max_num_pages);
-				} ?>
+	<div class="col-sm-8 author-page-content-container">
+		<h2><?php echo $coauthor_object[0]->display_name; ?></h2>
+		<div class="row">
+			<div class="col-md-6 author-description">
+				<?php echo $coauthor_object[0]->description; ?>
+			</div>
+			<div class="col-md-6 schools-staffed">
+				<?php $schools_staffed = rwmb_meta('schools_staffed', 'type=taxonomy&taxonomy=program_taxo', $post_id=$coauthor_object[0]->ID); ?>
+				<?php if (!empty($schools_staffed)) { ?>
+					<h6>Programs Staffed</h6>
+					<?php foreach ($schools_staffed as $school) { ?>
+						<div><a href="<?php echo get_permalink(get_page_by_path($school->slug, OBJECT, 'program')); ?>"><i class="icon-location-arrow"></i> <?php echo $school->name; ?></a></div>
+					<?php } ?>
+				<?php } ?>
 			</div>
 		</div>
+		
+
+		<?php if ( have_posts() ) {
+				echo '<h2>Posts by ' . $coauthor_object[0]->first_name . '</h2>';
+				while ( have_posts() ) {
+					the_post(); ?>
+			<?php display_loop_excerpt($post->ID); ?>
+		<?php } // end while
+		} ?>
+
+	</div>
+	
+	<div class="col-sm-4 sidebar">
+		<?php get_sidebar(); ?>
+	</div>
+
+
+</div>
+
+<div class="row">
+	<div class="col-md-9">
+		<?php if (function_exists("pagination")) {
+			pagination();
+		} ?>
+	</div>
+</div>
 	    
 <?php get_footer(); ?>

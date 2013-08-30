@@ -205,7 +205,7 @@ margin: 0px;
 
 .main-menu-desktop .related-post {
 	margin-top: 30px;
-	padding: 0px 0px 15px 40px;
+	padding: 0px 0px 15px 20px;
 	position: absolute;
 	left: 0px;
 	top: 0px;
@@ -226,15 +226,9 @@ margin: 0px;
 	color: #CCC;
 }
 
-@media (min-width: 1200px) {
-	.main-menu-desktop .related-post img {
-		width: 641px !important;
-	}
-}
-
 
 .main-menu-desktop .related-post img {
-	width: 502px;
+	width: 100% !important;
 	filter: grayscale(100%);
 	-webkit-filter: grayscale(100%);
 	   -moz-filter: grayscale(100%);
@@ -307,7 +301,7 @@ margin: 0px;
 	left: 0px;
 	bottom: 5px;
 	height: auto !important;
-	padding: 0px 0px 0px 40px !important;
+	padding: 0px 0px 0px 20px !important;
 }
 
 .related-posts-menu > li {
@@ -326,7 +320,7 @@ margin: 0px;
 
 #related-posts-menu-title {
 	width: auto !important;
-	padding: 7px 20px 7px 0px !important;
+	padding: 5px 20px 7px 0px !important;
 	text-transform: uppercase;
 	cursor: default !important;
 }

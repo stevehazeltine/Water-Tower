@@ -40,7 +40,7 @@
 	   
 	<div class="related-posts-menu-container">
 		<ul class="related-posts-menu">
-			<li id="related-posts-menu-title"><?php echo $title; ?> <i class="icon-mail-forward"></i></li>
+			<li id="related-posts-menu-title"><?php echo $title; ?></li>
 			   <?php $blogroll = new WP_Query( $blogroll_args ); ?>
 			   <?php if ( $blogroll->have_posts() ) { ?>
 			   <?php $i = 1; ?>
@@ -102,7 +102,7 @@
 
 <?php //----- START DESKTOP MENU -----// ?>
 
-<div class="row main-menu-desktop-container visible-lg">
+<div class="row main-menu-desktop-container visible-md visible-md visible-md visible-lg">
 	<ul class="main-menu-desktop">
 		
 		<?php //----- ABOUT MENU -----// ?>
@@ -111,12 +111,12 @@
 		 	<ul id="about-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		
 		 		
-		 		<div class="col-lg-3 primary-menu">
+		 		<div class="col-md-3 primary-menu">
 			 		<?php disp_primary_menu('about'); ?>		
 		 		</div>
 		 		
 		 		
-		 		<div class="col-lg-2 center-highlight">
+		 		<div class="col-md-2 center-highlight">
 		 			<div class="sub-main-menu">
 						
 						
@@ -173,7 +173,7 @@
 		 		</div>
 		 		
 		 		
-		 		<div class="col-lg-7 menu-related-posts">
+		 		<div class="col-md-7 menu-related-posts">
 			 		<?php main_menu_latest_posts('about')	; ?>	   
 		 		</div>
 		 	</ul>
@@ -200,12 +200,12 @@
 			
 			<!--TRAINING DROPDOWN-->
 			<ul class="dropdown-container stretch-fullscreen clearfix">
-		 		<div class="col-lg-3 primary-menu">
+		 		<div class="col-md-3 primary-menu">
 		 			<?php disp_primary_menu('training'); ?>
 		 		</div>
 		 		
 		 		
-		 		<div class="col-lg-9 center-highlight">
+		 		<div class="col-md-9 center-highlight">
 		 				<div class="row sub-main-menu">
 							
 							
@@ -238,9 +238,9 @@
 									'discipleship-training-schools',
 									'biblical-studies',
 									'career-discipleship',
-									'secondary-schools',
-									'seminars',
 									'summer-programs',
+									'seminars',
+									'secondary-schools',
 								); 
 							?>
 							
@@ -254,7 +254,7 @@
 								
 								<div class="row xl-programs-menu-row">
 									<?php foreach ($program_classifications as $class) { ?>				
-										<div class="col-lg-4">							
+										<div class="col-md-4">							
 											<?php 
 											$args = array(
 												'nopaging'					=>  true ,
@@ -280,7 +280,7 @@
 								
 								<div class="row programs-menu-row">
 									<?php foreach ($program_classifications as $class) { ?>				
-										<div class="col-lg-6">							
+										<div class="col-md-6">							
 											<?php 
 											$args = array(
 												'nopaging'					=>  true ,
@@ -310,17 +310,22 @@
 		 
 		 
 		 
+		 
+		 
+		 
+		 
+		 
 		 <!--OUTREACH LINK-->
 		 <li class="span"><span class="link-wrapper"><a href="#">Outreach</a><i class="icon-caret-up"></i></span>
 		 
 		 <!--OUTREACH DROPDOWN-->
 		 	<ul id="outreach-dropdown" class="dropdown-container  stretch-fullscreen clearfix">
 		 		
-		 		<div class="col-lg-3 primary-menu">
+		 		<div class="col-md-3 primary-menu">
 		 			<?php disp_primary_menu('outreach'); ?>
 		 		</div>
 
-		 		<div class="col-lg-2 center-highlight">
+		 		<div class="col-md-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 			
 		 						<!----------TARGET NATIONS------------>
@@ -370,12 +375,20 @@
 		 			</div>
 		 		</div>
 		 		
-		 		<div class="col-lg-7 menu-related-posts">
-					<?php main_menu_latest_posts('outreach', 'outreach-updates')	; ?>
+		 		<div class="col-md-7 menu-related-posts">
+					<?php main_menu_latest_posts('outreach', 'outreach-updates', 'Outreach Updates')	; ?>
 				</div>	
 		 		
 		 	</ul>
 		 </li>
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 		 
 		 
 		 <!--RESOURCES LINK-->
@@ -384,18 +397,17 @@
 		 <!--RESOURCES DROPDOWN-->
 		 	<ul id="resources-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		
-		 		<div class="col-lg-3 primary-menu">
+		 		<div class="col-md-3 primary-menu">
 		 			<?php disp_primary_menu('resources'); ?>
 		 		</div>			
 							 		
-		 		<div class="col-lg-2 center-highlight">
+		 		<div class="col-md-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 				<label>Post Categories</label>
 		 				<ul>
 		 					<?php $args = array(
 		 							'title_li'   => '',
 		 							'exclude'	=> '16',
-		 							'hide_empty' => 0,
 		 					); ?>
 		 				
 		 					<?php wp_list_categories($args); ?>
@@ -403,8 +415,8 @@
 		 			</div>
 		 		</div>
 		 		
-		 		<div class="col-lg-7 menu-related-posts">
-					<?php main_menu_latest_posts('resources', 'staff-articles')	; ?>
+		 		<div class="col-md-7 menu-related-posts">
+					<?php main_menu_latest_posts('resources', 'staff-articles', 'Staff Articles')	; ?>
 				</div>
 		 		
 		 	</ul>
@@ -420,11 +432,11 @@
 		 <!--GET INVOLVED DROPDOWN-->
 		 	<ul id="get-involved-dropdown" class="dropdown-container stretch-fullscreen clearfix">
 		 		
-		 		<div class="col-lg-3 primary-menu">
+		 		<div class="col-md-3 primary-menu">
 		 			<?php disp_primary_menu('get-involved'); ?>
 		 		</div>
 		 		
-		 		<div class="col-lg-2 center-highlight">
+		 		<div class="col-md-2 center-highlight">
 		 			<div class="sub-main-menu">
 		 					<!---------- COMMUNITY EVENTS ------------>
 							<?php $args = array(
@@ -472,8 +484,8 @@
 		 			</div>
 		 		</div>
 		 		
-		 		<div class="col-lg-7 menu-related-posts">
-					<?php main_menu_latest_posts('get-involved', 'project-updates')	; ?>
+		 		<div class="col-md-7 menu-related-posts">
+					<?php main_menu_latest_posts('get-involved', 'project-updates', 'Project Updates')	; ?>
 				</div>
 		 		
 		 	</ul>
