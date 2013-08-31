@@ -2442,7 +2442,6 @@
 								
 								//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
 								} else {
-									echo 'heres your problem';
 									$this->single[] = array('ID' => $author_id);
 								}
 							
