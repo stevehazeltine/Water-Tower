@@ -459,7 +459,7 @@
 						 		<div class="apply-button-dropdown-button"><i class="icon-caret-down"></i></div>
 						 		
 						 		<ul>
-					 				<li class="apply-button-dropdown-item">Online and offline versions of our application are available, however we highly recomend our online option as it has been optimized to help our staff process, and communicate with you in the most efficient manner.</li>
+					 				<li class="apply-button-dropdown-item">Online and offline versions of our application are available, however, we highly recommend our online option as it has been optimized for efficiency and ease of use for you, as the applicant, and our staff.  Please contact Registrar if you prefer a downloaded version or have any questions concerning the online application process. Otherwise, click on the 'Apply Online' button above.</li>
 									<a href="<?php echo get_bloginfo('url'); ?>/contact"><li class="apply-button-dropdown-item-button">Contact Registrar</li></a>
 								</ul>
 						 		
