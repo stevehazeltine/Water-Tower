@@ -2,6 +2,6 @@
 /*
 Template Name: Apply
 */
-
-header('Location: http://' . get_apply_link());
+	wp_head();
+	header('Location: http://' . get_apply_link());
 ?>
