@@ -3305,7 +3305,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="col-md-<?php echo $span; ?> col-6 instagram-container">
+		  		<div class="col-sm-<?php echo $span; ?> instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
@@ -3321,22 +3321,23 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  
 			  <?php if (!empty($result->data)) { ?>
 			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
-			  <div class="row instarow">
-				  <?php foreach ($result->data as $post) { ?>
-					  <?php if ($row_i <= $rows) { ?> 
-							  	<?php if ($col_i <= $cols) { ?>
-									<?php get_instagram_post($post); ?>
-									<?php $col_i = ++$col_i; ?>
-								<?php } else { ?>
+			  <div class="row instarow hidden-xs">
+				  <?php
+				  foreach ($result->data as $post) {
+					  if ($row_i <= $rows) {
+						if ($col_i <= $cols) {
+							get_instagram_post($post);
+							$col_i = ++$col_i;
+						} else { ?>
 								  </div>
 								  <?php $row_i = ++$row_i; ?>
-								  <div class="row instarow">
+								  <div class="row instarow hidden-xs">
 						  
-						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
-									<?php $col_i = 2; ?>
-								<?php } ?>
-					  <?php } ?>
-				  <?php } ?>
+							<?php if ($row_i <= $rows) { get_instagram_post($post);}
+							$col_i = 2;
+						}
+					  } 
+				  } ?>
 								  </div>
 								  <?php } ?>
 		<?php } 

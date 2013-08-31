@@ -150,13 +150,12 @@
 					<div class="row">
 						<div class="col-md-12 stretch-fullscreen link-footer-container"> 
 							<div class="link-footer">
-								 
-								<a href="<?php echo get_bloginfo('url'); ?>">© YWAM Montana-Lakeside 2013</a>
-								<a href="https://github.com/YWAM-Montana-Lakeside/Water-Tower">Water Tower - Version 0.95 (Beta)</a>
-								<a href="https://github.com/YWAM-Montana-Lakeside/Water-Tower/issues?state=open">Report A Bug</a>
 								
-								<a href="http://www.ywam.org">Youth With A Mission</a>
 								<span class="user-access-point" style="float: right;"><?php wp_loginout(); ?></span>
+								<a href="<?php echo get_bloginfo('url'); ?>">© YWAM Montana-Lakeside 2013</a>
+								<a href="https://github.com/YWAM-Montana-Lakeside/Water-Tower/issues?state=open">Report A Bug</a>
+								<a href="http://www.ywam.org">Youth With A Mission</a>
+								
 								
 							</div>
 						</div>
