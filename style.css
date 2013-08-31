@@ -556,6 +556,9 @@ font-size: 14px;
 /************************************/
 
 /***** PROJECT INDEX *****/
+.project-index {
+padding: 20px 0px;
+}
 
 .project-index .project-container {
 	margin-bottom: 50px;
@@ -564,6 +567,11 @@ font-size: 14px;
 .project-index h2 {
 	display: inline-block;
 	margin-top: 0px;
+}
+
+.project-index h2 a {
+	font-family:'HelveticaNeueW01-47LtCn 692689';
+	font-size: 22px;
 }
 
 .project-index h6 {
@@ -584,6 +592,7 @@ font-size: 14px;
 
 .project-index .project-finances-title {
 	color: #666;
+	margin-bottom: 5px;
 }
 
 .project-index .project-status-meter {

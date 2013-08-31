@@ -888,7 +888,7 @@
 								<div class="col-md-9 project-content-container">
 									<h2><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 																				
-									<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>
+									<!--<span class="project-funds"><?php echo number_format($project_status->project_finances['percent_raised']); ?>% Funded</span>-->
 									
 									<?php the_excerpt(); ?>
 									
