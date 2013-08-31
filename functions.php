@@ -2396,15 +2396,11 @@
 		private function family_oriented() {
 				
 				//----- SEPARATE MARRIED COUPLES FROM SINGLES -----//
-				foreach($this->author_ids as $author) {
+				foreach($this->author_ids as $author_id) {
 					
 					//-----CHECK CURRENT LEADER AGAINST KNOWN SPOUSES-----//
-					if (!in_array($author, $this->spouse_ids)) {
-					
-						//-----DEFINE LEADER ID-----//
-						$author_object = get_post($author, OBJECT);
-						$author_id = $author_object->ID;
-						
+					if (!in_array($author_id, $this->spouse_ids)) {
+
 						//-----CHECK IF SPOUSE EXISTS-----//
 						if (rwmb_meta('has_spouse', '', $post_id=$author_id) == 1) {
 							$terms = rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$author_id );
@@ -2421,14 +2417,13 @@
 								}
 									
 								//----- CHECK IF SPOUSE IS PRESENT -----//
-								foreach ($this->author_ids as $i_author) {
-									$i_spouse_object = get_post($i_author, OBJECT);
-									$i_author_id = $i_spouse_object->ID;
-									
-									if ($spouse_id != $i_author_id) {
-										$spouse_present = false;
-									}  else {
-										$spouse_present = true;
+								foreach ($this->author_ids as $i_spouse_id) {
+									if ($spouse_present != true) {
+										if ($spouse_id != $i_spouse_id) {
+											$spouse_present = false;
+										}  else {
+											$spouse_present = true;
+										}
 									}
 								}
 								
@@ -2447,6 +2442,7 @@
 								
 								//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
 								} else {
+									echo 'heres your problem';
 									$this->single[] = array('ID' => $author_id);
 								}
 							
