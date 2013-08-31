@@ -814,7 +814,7 @@ font-style: italic;
 
 @media (max-width: 767px) {
 	.blogroll-block {
-		min-height: 160px;
+		min-height: 115px;
 	}
 	
 	.home-page-blogroll h2 {
@@ -1351,7 +1351,10 @@ margin-bottom: 35px;
 @media (max-width: 767px) {
 	.school-leader-container .married-avatar-container {
 		float: left;
-		margin-right:15px;
+	}
+	
+	.school-leader-container .married-avatar-container:last-child {
+		margin-left: 0px;
 	}
 }
 
@@ -3346,7 +3349,7 @@ overflow: hidden !important;
 	}
 	
 	.container {
-		padding: 0px 20px;
+		padding: 0px 15px;
 	}
 	
 	.banner-image .attachment-full-banner {

@@ -2396,15 +2396,11 @@
 		private function family_oriented() {
 				
 				//----- SEPARATE MARRIED COUPLES FROM SINGLES -----//
-				foreach($this->author_ids as $author) {
+				foreach($this->author_ids as $author_id) {
 					
 					//-----CHECK CURRENT LEADER AGAINST KNOWN SPOUSES-----//
-					if (!in_array($author, $this->spouse_ids)) {
-					
-						//-----DEFINE LEADER ID-----//
-						$author_object = get_post($author, OBJECT);
-						$author_id = $author_object->ID;
-						
+					if (!in_array($author_id, $this->spouse_ids)) {
+
 						//-----CHECK IF SPOUSE EXISTS-----//
 						if (rwmb_meta('has_spouse', '', $post_id=$author_id) == 1) {
 							$terms = rwmb_meta( 'spouse', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$author_id );
@@ -2421,14 +2417,13 @@
 								}
 									
 								//----- CHECK IF SPOUSE IS PRESENT -----//
-								foreach ($this->author_ids as $i_author) {
-									$i_spouse_object = get_post($i_author, OBJECT);
-									$i_author_id = $i_spouse_object->ID;
-									
-									if ($spouse_id != $i_author_id) {
-										$spouse_present = false;
-									}  else {
-										$spouse_present = true;
+								foreach ($this->author_ids as $i_spouse_id) {
+									if ($spouse_present != true) {
+										if ($spouse_id != $i_spouse_id) {
+											$spouse_present = false;
+										}  else {
+											$spouse_present = true;
+										}
 									}
 								}
 								
@@ -2447,6 +2442,7 @@
 								
 								//-----ADD TO SINGLES LIST IF SPOUSE IS NOT PRESENT-----//
 								} else {
+									echo 'heres your problem';
 									$this->single[] = array('ID' => $author_id);
 								}
 							
@@ -3309,7 +3305,7 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  <?php global $span, $resolution; ?>
 			   
 			  
-		  		<div class="col-md-<?php echo $span; ?> col-6 instagram-container">
+		  		<div class="col-sm-<?php echo $span; ?> instagram-container">
 		  			<a href="<?php echo $post->link; ?>" target="_blank">
 						<img src="<?php echo $post->images->$resolution->url; ?>" />
 					
@@ -3325,22 +3321,23 @@ class ywammontana_walker_comment extends Walker_Comment {
 			  
 			  <?php if (!empty($result->data)) { ?>
 			  <h4><?php echo $title_prefix; ?> Instagram Feed</h4>
-			  <div class="row instarow">
-				  <?php foreach ($result->data as $post) { ?>
-					  <?php if ($row_i <= $rows) { ?> 
-							  	<?php if ($col_i <= $cols) { ?>
-									<?php get_instagram_post($post); ?>
-									<?php $col_i = ++$col_i; ?>
-								<?php } else { ?>
+			  <div class="row instarow hidden-xs">
+				  <?php
+				  foreach ($result->data as $post) {
+					  if ($row_i <= $rows) {
+						if ($col_i <= $cols) {
+							get_instagram_post($post);
+							$col_i = ++$col_i;
+						} else { ?>
 								  </div>
 								  <?php $row_i = ++$row_i; ?>
-								  <div class="row instarow">
+								  <div class="row instarow hidden-xs">
 						  
-						  			<?php if ($row_i <= $rows) { get_instagram_post($post);} ?>
-									<?php $col_i = 2; ?>
-								<?php } ?>
-					  <?php } ?>
-				  <?php } ?>
+							<?php if ($row_i <= $rows) { get_instagram_post($post);}
+							$col_i = 2;
+						}
+					  } 
+				  } ?>
 								  </div>
 								  <?php } ?>
 		<?php } 

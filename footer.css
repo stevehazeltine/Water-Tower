@@ -37,6 +37,9 @@
 	margin-top: 3px;
 }
 
+.link-footer {
+	text-align: center;
+}
 
 
 		.link-footer-container {
@@ -45,14 +48,15 @@
 		
 		.link-footer-container a {
 			color: white;
-			font-size: 12px;
+			font-size: 11px;
 			border-right: 1px solid white;
 			padding: 2px 10px;
-			font-family:'HelveticaNeueW01-67MdCn 692710';
+			font-family: 'HelveticaNeueW01-47LtCn 692689';
+			letter-spacing: 1px;
 		}
 		
 		.link-footer-container a:last-child {
-			border: none;
+			border-right: none !important;
 		}
 
 
