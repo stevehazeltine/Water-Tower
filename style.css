@@ -3110,6 +3110,7 @@ padding: 5px 5px 5px 5px !important;
 	
 	.navbar .navbar-brand {
 		float: left;
+		padding: 15px 0px;
 	}
 	
 	.navbar .navbar-brand img {
