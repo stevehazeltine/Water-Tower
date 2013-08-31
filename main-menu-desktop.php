@@ -407,7 +407,7 @@
 		 				<ul>
 		 					<?php $args = array(
 		 							'title_li'   => '',
-		 							'exclude'	=> '16',
+		 							'exclude'	=> array('16', '7'),
 		 					); ?>
 		 				
 		 					<?php wp_list_categories($args); ?>
