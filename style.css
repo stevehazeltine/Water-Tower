@@ -3750,6 +3750,16 @@ font-size: 11px !important;
 	padding: 5px 8px !important;
 }
 
+.gform_wrapper img{
+	width: auto;
+}
+
+#gforms_confirmation_message {
+	font-size: 13px;
+	text-transform: none;
+	margin: 20px 0px;
+	font-family: 'HelveticaNeueW01-47LtCn 692689';
+}
 
 /***********************************/
 /***** INSTAGRAM WIDGET STYLES *****/
