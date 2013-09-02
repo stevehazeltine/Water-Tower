@@ -544,7 +544,7 @@
 											<?php } ?>
 										<?php } else { ?>
 											<li id="no-info-section" class="program-info-section-title active-info-section">
-														<a class="title-link" data-quarter="no-info-section" href="#_">Dates Not Avaiable <i class="icon-caret-down"></i></a>
+														<a class="title-link" data-quarter="no-info-section" href="#_">Dates Not Available <i class="icon-caret-down"></i></a>
 															<ul class="program-info-dropdown dropped-down">
 																<li class="ongoing-desc">Sorry, but we don't have any dates for this school yet.</li>
 															</ul>

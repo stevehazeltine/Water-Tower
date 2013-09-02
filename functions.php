@@ -2604,12 +2604,13 @@
 			 *
 			 */
 			
-			function get_related_posts($related_args) {
+			function get_related_posts($related_args=array()) {
 			
 			
 			
 			if (!isset($related_args["title"])){$related_args["title"] = 'Related Posts';}
 			if (!isset($related_args["posts_per_page"])){$related_args["posts_per_page"] = 3;}
+			if (!isset($related_args["category_name"])){$related_args["category_name"] = null;}
 			if (!isset($related_args["program_taxo"])){$related_args["program_taxo"] = null;}
 			if (!isset($related_args["project_taxo"])){$related_args["project_taxo"] = null;}
 			if (!isset($related_args["target_nation_taxo"])){$related_args["target_nation_taxo"] = null;}
@@ -2633,6 +2634,7 @@
 		   <?php $args = array(
 				'posts_per_page' 	=> $related_args["posts_per_page"],
 				'post_type' 		=> 'post',
+				'category_name'		=> $related_args["category_name"],
 				'program_taxo' 		=> $related_args["program_taxo"],
 				'projects_taxo'		=> $related_args["project_taxo"],
 				'target_nations_taxo'=> $related_args["target_nation_taxo"],
@@ -2682,6 +2684,36 @@
 			   <?php wp_reset_postdata(); ?>
 						   
 			<?php } //  END GET RELATED POSTS
+			
+			
+			//----------------------------//
+			//----- SUBSCRIBE WIDGET -----//
+			/*
+			 *	Function to retrieve and display the subscribe widget
+			 *
+			 */
+				function subscribe_widget() { ?>
+				<li class="subscribe-widget-container">
+					<h2><?php _e('Subscribe'); ?></h2>
+					
+					<p>Want us to send you an email every time we post new content to the site?  Fill out the form below and we'll be sure to keep you updated</p>
+					
+					<div>
+						<?php echo do_shortcode('[gravityform id="2" name="Subscribe Form" title="false" description="false" ajax="true"]'); ?>
+					</div>
+					<div class="subscribe-widget-footer">
+						<ul>
+							<li><a href="<?php bloginfo('rss2_url'); ?>"><i class="icon-rss"></i>RSS</a></li>
+							<li><a href="<?php echo get_social_media_link('facebook_url'); ?>"><i class="icon-facebook"></i></a></li>
+							<li><a href="<?php echo get_social_media_link('twitter_url'); ?>"><i class="icon-twitter"></i></a></li>
+							<li><a href="<?php echo get_social_media_link('instagram_url'); ?>"><i class="icon-instagram"></i></a></li>
+						</ul>
+					</div>
+				</li>
+			<?php }
+			
+			
+			
 			
 			
 			

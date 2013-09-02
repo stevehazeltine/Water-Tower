@@ -5,14 +5,18 @@
 	<div class="row">
 	
 	
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<h1>Contact Us</h1>
 			<p><?php the_content(); ?><p>
+			<?php echo do_shortcode('[gravityform id="1" name="Contact Form" title="false" description="false" ajax="true"]'); ?>
 		</div><!--/.col-md-5-->
 		
-		<div class="col-md-6">
-			<?php echo do_shortcode('[gravityform id="1" name="Contact Form" title="false" description="false" ajax="true"]'); ?>
-		</div><!--/.col-md-7-->
+		<div class="col-md-4 sidebar">
+			<ul>
+			<?php get_related_posts(array('posts_per_page'=>5, 'title'=>'Latest Posts')); ?>
+			<?php subscribe_widget(); ?>
+			</ul>
+		</div><!--/.col-md-4-->
 	
 	</div><!--/.row-->
 <?php endwhile; else: endif; ?>
