@@ -2182,7 +2182,7 @@
 										<?php } else { ?>
 										
 										
-										
+											<?php if (isset($program_info->schedule)) { ?>
 											<?php //----- PROGRAM SCHEDULE TABLE HEADER -----//?>
 											<div class="program-archive-footer-dropdown-content program-archive-footer-dropdown-header row hidden-xs">
 												<div class="col-sm-2">Quarter<i class="icon-angle-down"></i></div>
@@ -2193,52 +2193,56 @@
 											</div>
 											
 											<?php //----- PROGRAM SCHEDULE INFO LOOP -----// ?>
-											
-											<?php foreach($program_info->schedule as $program_instance) { ?>
-											
-												<div class="program-archive-footer-dropdown-content row">
-													<div class="col-sm-2 col-md-2 col-12"><?php echo $program_instance['quarter']; ?></div>
-													<div class="col-sm-4 col-md-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
-													
-													
-													
-													<div class="col-xs-4 col-sm-2 col-md-2">
-														<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
-														<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
-														<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
-														<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
-													</div>
-													
-													<div class="col-xs-5 col-sm-2 col-md-2">
-														<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
-														<?php echo date("M d, Y", strtotime($program_instance['canadian_app_deadline'])); ?><br />
-														<?php echo date("M d, Y", strtotime($program_instance['african_app_deadline'])); ?><br />
-														<?php echo date("M d, Y", strtotime($program_instance['international_app_deadline'])); ?>
-													</div>
-													
-													
-													
-													<div class="col-xs-3 col-sm-2 col-md-2">
-													
-														<?php 
-														$application_status = array(
-															'app_status',
-															'canadian_app_status',
-															'african_app_status',
-															'international_app_status',
-														);
-
-														?>
+												<?php foreach($program_info->schedule as $program_instance) { ?>
+												
+													<div class="program-archive-footer-dropdown-content row">
+														<div class="col-sm-2 col-md-2 col-12"><?php echo $program_instance['quarter']; ?></div>
+														<div class="col-sm-4 col-md-4 col-12"><?php echo date("M d, Y", strtotime($program_instance['start_date'])) ?> - <?php echo date("M d, Y", strtotime($program_instance['end_date'])); ?></div>
 														
-														<?php 
-															foreach ($application_status as $application) {
-																$application_status_color = $application . '_color';
-																echo '<div>' . ucwords($program_instance[$application]) . '<i class="icon-circle-blank" style="color: #' . $program_instance[$application_status_color] . '"></i></div>';
-															}
-														?>
+														
+														
+														<div class="col-xs-4 col-sm-2 col-md-2">
+															<?php echo '<div><i class="icon-location-arrow"></i> American</div>'; ?>
+															<?php echo '<div><i class="icon-location-arrow"></i> Canadian</div>'; ?>
+															<?php echo '<div><i class="icon-location-arrow"></i> African</div>'; ?>
+															<?php echo '<div><i class="icon-location-arrow"></i> International</div>'; ?>
+														</div>
+														
+														<div class="col-xs-5 col-sm-2 col-md-2">
+															<?php echo date("M d, Y", strtotime($program_instance['app_deadline'])) ?><br />
+															<?php echo date("M d, Y", strtotime($program_instance['canadian_app_deadline'])); ?><br />
+															<?php echo date("M d, Y", strtotime($program_instance['african_app_deadline'])); ?><br />
+															<?php echo date("M d, Y", strtotime($program_instance['international_app_deadline'])); ?>
+														</div>
+														
+														
+														
+														<div class="col-xs-3 col-sm-2 col-md-2">
+														
+															<?php 
+															$application_status = array(
+																'app_status',
+																'canadian_app_status',
+																'african_app_status',
+																'international_app_status',
+															);
+	
+															?>
+															
+															<?php 
+																foreach ($application_status as $application) {
+																	$application_status_color = $application . '_color';
+																	echo '<div>' . ucwords($program_instance[$application]) . '<i class="icon-circle-blank" style="color: #' . $program_instance[$application_status_color] . '"></i></div>';
+																}
+															?>
+														</div>
 													</div>
+												
+												<?php } ?>
+											<?php } else { ?>
+												<div class="program-archive-disclaimer">
+													Sorry for the inconvenience, but there are no dates available for this program at the moment.
 												</div>
-											
 											<?php } ?>
 										<?php } ?>
 									</div>
@@ -2649,11 +2653,11 @@
 					   
 							<li>
 								<div class="row sidebar-related-post">
-									<div class="sidebar-thumbnail-container visible-md visible-lg col-md-4">
+									<div class="sidebar-thumbnail-container col-xs-4">
 										<?php the_post_thumbnail( 'xs-thumbnail-card' ); ?>
 									</div>
 									
-									<div class="sidebar-related-post-content col-md-8">
+									<div class="sidebar-related-post-content col-xs-8">
 										<h5><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
 										<p><?php the_time( 'F j, Y' ); ?></p>
 									</div>

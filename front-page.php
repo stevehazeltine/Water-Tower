@@ -157,6 +157,66 @@ Template Name: Front Page
             
             
             
+			
+			
+			<!---------------- RECENT POSTS ----------------->
+            	<div class="home-page-blogroll homepage-recent-posts">
+	            	<h4>Recent Posts</h4>
+					
+						<div class="row">
+						
+							<?php $args = array(
+							'post_type' 	 			=>	'post',
+							'posts_per_page'			=>  7,
+							); ?>
+							   
+							   <?php $my_query = new WP_Query( $args ); ?>
+							   <?php if ( $my_query->have_posts() ) { ?>
+							   <?php $i = 1; ?>
+								   <?php while ( $my_query->have_posts() ) { ?>
+									   <?php $my_query->the_post(); ?>
+										<?php $post_id = $post->ID; ?>
+										<?php if ($i == 1) { ?>
+										<div class="col-sm-7 most-recent-post">
+											<?php the_post_thumbnail( 'full-banner'); ?>
+											<?php $obj = new postRibbon($post->ID); ?>
+											<?php $obj->build_ribbon('horizontal',5); ?>
+											
+											<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2><?php the_title(); ?></h2></a>
+											<?php the_excerpt(); ?>
+											<div class="post-meta-footer">
+												<div><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>">Read Full Article</a></div>
+												<div>Published: <?php the_time('F j, Y'); ?></div>
+												<div>Written By: <?php coauthors_posts_links(','); ?></div>
+											</div>
+										</div>
+										<div class="col-sm-5"><ul class="recent-post-list">
+										<?php } else { ?>
+											
+													<li>
+														<a class="recent-post-list-title" href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
+														<div class="recent-post-list-date">Published: <?php the_time('F j, Y'); ?></div>
+													</li>
+
+											
+										<?php } ?>
+									   
+									   <?php $i = ++$i; ?>
+								   <?php } ?>
+								   <?php echo '</ul></div>'; // Close div for list of latest posts ?>
+							   <?php } ?>
+							   <?php wp_reset_postdata(); ?>
+						</div>
+			</div>
+
+			
+			
+			
+			
+			
+			
+			
+			
             
             
             
@@ -171,8 +231,6 @@ Template Name: Front Page
             	
             	
             	<div class="row">
-            	<?php //IF ALERT STATUS IS ACTIVATED FOR SLIDER PUSH LATEST POST TO FRONT, OTHERWISE EXCLUDE IT TO PREVENT DUPLICATION ?>
-				<?php if (rwmb_meta('alert_slider_activation') == 1) { $offset_posts = 0; } else { $offset_posts = 1; } ?>
 	            
 	            	<?php $args = array(
 					'post_type' 	 			=>	'videos',
@@ -186,14 +244,16 @@ Template Name: Front Page
 							   <?php $my_query->the_post(); ?>
 	
 							    <div class="col-md-4">
-									<div id="video<?php echo $i; ?>" class="royalSlider videoGallery rsDefault">
-									  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+									<div class="blogroll-video-block">
+										<div id="video<?php echo $i; ?>" class="royalSlider videoGallery rsDefault">
+										  <a class="rsImg" data-rsVideo="<?php echo rwmb_meta('video_id'); ?>" href="<?php $image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), '16:9-media-thumbnail'); echo $image[0];?>"></a>
+										</div>
+										
+										<?php $obj = new PostRibbon($post->ID); ?>
+										<?php $obj->build_ribbon('horizontal', 3); ?>
+										
+										<h2><?php the_title(); ?></h2>
 									</div>
-									
-									<?php $obj = new PostRibbon($post->ID); ?>
-									<?php $obj->build_ribbon('horizontal', 3); ?>
-									
-									<h2><?php the_title(); ?></h2>
 				            	</div>
 							   
 							   <?php $i=$i+1; ?>
@@ -207,75 +267,25 @@ Template Name: Front Page
             
             
             
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
             
 
-            <!---------------- RECENT POSTS ----------------->
-            <div class="row">
-            	<div class="col-md-12 home-page-blogroll">
-	            	<h4>Recent Posts</h4>
-            	
-            	
-						            	
-            	
-            	
-            	
-						<div class="row">
-						
-							<?php $args = array(
-							'post_type' 	 			=>	'post',
-							'posts_per_page'			=>  4,
-							); ?>
-							   
-							   <?php $my_query = new WP_Query( $args ); ?>
-							   <?php if ( $my_query->have_posts() ) { ?>
-								   <?php while ( $my_query->have_posts() ) { ?>
-									   <?php $my_query->the_post(); ?>
-
-										<div class="col-xs-6 col-md-3 blogroll-block home-page-post-container">
-											
-											<?php // check if the post has a Post Thumbnail assigned to it.
-												if ( has_post_thumbnail() ) {
-													the_post_thumbnail( 'thumbnail-card');
-												} else {
-												echo '<img src="http://placehold.it/1200x600" />';
-											} ?>
-											
-											
-											
-											<?php $obj = new PostRibbon($post->ID); ?>
-											<?php $obj->build_ribbon('horizontal', 3); ?>
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											
-											<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><h2><?php the_title(); ?></h2></a>
-										</div>
-									   
-								   <?php } ?>
-							   <?php } ?>
-							   <?php wp_reset_postdata(); ?>
-						</div>
-			</div>
-		</div>
+            
 		<?php endwhile; else: ?>
 				<p>Oh man, we seriously need to work on this.  It appears that we have lead you astray somehow, you may want to try back later.  Sorry about that.</p>
 			<?php endif; ?>

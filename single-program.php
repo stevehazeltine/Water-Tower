@@ -368,6 +368,7 @@
 											$terms = rwmb_meta( 'leaders', 'type=taxonomy&taxonomy=guest_author_taxo', $post_id=$program_id );
 											
 											if (!empty($terms)) {
+												echo '<h4>School Leaders</h4>';
 												foreach ( $terms as $term ) {
 													$author_object = get_page_by_path('cap-' . $term->slug, OBJECT, 'guest-author');
 												   $leader_string[] = $author_object->ID;
@@ -415,32 +416,6 @@
 										); ?>
 										
 										<?php get_instagram($insta_args); ?>
-											 
-											 
-											 
-											 
-											 
-											 
-											 
-											 
-											 
-										
-										
-										<!-- INTERNATIONAL STUDENTS -->
-										<h4>International Students</h4><p>Applications for Canadian citizens should be completed no later than 1 month prior to the start of the school. For all other international applicants, completed applications should be received 4 months prior to the start of the school (Africans at least 6 months.) You must have a passport that is still valid up to six months after completion of the school. Each family member coming must have their own passport, including each child.</p>
-										
-										
-										
-										<?php $custom_value = rwmb_meta( 'accreditation' ); if ($custom_value != '') { ?><h4>Accreditation</h4>
-										<p><?php echo $custom_value;?></p><?php } ?>
-										
-
-										 <?php if (rwmb_meta( 'prerequisites' ) != '') { ?>
-											 <?php// PREREQUISITES SECTION ?>										 
-												 <h4>Prerequisites</h4>
-												 <p><?php echo rwmb_meta( 'prerequisites' ) ?></p>
-										 <?php } ?>
-
 										 </div><!-- .entry -->
 								 </div> <!-- .post -->
 					</div><!--col-md-8 content container-->
@@ -451,7 +426,7 @@
 					
 					
 					<!--PROGRAM SIDEBAR-->							 
-					 <div class="col-12 col-md-4 sidebar">
+					 <div class="col-md-4 sidebar">
 					 
 					 	<?php //----- APPLY BUTTON -----// ?>
 						 	<div class="apply-button-container">
@@ -460,7 +435,7 @@
 						 		
 						 		<ul>
 					 				<li class="apply-button-dropdown-item">Online and offline versions of our application are available, however, we highly recommend our online option as it has been optimized for efficiency and ease of use for you, as the applicant, and our staff.  Please contact Registrar if you prefer a downloaded version or have any questions concerning the online application process. Otherwise, click on the 'Apply Online' button above.</li>
-									<a href="<?php echo get_bloginfo('url'); ?>/contact"><li class="apply-button-dropdown-item-button">Contact Registrar</li></a>
+									<a href="<?php echo get_bloginfo('url'); ?>/contact/?destination=registrar"><li class="apply-button-dropdown-item-button">Contact Registrar</li></a>
 								</ul>
 						 		
 						 	</div>

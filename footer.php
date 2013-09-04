@@ -132,7 +132,7 @@
 					<a href="<?php echo get_bloginfo ('url'); ?>/apply"><li>Apply Online</li></a>
 					<a href="<?php echo get_bloginfo ('url'); ?>/contact"><li>Contact Us</li></a>
 					<a href="<?php echo get_bloginfo ('url'); ?>/staff-opportunities"><li>Staff Opportunities</li></a>
-					<a href="<?php echo get_bloginfo ('url'); ?>/contact"><li>Site Feedback</li></a>
+					<a href="<?php echo get_bloginfo ('url'); ?>/contact/?destination=site-feedback"><li>Site Feedback</li></a>
 					
 				</ul>
 				

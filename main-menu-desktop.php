@@ -103,7 +103,7 @@
 <?php //----- START DESKTOP MENU -----// ?>
 
 <div class="row main-menu-desktop-container visible-md visible-md visible-md visible-lg">
-	<ul class="main-menu-desktop">
+	<ul class="main-menu-desktop clearfix">
 		
 		<?php //----- ABOUT MENU -----// ?>
 		<li class="span first-item"><span class="link-wrapper"><a href="#">About</a><i class="icon-caret-up"></i></span>

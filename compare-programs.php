@@ -319,7 +319,7 @@ Template Name: Compare Programs
 			<h2>Comparing Programs</h2>
 			<p>While we value all of our programs here at YWAM Montana - Lakeside, our top priority is directing students to the programs that can best equip them for the passions God has placed in their lives.</p>
 			<div>
-				<a href="<?php echo get_bloginfo('url'); ?>/contact/"><div class="compare-programs-button col-md-3 col-lg-12">Contact Registrar</div></a>
+				<a href="<?php echo get_bloginfo('url'); ?>/contact/?destination=registrar"><div class="compare-programs-button col-md-3 col-lg-12">Contact Registrar</div></a>
 				<a href="<?php echo get_bloginfo('url'); ?>/programs/"><div class="compare-programs-button col-md-3 col-lg-12">Program Archive</div></a>
 			</div>
 		</div>
